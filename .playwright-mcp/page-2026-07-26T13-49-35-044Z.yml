@@ -1,0 +1,347 @@
+- generic [active] [ref=f8e1]:
+  - banner [ref=f8e2]:
+    - generic [ref=f8e4]:
+      - generic [ref=f8e6]:
+        - button "English" [ref=f8e9] [cursor=pointer]:
+          - figure [ref=f8e10]
+        - generic [ref=f8e17]:
+          - button "Support" [ref=f8e19] [cursor=pointer]:
+            - text: Support
+            - figure [ref=f8e20]
+          - button "Login" [ref=f8e23] [cursor=pointer]:
+            - text: Login
+            - figure [ref=f8e24]
+      - generic [ref=f8e27]:
+        - link "Twilio" [ref=f8e29] [cursor=pointer]:
+          - /url: https://www.twilio.com/en-us
+        - navigation [ref=f8e36]:
+          - button "Products" [ref=f8e38] [cursor=pointer]:
+            - text: Products
+            - figure [ref=f8e39]
+          - button "Solutions" [ref=f8e42] [cursor=pointer]:
+            - text: Solutions
+            - figure [ref=f8e43]
+          - button "Why Twilio" [ref=f8e46] [cursor=pointer]:
+            - text: Why Twilio
+            - figure [ref=f8e47]
+          - button "Resources" [ref=f8e50] [cursor=pointer]:
+            - text: Resources
+            - figure [ref=f8e51]
+          - button "Pricing" [ref=f8e54] [cursor=pointer]:
+            - text: Pricing
+            - figure [ref=f8e55]
+        - generic [ref=f8e57]:
+          - button "Search" [ref=f8e59] [cursor=pointer]:
+            - figure [ref=f8e60]
+          - generic [ref=f8e63]:
+            - link "Contact sales" [ref=f8e64] [cursor=pointer]:
+              - /url: https://www.twilio.com/en-us/help/sales
+            - link "Start for free" [ref=f8e66] [cursor=pointer]:
+              - /url: https://www.twilio.com/try-twilio
+  - main [ref=f8e68]:
+    - generic [ref=f8e71]:
+      - generic [ref=f8e72]:
+        - generic [ref=f8e73]: Guidelines
+        - heading "India (IN)" [level=1] [ref=f8e76]
+      - link "Back to Guidelines" [ref=f8e78] [cursor=pointer]:
+        - /url: /en-us/guidelines
+        - generic [ref=f8e79]:
+          - img "Caret left" [ref=f8e81]
+          - text: Back to Guidelines
+    - generic [ref=f8e85]:
+      - table [ref=f8e89]:
+        - rowgroup [ref=f8e90]:
+          - row [ref=f8e91]:
+            - columnheader "Locale Summary" [ref=f8e92]:
+              - paragraph [ref=f8e95]:
+                - generic [ref=f8e96]: Locale Summary
+            - columnheader [ref=f8e97]
+        - rowgroup [ref=f8e98]:
+          - row [ref=f8e99]:
+            - cell [ref=f8e100]:
+              - paragraph [ref=f8e103]: Locale name
+            - cell [ref=f8e104]:
+              - paragraph [ref=f8e107]: India
+          - row [ref=f8e108]:
+            - cell [ref=f8e109]:
+              - paragraph [ref=f8e112]:
+                - generic [ref=f8e113]: ISO code
+                - text: The International Organization for Standardization two character representation for the given locale.
+            - cell [ref=f8e114]:
+              - paragraph [ref=f8e117]: IN
+          - row [ref=f8e118]:
+            - cell [ref=f8e119]:
+              - paragraph [ref=f8e122]: Region
+            - cell [ref=f8e123]:
+              - paragraph [ref=f8e126]: Asia–Pacific
+      - table [ref=f8e130]:
+        - rowgroup [ref=f8e131]:
+          - row [ref=f8e132]:
+            - columnheader "Numbers Summary" [ref=f8e133]:
+              - paragraph [ref=f8e136]:
+                - generic [ref=f8e137]: Numbers Summary
+            - columnheader [ref=f8e138]
+        - rowgroup [ref=f8e139]:
+          - row [ref=f8e140]:
+            - cell [ref=f8e141]:
+              - paragraph [ref=f8e144]: Toll-Free Prefixes
+            - cell [ref=f8e145]:
+              - paragraph [ref=f8e148]: "+91800"
+    - generic [ref=f8e152]:
+      - 'heading "India: Toll-Free Numbers" [level=2] [ref=f8e154]'
+      - paragraph [ref=f8e156]:
+        - generic [ref=f8e157]: Requirements for Individuals
+      - separator [ref=f8e159]
+      - table [ref=f8e161]:
+        - rowgroup [ref=f8e162]:
+          - row [ref=f8e163]:
+            - columnheader "Information required" [ref=f8e164]:
+              - paragraph [ref=f8e167]:
+                - generic [ref=f8e168]: Information required
+            - columnheader [ref=f8e169]:
+              - paragraph [ref=f8e172]: Documentation required
+            - columnheader "Acceptable Documentation One of the following" [ref=f8e173]:
+              - paragraph [ref=f8e176]:
+                - generic [ref=f8e177]: Acceptable Documentation
+                - generic [ref=f8e178]: One of the following
+        - rowgroup [ref=f8e179]:
+          - row [ref=f8e180]:
+            - cell [ref=f8e181]:
+              - generic [ref=f8e183]:
+                - paragraph [ref=f8e184]: Address
+                - paragraph [ref=f8e185]: Must be outside of the country
+            - cell [ref=f8e186]:
+              - paragraph [ref=f8e189]: No documentation required
+            - cell [ref=f8e190]
+      - paragraph [ref=f8e192]:
+        - generic [ref=f8e193]: Requirements for Businesses
+      - separator [ref=f8e196]
+      - table [ref=f8e198]:
+        - rowgroup [ref=f8e199]:
+          - row [ref=f8e200]:
+            - columnheader "Information required" [ref=f8e201]:
+              - paragraph [ref=f8e204]:
+                - generic [ref=f8e205]: Information required
+            - columnheader [ref=f8e206]:
+              - paragraph [ref=f8e209]: Documentation required
+            - columnheader "Acceptable Documentation One of the following" [ref=f8e210]:
+              - paragraph [ref=f8e213]:
+                - generic [ref=f8e214]: Acceptable Documentation
+                - generic [ref=f8e215]: One of the following
+        - rowgroup [ref=f8e216]:
+          - row [ref=f8e217]:
+            - cell [ref=f8e218]:
+              - generic [ref=f8e220]:
+                - paragraph [ref=f8e221]: Address
+                - paragraph [ref=f8e222]: Must be outside of the country
+            - cell [ref=f8e223]:
+              - paragraph [ref=f8e226]: No documentation required
+            - cell [ref=f8e227]
+    - generic [ref=f8e229]:
+      - separator [ref=f8e233]
+      - paragraph [ref=f8e237]: For the benefit of all our customers, these guidelines are provided to help you comply with applicable requirements and to help ensure Twilio's platform remains compliant with global telecommunications ecosystem requirements. These guidelines represent our current understanding of common compliance requirements generally applicable to Twilio and its customers, and do not constitute legal advice. By posting these guidelines, Twilio makes no assurances regarding the legal compliance of your application built using our APIs. You are expected to understand and abide by all compliance obligations applicable to your specific application. You should check these pages regularly for updates as telecommunications ecosystem requirements continue to evolve and change, and the information below may be updated or changed without notice.
+  - contentinfo [ref=f8e238]:
+    - generic [ref=f8e242]:
+      - generic [ref=f8e243]:
+        - figure [ref=f8e246]:
+          - link [ref=f8e247] [cursor=pointer]:
+            - /url: /en-us
+            - generic "Twilio" [ref=f8e248]:
+              - img "Twilio" [ref=f8e249]
+        - list [ref=f8e262]:
+          - listitem [ref=f8e263]:
+            - link "Twilio careers" [ref=f8e266] [cursor=pointer]:
+              - /url: http://jobs.twilio.com/
+          - listitem [ref=f8e268]:
+            - link "Twilio.org" [ref=f8e271] [cursor=pointer]:
+              - /url: https://www.twilio.org/en-us
+          - listitem [ref=f8e273]:
+            - link "Press and media" [ref=f8e276] [cursor=pointer]:
+              - /url: /en-us/press
+          - listitem [ref=f8e278]:
+            - link "Investor relations" [ref=f8e281] [cursor=pointer]:
+              - /url: https://investors.twilio.com/
+          - listitem [ref=f8e283]:
+            - link "Legal" [ref=f8e286] [cursor=pointer]:
+              - /url: /en-us/legal/tos
+          - listitem [ref=f8e288]:
+            - link "Privacy" [ref=f8e291] [cursor=pointer]:
+              - /url: /en-us/legal/privacy
+          - listitem [ref=f8e293]:
+            - link "Security" [ref=f8e296] [cursor=pointer]:
+              - /url: /en-us/security
+          - listitem [ref=f8e298]:
+            - link "Sitemap" [ref=f8e301] [cursor=pointer]:
+              - /url: https://www.twilio.com/sitemap.xml
+          - listitem [ref=f8e303]:
+            - link "LLMS" [ref=f8e306] [cursor=pointer]:
+              - /url: https://www.twilio.com/llms.txt
+        - list [ref=f8e311]:
+          - listitem [ref=f8e312]:
+            - link "Twilio on Facebook" [ref=f8e313] [cursor=pointer]:
+              - /url: https://www.facebook.com/TeamTwilio
+          - listitem [ref=f8e317]:
+            - link "Twilio on X" [ref=f8e318] [cursor=pointer]:
+              - /url: https://x.com/twilio
+              - img "Twitter Logo" [ref=f8e320]
+          - listitem [ref=f8e322]:
+            - link "Twilio on LinkedIn" [ref=f8e323] [cursor=pointer]:
+              - /url: https://www.linkedin.com/company/twilio-inc-
+          - listitem [ref=f8e327]:
+            - link "Twilio on Youtube" [ref=f8e328] [cursor=pointer]:
+              - /url: https://www.youtube.com/@twilio
+        - paragraph [ref=f8e331]: Copyright © 2026 Twilio Inc. All rights reserved.
+      - generic [ref=f8e333]:
+        - button "Considering Twilio?"
+        - list [ref=f8e335]:
+          - listitem [ref=f8e336]:
+            - link "About Twilio" [ref=f8e339] [cursor=pointer]:
+              - /url: /en-us/company
+          - listitem [ref=f8e341]:
+            - link "Customer Engagement Platform (CEP)" [ref=f8e344] [cursor=pointer]:
+              - /url: /en-us/customer-engagement-platform
+          - listitem [ref=f8e346]:
+            - link "Communications" [ref=f8e349] [cursor=pointer]:
+              - /url: /en-us/cpaas
+          - listitem [ref=f8e351]:
+            - link "Conversational AI" [ref=f8e354] [cursor=pointer]:
+              - /url: /en-us/products/conversational-ai
+          - listitem [ref=f8e356]:
+            - link "User authentication and identity" [ref=f8e359] [cursor=pointer]:
+              - /url: /en-us/user-authentication-identity
+          - listitem [ref=f8e361]:
+            - link "Customer Data Platform (CDP)" [ref=f8e364] [cursor=pointer]:
+              - /url: /en-us/customer-data-platform
+          - listitem [ref=f8e366]:
+            - link "AI" [ref=f8e369] [cursor=pointer]:
+              - /url: /en-us/ai
+          - listitem [ref=f8e371]:
+            - link "Customer stories" [ref=f8e374] [cursor=pointer]:
+              - /url: https://customers.twilio.com/en-us
+          - listitem [ref=f8e376]:
+            - link "Events" [ref=f8e379] [cursor=pointer]:
+              - /url: /en-us/events
+          - listitem [ref=f8e381]:
+            - link "Contact sales" [ref=f8e384] [cursor=pointer]:
+              - /url: /en-us/help/sales
+          - listitem [ref=f8e386]:
+            - link "Why Twilio" [ref=f8e389] [cursor=pointer]:
+              - /url: /en-us/why-twilio
+              - figure [ref=f8e391]
+      - generic [ref=f8e394]:
+        - button "Products and Features"
+        - list [ref=f8e396]:
+          - listitem [ref=f8e397]:
+            - link "SMTP" [ref=f8e400] [cursor=pointer]:
+              - /url: /en-us/products/email-api/smtp-service
+          - listitem [ref=f8e402]:
+            - link "Branded Calling" [ref=f8e405] [cursor=pointer]:
+              - /url: /en-us/voice/branded-calling
+          - listitem [ref=f8e407]:
+            - link "Twilio Segment" [ref=f8e410] [cursor=pointer]:
+              - /url: /en-us/customer-data-platform
+          - listitem [ref=f8e412]:
+            - link "Twilio Engage" [ref=f8e415] [cursor=pointer]:
+              - /url: /en-us/products/engage
+          - listitem [ref=f8e417]:
+            - link "Connections" [ref=f8e420] [cursor=pointer]:
+              - /url: /en-us/products/connections
+          - listitem [ref=f8e422]:
+            - link "SendGrid Email API" [ref=f8e425] [cursor=pointer]:
+              - /url: /en-us/products/email-api
+          - listitem [ref=f8e427]:
+            - link "RCS messaging" [ref=f8e430] [cursor=pointer]:
+              - /url: /en-us/messaging/channels/rcs
+          - listitem [ref=f8e432]:
+            - link "Latest innovations" [ref=f8e435] [cursor=pointer]:
+              - /url: /en-us/products/beta
+          - listitem [ref=f8e437]:
+            - link "Pre-built solutions" [ref=f8e440] [cursor=pointer]:
+              - /url: /en-us/partners/saas
+          - listitem [ref=f8e442]:
+            - link "Support plans" [ref=f8e445] [cursor=pointer]:
+              - /url: /en-us/support-plans
+          - listitem [ref=f8e447]:
+            - link "All products" [ref=f8e450] [cursor=pointer]:
+              - /url: /en-us/products
+              - figure [ref=f8e452]
+      - generic [ref=f8e455]:
+        - button "Use Cases"
+        - list [ref=f8e457]:
+          - listitem [ref=f8e458]:
+            - link "Voice AI" [ref=f8e461] [cursor=pointer]:
+              - /url: /en-us/use-cases/voice-AI
+          - listitem [ref=f8e463]:
+            - link "AI agent productivity" [ref=f8e466] [cursor=pointer]:
+              - /url: /en-us/solutions/agent-productivity
+          - listitem [ref=f8e468]:
+            - link "Customer data management" [ref=f8e471] [cursor=pointer]:
+              - /url: /en-us/use-cases/customer-data-management-integration
+          - listitem [ref=f8e473]:
+            - link "Audience segmentation" [ref=f8e476] [cursor=pointer]:
+              - /url: /en-us/use-cases/segmentation-audience-activation
+          - listitem [ref=f8e478]:
+            - link "Contact center" [ref=f8e481] [cursor=pointer]:
+              - /url: /en-us/flex/use-cases/contact-center
+          - listitem [ref=f8e483]:
+            - link "SMS marketing" [ref=f8e486] [cursor=pointer]:
+              - /url: /en-us/solutions/text-marketing
+          - listitem [ref=f8e488]:
+            - link "Customer acquisition" [ref=f8e491] [cursor=pointer]:
+              - /url: /en-us/use-cases/customer-acquisition-activation
+          - listitem [ref=f8e493]:
+            - link "Fraud prevention" [ref=f8e496] [cursor=pointer]:
+              - /url: /en-us/use-cases/fraud-prevention
+          - listitem [ref=f8e498]:
+            - link "Voice response system (IVR)" [ref=f8e501] [cursor=pointer]:
+              - /url: /en-us/use-cases/ivr
+          - listitem [ref=f8e503]:
+            - link "Bulk text messaging" [ref=f8e506] [cursor=pointer]:
+              - /url: /en-us/use-cases/mass-texting
+          - listitem [ref=f8e508]:
+            - link "Mass email sender" [ref=f8e511] [cursor=pointer]:
+              - /url: /en-us/resource-center/bulk-email-guide
+          - listitem [ref=f8e513]:
+            - link "All use cases" [ref=f8e516] [cursor=pointer]:
+              - /url: https://www.twilio.com/en-us/solutions#use-cases
+              - figure [ref=f8e518]
+      - generic [ref=f8e521]:
+        - button "Developers"
+        - list [ref=f8e523]:
+          - listitem [ref=f8e524]:
+            - link "Developer resources" [ref=f8e527] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs#developer-toolkit
+          - listitem [ref=f8e529]:
+            - link "Twilio Essentials" [ref=f8e532] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs#twilio-essentials
+          - listitem [ref=f8e534]:
+            - link "SDKs" [ref=f8e537] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/libraries
+          - listitem [ref=f8e539]:
+            - link "CDP integrations" [ref=f8e542] [cursor=pointer]:
+              - /url: /en-us/catalog
+          - listitem [ref=f8e544]:
+            - link "Serverless" [ref=f8e547] [cursor=pointer]:
+              - /url: /en-us/serverless
+          - listitem [ref=f8e549]:
+            - link "Conversations" [ref=f8e552] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/conversations
+          - listitem [ref=f8e554]:
+            - link "SMTP Email API" [ref=f8e557] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/sendgrid/for-developers/sending-email/getting-started-smtp
+          - listitem [ref=f8e559]:
+            - link "SMS API" [ref=f8e562] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/messaging/api
+          - listitem [ref=f8e564]:
+            - link "WhatsApp API" [ref=f8e567] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/whatsapp
+          - listitem [ref=f8e569]:
+            - link "Voice API" [ref=f8e572] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/voice
+          - listitem [ref=f8e574]:
+            - link "Connections" [ref=f8e577] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/segment/connections
+          - listitem [ref=f8e579]:
+            - link "All docs" [ref=f8e582] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs
+              - figure [ref=f8e584]

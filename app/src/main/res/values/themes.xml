@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Splash theme only. All in-app theming is Compose (core:designsystem). windowSplashScreen* keys
+      are API 31+; androidx.core:core-splashscreen backports the behaviour to our minSdk of 29.
+    -->
+    <style name="Theme.Asktrix.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+        <item name="postSplashScreenTheme">@style/Theme.Asktrix</item>
+    </style>
+
+    <style name="Theme.Asktrix" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>

@@ -1,0 +1,818 @@
+- generic [active] [ref=f17e1]:
+  - banner [ref=f17e2]:
+    - generic [ref=f17e4]:
+      - generic [ref=f17e6]:
+        - button "English" [ref=f17e9] [cursor=pointer]:
+          - figure [ref=f17e10]
+          - figure [ref=f17e18]
+        - generic [ref=f17e20]:
+          - button "Support" [ref=f17e22] [cursor=pointer]:
+            - text: Support
+            - figure [ref=f17e23]
+          - button "Login" [ref=f17e26] [cursor=pointer]:
+            - text: Login
+            - figure [ref=f17e27]
+      - generic [ref=f17e30]:
+        - link "Twilio" [ref=f17e32] [cursor=pointer]:
+          - /url: https://www.twilio.com/en-us
+        - navigation [ref=f17e39]:
+          - button "Products" [ref=f17e41] [cursor=pointer]:
+            - text: Products
+            - figure [ref=f17e42]
+          - button "Solutions" [ref=f17e45] [cursor=pointer]:
+            - text: Solutions
+            - figure [ref=f17e46]
+          - button "Why Twilio" [ref=f17e49] [cursor=pointer]:
+            - text: Why Twilio
+            - figure [ref=f17e50]
+          - button "Resources" [ref=f17e53] [cursor=pointer]:
+            - text: Resources
+            - figure [ref=f17e54]
+          - button "Pricing" [ref=f17e57] [cursor=pointer]:
+            - text: Pricing
+            - figure [ref=f17e58]
+        - generic [ref=f17e60]:
+          - button "Search" [ref=f17e62] [cursor=pointer]:
+            - figure [ref=f17e63]
+          - generic [ref=f17e66]:
+            - link "Contact sales" [ref=f17e67] [cursor=pointer]:
+              - /url: https://www.twilio.com/en-us/help/sales
+            - link "Start for free" [ref=f17e69] [cursor=pointer]:
+              - /url: https://www.twilio.com/try-twilio
+  - main [ref=f17e71]:
+    - generic [ref=f17e78]:
+      - generic [ref=f17e79]:
+        - generic [ref=f17e80]:
+          - generic [ref=f17e81]: Twilio Voice pricing
+          - heading "Flexible and transparent Voice pricing" [level=1] [ref=f17e84]
+          - paragraph [ref=f17e87]: Modernize your voice stack without ripping anything out. Snap on Voice AI, payments, and branded calls alongside your current setup. Pay transparent rates. No hidden fees.
+        - link "Start for free" [ref=f17e89] [cursor=pointer]:
+          - /url: https://www.twilio.com/try-twilio
+        - generic [ref=f17e91]:
+          - generic [ref=f17e92]:
+            - figure [ref=f17e94]
+            - generic [ref=f17e97]: Free trial
+          - generic [ref=f17e98]:
+            - figure [ref=f17e100]
+            - generic [ref=f17e103]: No credit card required
+          - generic [ref=f17e104]:
+            - figure [ref=f17e106]
+            - generic [ref=f17e109]: Flexible pricing
+      - figure [ref=f17e111]:
+        - img "Smiling woman on phone viewed with a plan creation button and volume options." [ref=f17e113]
+    - generic [ref=f17e121]:
+      - generic: Calls in
+      - generic [ref=f17e123]:
+        - paragraph [ref=f17e124]:
+          - generic [ref=f17e125]: India
+        - textbox "Calls in" [ref=f17e126] [cursor=pointer]:
+          - /placeholder: Enter a locale
+    - paragraph [ref=f17e133]:
+      - generic [ref=f17e134]:
+        - text: "Jump to:"
+        - link "Voice pricing" [ref=f17e135] [cursor=pointer]:
+          - /url: "#voice-payg-heading"
+        - link "CPS pricing" [ref=f17e136] [cursor=pointer]:
+          - /url: "#voice-cps-heading"
+        - link "Intelligent service pricing" [ref=f17e137] [cursor=pointer]:
+          - /url: "#voice-is-heading"
+        - link "Network Traversal Service" [ref=f17e138] [cursor=pointer]:
+          - /url: "#voice-nts"
+        - link "Volume pricing" [ref=f17e139] [cursor=pointer]:
+          - /url: "#voice-vol-heading"
+    - generic [ref=f17e141]:
+      - generic [ref=f17e146]:
+        - generic [ref=f17e147]:
+          - paragraph [ref=f17e148]: India
+          - heading "Pay-as-you-go Voice pricing" [level=2] [ref=f17e149]
+        - paragraph [ref=f17e151]: No commitments necessary. Build your application with calling for any device and intelligent services that help you ship faster.
+      - table [ref=f17e156]:
+        - rowgroup [ref=f17e157]:
+          - row [ref=f17e158]:
+            - columnheader "Number type" [ref=f17e159]:
+              - paragraph [ref=f17e162]:
+                - generic [ref=f17e163]: Number type
+            - columnheader "To make calls" [ref=f17e164]:
+              - paragraph [ref=f17e167]:
+                - generic [ref=f17e168]: To make calls
+            - columnheader "To receive calls" [ref=f17e169]:
+              - paragraph [ref=f17e172]:
+                - generic [ref=f17e173]: To receive calls
+            - columnheader "Refer from Twilio" [ref=f17e174]:
+              - paragraph [ref=f17e177]:
+                - generic [ref=f17e178]: Refer from Twilio
+        - rowgroup [ref=f17e179]:
+          - row [ref=f17e180]:
+            - cell "Local calls tooltip Icon" [ref=f17e181]:
+              - generic [ref=f17e184]:
+                - paragraph [ref=f17e185]:
+                  - generic [ref=f17e186]: Local calls
+                - img "tooltip Icon" [ref=f17e187]
+            - cell "$0.0699 / min" [ref=f17e188]:
+              - paragraph [ref=f17e191]:
+                - generic [ref=f17e192]: $0.0699
+                - text: / min
+            - cell [ref=f17e193]
+            - cell [ref=f17e199]
+          - row [ref=f17e205]:
+            - cell "Mobile calls tooltip Icon" [ref=f17e206]:
+              - generic [ref=f17e209]:
+                - paragraph [ref=f17e210]:
+                  - generic [ref=f17e211]: Mobile calls
+                - img "tooltip Icon" [ref=f17e212]
+            - cell "$0.0496 / min" [ref=f17e213]:
+              - paragraph [ref=f17e216]:
+                - generic [ref=f17e217]: $0.0496
+                - text: / min
+            - cell [ref=f17e218]
+            - cell [ref=f17e224]
+          - row [ref=f17e230]:
+            - cell [ref=f17e231]:
+              - generic [ref=f17e234]:
+                - paragraph [ref=f17e235]:
+                  - link "Browser/app" [ref=f17e238] [cursor=pointer]:
+                    - /url: https://www.twilio.com/en-us/voice-sdk
+                - img "tooltip Icon" [ref=f17e239]
+            - cell "$0.0040 / min" [ref=f17e240]:
+              - paragraph [ref=f17e243]:
+                - generic [ref=f17e244]: $0.0040
+                - text: / min
+            - cell "$0.0040 / min" [ref=f17e245]:
+              - paragraph [ref=f17e248]:
+                - generic [ref=f17e249]: $0.0040
+                - text: / min
+            - cell [ref=f17e250]
+          - row [ref=f17e256]:
+            - cell [ref=f17e257]:
+              - generic [ref=f17e260]:
+                - paragraph [ref=f17e261]:
+                  - link "SIP interface" [ref=f17e262] [cursor=pointer]:
+                    - /url: https://www.twilio.com/en-us/voice/sip-interface
+                - img "tooltip Icon" [ref=f17e264]
+            - cell "$0.0040 / min" [ref=f17e265]:
+              - paragraph [ref=f17e268]:
+                - generic [ref=f17e269]: $0.0040
+                - text: / min
+            - cell "$0.0040 / min" [ref=f17e270]:
+              - paragraph [ref=f17e273]:
+                - generic [ref=f17e274]: $0.0040
+                - text: / min
+            - cell "$0.1000 / refer" [ref=f17e275]:
+              - paragraph [ref=f17e278]:
+                - generic [ref=f17e279]: $0.1000
+                - text: / refer
+          - row [ref=f17e280]:
+            - cell "Secure media tooltip Icon" [ref=f17e281]:
+              - generic [ref=f17e284]:
+                - paragraph [ref=f17e285]:
+                  - generic [ref=f17e286]: Secure media
+                - img "tooltip Icon" [ref=f17e287]
+            - cell "Included" [ref=f17e288]:
+              - paragraph [ref=f17e291]:
+                - generic [ref=f17e292]: Included
+            - cell "Included" [ref=f17e293]:
+              - paragraph [ref=f17e296]:
+                - generic [ref=f17e297]: Included
+            - cell [ref=f17e298]
+    - button [ref=f17e308] [cursor=pointer]:
+      - heading "In depth pricing" [level=3] [ref=f17e310]
+    - generic [ref=f17e318]:
+      - generic [ref=f17e321]:
+        - heading "BYOC trunking pricing" [level=3] [ref=f17e325]
+        - table [ref=f17e327]:
+          - rowgroup [ref=f17e328]:
+            - row [ref=f17e329]:
+              - columnheader "BYOC trunking pricing" [ref=f17e330]:
+                - paragraph [ref=f17e333]:
+                  - generic [ref=f17e334]: BYOC trunking pricing
+              - columnheader "To make calls" [ref=f17e335]:
+                - paragraph [ref=f17e338]:
+                  - generic [ref=f17e339]: To make calls
+              - columnheader "To receive calls" [ref=f17e340]:
+                - paragraph [ref=f17e343]:
+                  - generic [ref=f17e344]: To receive calls
+          - rowgroup [ref=f17e345]:
+            - row [ref=f17e346]:
+              - cell [ref=f17e347]:
+                - generic [ref=f17e350]:
+                  - paragraph [ref=f17e351]:
+                    - link "BYOC trunking" [ref=f17e354] [cursor=pointer]:
+                      - /url: https://www.twilio.com/en-us/voice/byoc-trunking
+                  - img "tooltip Icon" [ref=f17e355]
+              - cell "$0.0040 / min" [ref=f17e356]:
+                - paragraph [ref=f17e359]:
+                  - generic [ref=f17e360]: $0.0040
+                  - text: / min
+              - cell "$0.0040 / min" [ref=f17e361]:
+                - paragraph [ref=f17e364]:
+                  - generic [ref=f17e365]: $0.0040
+                  - text: / min
+            - row [ref=f17e366]:
+              - cell "Secure media tooltip Icon" [ref=f17e367]:
+                - generic [ref=f17e370]:
+                  - paragraph [ref=f17e371]:
+                    - generic [ref=f17e372]: Secure media
+                  - img "tooltip Icon" [ref=f17e373]
+              - cell "Included" [ref=f17e374]:
+                - paragraph [ref=f17e377]:
+                  - generic [ref=f17e378]: Included
+              - cell "Included" [ref=f17e379]:
+                - paragraph [ref=f17e382]:
+                  - generic [ref=f17e383]: Included
+      - link "Start for free" [ref=f17e388] [cursor=pointer]:
+        - /url: https://www.twilio.com/try-twilio
+    - generic [ref=f17e391]:
+      - generic [ref=f17e394]:
+        - generic [ref=f17e395]:
+          - paragraph [ref=f17e396]: India
+          - heading "Phone number pricing" [level=2] [ref=f17e397]
+        - paragraph [ref=f17e399]: Pick from a deep inventory of phone numbers in over 100 locales.
+      - table [ref=f17e404]:
+        - rowgroup [ref=f17e405]:
+          - row [ref=f17e406]:
+            - columnheader "Number type" [ref=f17e407]:
+              - paragraph [ref=f17e410]:
+                - generic [ref=f17e411]: Number type
+            - columnheader "Price" [ref=f17e412]:
+              - paragraph [ref=f17e415]:
+                - generic [ref=f17e416]: Price
+        - rowgroup [ref=f17e417]:
+          - row [ref=f17e418]:
+            - cell "International numbers View the list of international numbers and capabilities. tooltip Icon" [ref=f17e419]:
+              - generic [ref=f17e422]:
+                - paragraph [ref=f17e423]:
+                  - generic [ref=f17e424]: International numbers
+                  - link "View the list of international numbers and capabilities." [ref=f17e425] [cursor=pointer]:
+                    - /url: https://support.twilio.com/hc/en-us/articles/223183068-Twilio-phone-number-availability-and-their-capabilities#voice_enabled
+                - img "tooltip Icon" [ref=f17e426]
+            - cell "Starting at $1.15 / mo" [ref=f17e427]:
+              - paragraph [ref=f17e430]:
+                - text: Starting at
+                - generic [ref=f17e431]: $1.15
+                - text: / mo
+    - generic [ref=f17e433]:
+      - generic [ref=f17e438]:
+        - generic [ref=f17e439]:
+          - paragraph [ref=f17e440]: India
+          - heading "Calls per second (CPS) pricing" [level=2] [ref=f17e441]
+        - paragraph [ref=f17e443]: Calculate global CPS. Available with pay‑as‑you‑go pricing and discounts for committed‑use. Provision up to 30 CPS in the console.
+      - generic [ref=f17e444]:
+        - generic [ref=f17e448]:
+          - generic [ref=f17e449]:
+            - heading "Monthly pricing" [level=3] [ref=f17e451]
+            - generic [ref=f17e452]:
+              - slider "Monthly pricing" [ref=f17e453]: "1"
+              - generic [ref=f17e454]:
+                - generic [ref=f17e455]: "1"
+                - generic [ref=f17e456]: 51+
+          - generic [ref=f17e457]:
+            - generic [ref=f17e458]:
+              - paragraph [ref=f17e459]: Calls per second
+              - status [ref=f17e461]: "1"
+            - generic [ref=f17e462]:
+              - paragraph [ref=f17e463]: Pay as you go Pricing
+              - status [ref=f17e465]: Free
+        - link "Start for free" [ref=f17e469] [cursor=pointer]:
+          - /url: https://www.twilio.com/try-twilio
+    - generic [ref=f17e472]:
+      - generic [ref=f17e476]:
+        - paragraph [ref=f17e477]: India
+        - heading "Intelligent service pricing" [level=2] [ref=f17e478]
+      - table [ref=f17e483]:
+        - rowgroup [ref=f17e484]:
+          - row [ref=f17e485]:
+            - columnheader "Feature" [ref=f17e486]:
+              - paragraph [ref=f17e489]:
+                - generic [ref=f17e490]: Feature
+            - columnheader "Price" [ref=f17e491]:
+              - paragraph [ref=f17e494]:
+                - generic [ref=f17e495]: Price
+            - columnheader [ref=f17e496]
+            - columnheader [ref=f17e497]
+        - rowgroup [ref=f17e498]:
+          - row [ref=f17e499]:
+            - cell [ref=f17e500]:
+              - generic [ref=f17e503]:
+                - paragraph [ref=f17e504]:
+                  - generic [ref=f17e506]:
+                    - link "Conference calls" [ref=f17e507] [cursor=pointer]:
+                      - /url: https://www.twilio.com/en-us/voice/conference
+                    - link:
+                      - /url: https://www.twilio.com/en-us/voice/conference
+                    - link:
+                      - /url: https://www.twilio.com/en-us/voice/conference/pricing
+                - img "tooltip Icon" [ref=f17e508]
+            - cell "Starting at $0.0018 / participant per min View pricing" [ref=f17e509]:
+              - generic [ref=f17e511]:
+                - paragraph [ref=f17e512]:
+                  - text: Starting at
+                  - generic [ref=f17e513]: $0.0018
+                  - text: / participant per min
+                - paragraph [ref=f17e514]:
+                  - link "View pricing" [ref=f17e516] [cursor=pointer]:
+                    - /url: https://www.twilio.com/en-us/voice/conference/pricing
+            - cell [ref=f17e517]
+            - cell [ref=f17e518]
+          - row [ref=f17e519]:
+            - cell [ref=f17e520]:
+              - generic [ref=f17e523]:
+                - paragraph [ref=f17e524]:
+                  - link "Call recording" [ref=f17e526] [cursor=pointer]:
+                    - /url: https://www.twilio.com/en-us/call-recording
+                - img "tooltip Icon" [ref=f17e527]
+            - cell "Recording $0.0025 / min" [ref=f17e528]:
+              - paragraph [ref=f17e531]:
+                - text: Recording
+                - generic [ref=f17e532]: $0.0025
+                - text: / min
+            - cell "Storage $0.0005 / min per mo" [ref=f17e533]:
+              - paragraph [ref=f17e536]:
+                - text: Storage
+                - generic [ref=f17e537]: $0.0005
+                - text: / min per mo
+            - cell "Transcription $0.0500 / min" [ref=f17e538]:
+              - paragraph [ref=f17e541]:
+                - text: Transcription
+                - generic [ref=f17e542]: $0.0500
+                - text: / min
+          - row [ref=f17e543]:
+            - cell [ref=f17e544]:
+              - generic [ref=f17e547]:
+                - paragraph [ref=f17e548]:
+                  - link "Answering machine detection" [ref=f17e551] [cursor=pointer]:
+                    - /url: https://www.twilio.com/en-us/blog/products/launches/introducing-new-answering-machine-detection-html
+                - img "tooltip Icon" [ref=f17e552]
+            - cell "$0.0075 / call" [ref=f17e553]:
+              - paragraph [ref=f17e556]:
+                - generic [ref=f17e557]: $0.0075
+                - text: / call
+            - cell [ref=f17e558]
+            - cell [ref=f17e559]
+          - row [ref=f17e560]:
+            - cell [ref=f17e561]:
+              - generic [ref=f17e564]:
+                - paragraph [ref=f17e565]:
+                  - link "Voice insights advanced features" [ref=f17e568] [cursor=pointer]:
+                    - /url: https://www.twilio.com/en-us/voice/insights
+                - img "tooltip Icon" [ref=f17e569]
+            - cell "$0.0024 / min" [ref=f17e570]:
+              - paragraph [ref=f17e573]:
+                - generic [ref=f17e574]: $0.0024
+                - text: / min
+            - cell [ref=f17e575]
+            - cell [ref=f17e576]
+          - row [ref=f17e577]:
+            - cell [ref=f17e578]:
+              - generic [ref=f17e581]:
+                - paragraph [ref=f17e582]:
+                  - link "Conversational Intelligence - Transcription" [ref=f17e585] [cursor=pointer]:
+                    - /url: https://www.twilio.com/docs/conversation-intelligence-classic/onboarding#transcripts
+                - img "tooltip Icon" [ref=f17e586]
+            - cell "Batch Transcription $0.024 / min" [ref=f17e587]:
+              - paragraph [ref=f17e590]:
+                - text: Batch Transcription
+                - generic [ref=f17e591]: $0.024
+                - text: / min
+            - cell "Streaming (Real-Time) Transcription $0.027 / min" [ref=f17e592]:
+              - paragraph [ref=f17e595]:
+                - text: Streaming (Real-Time) Transcription
+                - generic [ref=f17e596]: $0.027
+                - text: / min
+            - cell [ref=f17e597]
+          - row [ref=f17e598]:
+            - cell [ref=f17e599]:
+              - generic [ref=f17e602]:
+                - paragraph [ref=f17e603]:
+                  - link "Conversational Intelligence - Language Operator" [ref=f17e606] [cursor=pointer]:
+                    - /url: https://www.twilio.com/docs/conversation-intelligence-classic/language-operators#language-operators
+                - img "tooltip Icon" [ref=f17e607]
+            - cell "Standard $0.0040 / min" [ref=f17e608]:
+              - paragraph [ref=f17e611]:
+                - text: Standard
+                - generic [ref=f17e612]: $0.0040
+                - text: / min
+            - cell "Text Analysis $0.0035 / min" [ref=f17e613]:
+              - paragraph [ref=f17e616]:
+                - text: Text Analysis
+                - generic [ref=f17e617]: $0.0035
+                - text: / min
+            - cell [ref=f17e618]
+          - row [ref=f17e619]:
+            - cell [ref=f17e620]:
+              - generic [ref=f17e623]:
+                - paragraph [ref=f17e624]:
+                  - link "Conversational Intelligence - Generative Custom Operators" [ref=f17e627] [cursor=pointer]:
+                    - /url: https://www.twilio.com/docs/conversation-intelligence-classic/generative-custom-operators
+                - img "tooltip Icon" [ref=f17e628]
+            - cell "Input characters $0.002 / 1k characters" [ref=f17e629]:
+              - paragraph [ref=f17e632]:
+                - text: Input characters
+                - generic [ref=f17e633]: $0.002
+                - text: / 1k characters
+            - cell "Output characters $0.018 / 1k characters" [ref=f17e634]:
+              - paragraph [ref=f17e637]:
+                - text: Output characters
+                - generic [ref=f17e638]: $0.018
+                - text: / 1k characters
+            - cell [ref=f17e639]
+          - row [ref=f17e640]:
+            - cell [ref=f17e641]:
+              - generic [ref=f17e644]:
+                - paragraph [ref=f17e645]:
+                  - link "Pay Connectors" [ref=f17e648] [cursor=pointer]:
+                    - /url: https://www.twilio.com/docs/voice/twiml/pay/pay-connectors
+                - img "tooltip Icon" [ref=f17e649]
+            - cell "Starting at $0.150 / transaction View pricing" [ref=f17e650]:
+              - generic [ref=f17e652]:
+                - paragraph [ref=f17e653]:
+                  - text: Starting at
+                  - generic [ref=f17e654]: $0.150
+                  - text: / transaction
+                - paragraph [ref=f17e655]:
+                  - link "View pricing" [ref=f17e657] [cursor=pointer]:
+                    - /url: https://www.twilio.com/en-us/voice/pay-connectors/pricing
+            - cell [ref=f17e658]
+            - cell [ref=f17e659]
+          - row [ref=f17e660]:
+            - cell [ref=f17e661]:
+              - generic [ref=f17e664]:
+                - paragraph [ref=f17e665]:
+                  - link "Media Streams" [ref=f17e667] [cursor=pointer]:
+                    - /url: https://www.twilio.com/docs/voice/api/stream-resource
+                - img "tooltip Icon" [ref=f17e668]
+            - cell "$0.0044 / min" [ref=f17e669]:
+              - paragraph [ref=f17e672]:
+                - generic [ref=f17e673]: $0.0044
+                - text: / min
+            - cell [ref=f17e674]
+            - cell [ref=f17e675]
+          - row [ref=f17e676]:
+            - cell [ref=f17e677]:
+              - generic [ref=f17e680]:
+                - paragraph [ref=f17e681]:
+                  - link "SIPREC" [ref=f17e684] [cursor=pointer]:
+                    - /url: https://www.twilio.com/docs/voice/api/siprec
+                - img "tooltip Icon" [ref=f17e685]
+            - cell "$0.0044 / min" [ref=f17e686]:
+              - paragraph [ref=f17e689]:
+                - generic [ref=f17e690]: $0.0044
+                - text: / min
+            - cell [ref=f17e691]
+            - cell [ref=f17e692]
+          - row [ref=f17e693]:
+            - cell [ref=f17e694]:
+              - generic [ref=f17e697]:
+                - paragraph [ref=f17e698]:
+                  - link "Conversation Relay" [ref=f17e701] [cursor=pointer]:
+                    - /url: https://www.twilio.com/en-us/products/conversational-ai/conversationrelay
+                - img "tooltip Icon" [ref=f17e702]
+            - cell "$0.07 / min" [ref=f17e703]:
+              - paragraph [ref=f17e706]:
+                - generic [ref=f17e707]: $0.07
+                - text: / min
+            - cell [ref=f17e708]
+            - cell [ref=f17e709]
+          - row [ref=f17e710]:
+            - cell [ref=f17e711]:
+              - generic [ref=f17e714]:
+                - paragraph [ref=f17e715]:
+                  - link "Gather Speech Recognition" [ref=f17e718] [cursor=pointer]:
+                    - /url: https://www.twilio.com/docs/voice/twiml/gather#overview
+                - img "tooltip Icon" [ref=f17e719]
+            - cell "Twilio Picks Provider (Default) $0.02 / use" [ref=f17e720]:
+              - paragraph [ref=f17e723]:
+                - text: Twilio Picks Provider (Default)
+                - generic [ref=f17e724]: $0.02
+                - text: / use
+            - cell "Deepgram Nova or Google v2 $0.025 / use" [ref=f17e725]:
+              - paragraph [ref=f17e728]:
+                - text: Deepgram Nova or Google v2
+                - generic [ref=f17e729]: $0.025
+                - text: / use
+            - cell [ref=f17e730]
+          - row [ref=f17e731]:
+            - cell [ref=f17e732]:
+              - generic [ref=f17e735]:
+                - paragraph [ref=f17e736]:
+                  - link "Gather Speech Recognition (Legacy Models)" [ref=f17e739] [cursor=pointer]:
+                    - /url: https://www.twilio.com/docs/voice/twiml/gather#overview
+                - img "tooltip Icon" [ref=f17e740]
+            - cell "Standard Google v1 Model $0.035 / use" [ref=f17e741]:
+              - paragraph [ref=f17e744]:
+                - text: Standard Google v1 Model
+                - generic [ref=f17e745]: $0.035
+                - text: / use
+            - cell "Enhanced Google v1 Model $0.040 / use" [ref=f17e746]:
+              - paragraph [ref=f17e749]:
+                - text: Enhanced Google v1 Model
+                - generic [ref=f17e750]: $0.040
+                - text: / use
+            - cell [ref=f17e751]
+      - link "Start for free" [ref=f17e756] [cursor=pointer]:
+        - /url: https://www.twilio.com/try-twilio
+    - generic [ref=f17e762]:
+      - generic [ref=f17e765]:
+        - paragraph [ref=f17e766]: India
+        - heading "Network Traversal Service" [level=2] [ref=f17e767]
+      - table [ref=f17e771]:
+        - rowgroup [ref=f17e772]:
+          - row [ref=f17e773]:
+            - columnheader "Network Traversal" [ref=f17e774]:
+              - paragraph [ref=f17e777]:
+                - generic [ref=f17e778]: Network Traversal
+            - columnheader "Price" [ref=f17e779]:
+              - paragraph [ref=f17e782]:
+                - generic [ref=f17e783]: Price
+        - rowgroup [ref=f17e784]:
+          - row [ref=f17e785]:
+            - cell "STUN tooltip Icon" [ref=f17e786]:
+              - generic [ref=f17e789]:
+                - paragraph [ref=f17e790]:
+                  - generic [ref=f17e791]: STUN
+                - img "tooltip Icon" [ref=f17e792]
+            - cell "Free" [ref=f17e793]:
+              - paragraph [ref=f17e796]:
+                - generic [ref=f17e797]: Free
+          - row [ref=f17e798]:
+            - cell "TURN - US East, US West, Europe tooltip Icon" [ref=f17e799]:
+              - generic [ref=f17e802]:
+                - paragraph [ref=f17e803]:
+                  - generic [ref=f17e804]: TURN - US East, US West, Europe
+                - img "tooltip Icon" [ref=f17e805]
+            - cell "$0.4000 / per gigabyte" [ref=f17e806]:
+              - paragraph [ref=f17e809]:
+                - generic [ref=f17e810]: $0.4000
+                - text: / per gigabyte
+          - row [ref=f17e811]:
+            - cell "TURN - Asia tooltip Icon" [ref=f17e812]:
+              - generic [ref=f17e815]:
+                - paragraph [ref=f17e816]:
+                  - generic [ref=f17e817]: TURN - Asia
+                - img "tooltip Icon" [ref=f17e818]
+            - cell "$0.6000 / per gigabyte" [ref=f17e819]:
+              - paragraph [ref=f17e822]:
+                - generic [ref=f17e823]: $0.6000
+                - text: / per gigabyte
+          - row [ref=f17e824]:
+            - cell "TURN - Ocenia tooltip Icon" [ref=f17e825]:
+              - generic [ref=f17e828]:
+                - paragraph [ref=f17e829]:
+                  - generic [ref=f17e830]: TURN - Ocenia
+                - img "tooltip Icon" [ref=f17e831]
+            - cell "$0.8000 / per gigabyte" [ref=f17e832]:
+              - paragraph [ref=f17e835]:
+                - generic [ref=f17e836]: $0.8000
+                - text: / per gigabyte
+    - generic [ref=f17e838]:
+      - generic [ref=f17e841]:
+        - generic [ref=f17e842]:
+          - paragraph [ref=f17e843]: India
+          - heading "Volume discounts" [level=2] [ref=f17e844]
+        - paragraph [ref=f17e846]: When your application reaches volume scale, you’ll automatically get volume pricing. No negotiation necessary.
+      - generic [ref=f17e849]:
+        - heading "Recording storage volume pricing" [level=3] [ref=f17e853]
+        - table [ref=f17e857]:
+          - rowgroup [ref=f17e858]:
+            - row [ref=f17e859]:
+              - columnheader "Minutes per month" [ref=f17e860]:
+                - paragraph [ref=f17e863]:
+                  - generic [ref=f17e864]: Minutes per month
+              - columnheader "Price" [ref=f17e865]:
+                - paragraph [ref=f17e868]:
+                  - generic [ref=f17e869]: Price
+          - rowgroup [ref=f17e870]:
+            - row [ref=f17e871]:
+              - cell "First 5 million minutes" [ref=f17e872]:
+                - paragraph [ref=f17e875]:
+                  - generic [ref=f17e876]: First 5 million minutes
+              - cell "$0.00050 / min" [ref=f17e877]:
+                - paragraph [ref=f17e880]:
+                  - generic [ref=f17e881]: $0.00050
+                  - text: / min
+            - row [ref=f17e882]:
+              - cell "Next 10 million minutes" [ref=f17e883]:
+                - paragraph [ref=f17e886]:
+                  - generic [ref=f17e887]: Next 10 million minutes
+              - cell "$0.00025 / min" [ref=f17e888]:
+                - paragraph [ref=f17e891]:
+                  - generic [ref=f17e892]: $0.00025
+                  - text: / min
+            - row [ref=f17e893]:
+              - cell "Above 15 million minutes" [ref=f17e894]:
+                - paragraph [ref=f17e897]:
+                  - generic [ref=f17e898]: Above 15 million minutes
+              - cell "$0.00015 / min" [ref=f17e899]:
+                - paragraph [ref=f17e902]:
+                  - generic [ref=f17e903]: $0.00015
+                  - text: / min
+    - generic [ref=f17e910]:
+      - generic [ref=f17e911]:
+        - heading "Committed-use discounts" [level=2] [ref=f17e912]
+        - paragraph [ref=f17e913]: Enterprise pricing is available to customers with use cases that exceed our volume discounts. Commit to annual message volumes and receive a discount beyond standard volume tiers. Contact our sales team to learn more.
+      - link "Contact sales" [ref=f17e915] [cursor=pointer]:
+        - /url: https://www.twilio.com/en-us/help/sales
+  - contentinfo [ref=f17e917]:
+    - generic [ref=f17e921]:
+      - generic [ref=f17e922]:
+        - figure [ref=f17e925]:
+          - link [ref=f17e926] [cursor=pointer]:
+            - /url: /en-us
+            - generic "Twilio" [ref=f17e927]:
+              - img "Twilio" [ref=f17e928]
+        - list [ref=f17e941]:
+          - listitem [ref=f17e942]:
+            - link "Twilio careers" [ref=f17e945] [cursor=pointer]:
+              - /url: http://jobs.twilio.com/
+          - listitem [ref=f17e947]:
+            - link "Twilio.org" [ref=f17e950] [cursor=pointer]:
+              - /url: https://www.twilio.org/en-us
+          - listitem [ref=f17e952]:
+            - link "Press and media" [ref=f17e955] [cursor=pointer]:
+              - /url: /en-us/press
+          - listitem [ref=f17e957]:
+            - link "Investor relations" [ref=f17e960] [cursor=pointer]:
+              - /url: https://investors.twilio.com/
+          - listitem [ref=f17e962]:
+            - link "Legal" [ref=f17e965] [cursor=pointer]:
+              - /url: /en-us/legal/tos
+          - listitem [ref=f17e967]:
+            - link "Privacy" [ref=f17e970] [cursor=pointer]:
+              - /url: /en-us/legal/privacy
+          - listitem [ref=f17e972]:
+            - link "Security" [ref=f17e975] [cursor=pointer]:
+              - /url: /en-us/security
+          - listitem [ref=f17e977]:
+            - link "Sitemap" [ref=f17e980] [cursor=pointer]:
+              - /url: https://www.twilio.com/sitemap.xml
+          - listitem [ref=f17e982]:
+            - link "LLMS" [ref=f17e985] [cursor=pointer]:
+              - /url: https://www.twilio.com/llms.txt
+        - list [ref=f17e990]:
+          - listitem [ref=f17e991]:
+            - link "Twilio on Facebook" [ref=f17e992] [cursor=pointer]:
+              - /url: https://www.facebook.com/TeamTwilio
+          - listitem [ref=f17e996]:
+            - link "Twilio on X" [ref=f17e997] [cursor=pointer]:
+              - /url: https://x.com/twilio
+              - img "Twitter Logo" [ref=f17e999]
+          - listitem [ref=f17e1001]:
+            - link "Twilio on LinkedIn" [ref=f17e1002] [cursor=pointer]:
+              - /url: https://www.linkedin.com/company/twilio-inc-
+          - listitem [ref=f17e1006]:
+            - link "Twilio on Youtube" [ref=f17e1007] [cursor=pointer]:
+              - /url: https://www.youtube.com/@twilio
+        - paragraph [ref=f17e1010]: Copyright © 2026 Twilio Inc. All rights reserved.
+      - generic [ref=f17e1012]:
+        - button "Considering Twilio?"
+        - list [ref=f17e1014]:
+          - listitem [ref=f17e1015]:
+            - link "About Twilio" [ref=f17e1018] [cursor=pointer]:
+              - /url: /en-us/company
+          - listitem [ref=f17e1020]:
+            - link "Customer Engagement Platform (CEP)" [ref=f17e1023] [cursor=pointer]:
+              - /url: /en-us/customer-engagement-platform
+          - listitem [ref=f17e1025]:
+            - link "Communications" [ref=f17e1028] [cursor=pointer]:
+              - /url: /en-us/cpaas
+          - listitem [ref=f17e1030]:
+            - link "Conversational AI" [ref=f17e1033] [cursor=pointer]:
+              - /url: /en-us/products/conversational-ai
+          - listitem [ref=f17e1035]:
+            - link "User authentication and identity" [ref=f17e1038] [cursor=pointer]:
+              - /url: /en-us/user-authentication-identity
+          - listitem [ref=f17e1040]:
+            - link "Customer Data Platform (CDP)" [ref=f17e1043] [cursor=pointer]:
+              - /url: /en-us/customer-data-platform
+          - listitem [ref=f17e1045]:
+            - link "AI" [ref=f17e1048] [cursor=pointer]:
+              - /url: /en-us/ai
+          - listitem [ref=f17e1050]:
+            - link "Customer stories" [ref=f17e1053] [cursor=pointer]:
+              - /url: https://customers.twilio.com/en-us
+          - listitem [ref=f17e1055]:
+            - link "Events" [ref=f17e1058] [cursor=pointer]:
+              - /url: /en-us/events
+          - listitem [ref=f17e1060]:
+            - link "Contact sales" [ref=f17e1063] [cursor=pointer]:
+              - /url: /en-us/help/sales
+          - listitem [ref=f17e1065]:
+            - link "Why Twilio" [ref=f17e1068] [cursor=pointer]:
+              - /url: /en-us/why-twilio
+              - figure [ref=f17e1070]
+      - generic [ref=f17e1073]:
+        - button "Products and Features"
+        - list [ref=f17e1075]:
+          - listitem [ref=f17e1076]:
+            - link "SMTP" [ref=f17e1079] [cursor=pointer]:
+              - /url: /en-us/products/email-api/smtp-service
+          - listitem [ref=f17e1081]:
+            - link "Branded Calling" [ref=f17e1084] [cursor=pointer]:
+              - /url: /en-us/voice/branded-calling
+          - listitem [ref=f17e1086]:
+            - link "Twilio Segment" [ref=f17e1089] [cursor=pointer]:
+              - /url: /en-us/customer-data-platform
+          - listitem [ref=f17e1091]:
+            - link "Twilio Engage" [ref=f17e1094] [cursor=pointer]:
+              - /url: /en-us/products/engage
+          - listitem [ref=f17e1096]:
+            - link "Connections" [ref=f17e1099] [cursor=pointer]:
+              - /url: /en-us/products/connections
+          - listitem [ref=f17e1101]:
+            - link "SendGrid Email API" [ref=f17e1104] [cursor=pointer]:
+              - /url: /en-us/products/email-api
+          - listitem [ref=f17e1106]:
+            - link "RCS messaging" [ref=f17e1109] [cursor=pointer]:
+              - /url: /en-us/messaging/channels/rcs
+          - listitem [ref=f17e1111]:
+            - link "Latest innovations" [ref=f17e1114] [cursor=pointer]:
+              - /url: /en-us/products/beta
+          - listitem [ref=f17e1116]:
+            - link "Pre-built solutions" [ref=f17e1119] [cursor=pointer]:
+              - /url: /en-us/partners/saas
+          - listitem [ref=f17e1121]:
+            - link "Support plans" [ref=f17e1124] [cursor=pointer]:
+              - /url: /en-us/support-plans
+          - listitem [ref=f17e1126]:
+            - link "All products" [ref=f17e1129] [cursor=pointer]:
+              - /url: /en-us/products
+              - figure [ref=f17e1131]
+      - generic [ref=f17e1134]:
+        - button "Use Cases"
+        - list [ref=f17e1136]:
+          - listitem [ref=f17e1137]:
+            - link "Voice AI" [ref=f17e1140] [cursor=pointer]:
+              - /url: /en-us/use-cases/voice-AI
+          - listitem [ref=f17e1142]:
+            - link "AI agent productivity" [ref=f17e1145] [cursor=pointer]:
+              - /url: /en-us/solutions/agent-productivity
+          - listitem [ref=f17e1147]:
+            - link "Customer data management" [ref=f17e1150] [cursor=pointer]:
+              - /url: /en-us/use-cases/customer-data-management-integration
+          - listitem [ref=f17e1152]:
+            - link "Audience segmentation" [ref=f17e1155] [cursor=pointer]:
+              - /url: /en-us/use-cases/segmentation-audience-activation
+          - listitem [ref=f17e1157]:
+            - link "Contact center" [ref=f17e1160] [cursor=pointer]:
+              - /url: /en-us/flex/use-cases/contact-center
+          - listitem [ref=f17e1162]:
+            - link "SMS marketing" [ref=f17e1165] [cursor=pointer]:
+              - /url: /en-us/solutions/text-marketing
+          - listitem [ref=f17e1167]:
+            - link "Customer acquisition" [ref=f17e1170] [cursor=pointer]:
+              - /url: /en-us/use-cases/customer-acquisition-activation
+          - listitem [ref=f17e1172]:
+            - link "Fraud prevention" [ref=f17e1175] [cursor=pointer]:
+              - /url: /en-us/use-cases/fraud-prevention
+          - listitem [ref=f17e1177]:
+            - link "Voice response system (IVR)" [ref=f17e1180] [cursor=pointer]:
+              - /url: /en-us/use-cases/ivr
+          - listitem [ref=f17e1182]:
+            - link "Bulk text messaging" [ref=f17e1185] [cursor=pointer]:
+              - /url: /en-us/use-cases/mass-texting
+          - listitem [ref=f17e1187]:
+            - link "Mass email sender" [ref=f17e1190] [cursor=pointer]:
+              - /url: /en-us/resource-center/bulk-email-guide
+          - listitem [ref=f17e1192]:
+            - link "All use cases" [ref=f17e1195] [cursor=pointer]:
+              - /url: https://www.twilio.com/en-us/solutions#use-cases
+              - figure [ref=f17e1197]
+      - generic [ref=f17e1200]:
+        - button "Developers"
+        - list [ref=f17e1202]:
+          - listitem [ref=f17e1203]:
+            - link "Developer resources" [ref=f17e1206] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs#developer-toolkit
+          - listitem [ref=f17e1208]:
+            - link "Twilio Essentials" [ref=f17e1211] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs#twilio-essentials
+          - listitem [ref=f17e1213]:
+            - link "SDKs" [ref=f17e1216] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/libraries
+          - listitem [ref=f17e1218]:
+            - link "CDP integrations" [ref=f17e1221] [cursor=pointer]:
+              - /url: /en-us/catalog
+          - listitem [ref=f17e1223]:
+            - link "Serverless" [ref=f17e1226] [cursor=pointer]:
+              - /url: /en-us/serverless
+          - listitem [ref=f17e1228]:
+            - link "Conversations" [ref=f17e1231] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/conversations
+          - listitem [ref=f17e1233]:
+            - link "SMTP Email API" [ref=f17e1236] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/sendgrid/for-developers/sending-email/getting-started-smtp
+          - listitem [ref=f17e1238]:
+            - link "SMS API" [ref=f17e1241] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/messaging/api
+          - listitem [ref=f17e1243]:
+            - link "WhatsApp API" [ref=f17e1246] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/whatsapp
+          - listitem [ref=f17e1248]:
+            - link "Voice API" [ref=f17e1251] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/voice
+          - listitem [ref=f17e1253]:
+            - link "Connections" [ref=f17e1256] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/segment/connections
+          - listitem [ref=f17e1258]:
+            - link "All docs" [ref=f17e1261] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs
+              - figure [ref=f17e1263]

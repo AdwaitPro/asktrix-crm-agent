@@ -1,0 +1,198 @@
+- generic [active] [ref=f44e1]:
+  - link [ref=f44e2] [cursor=pointer]:
+    - /url: "#"
+    - text: ___
+  - generic [ref=f44e6]:
+    - generic:
+      - generic [ref=f44e7]:
+        - link "Skip to content" [ref=f44e8] [cursor=pointer]:
+          - /url: "#twilio-docs-content-area"
+        - link "Skip to navigation" [ref=f44e9] [cursor=pointer]:
+          - /url: "#twilio-docs-sidebar-nav"
+        - link "Skip to topbar" [ref=f44e10] [cursor=pointer]:
+          - /url: "#twilio-docs-topbar"
+      - complementary [ref=f44e11]:
+        - generic [ref=f44e12]:
+          - link [ref=f44e13] [cursor=pointer]:
+            - /url: /docs
+            - img "Go to the Twilio Docs home page" [ref=f44e16]
+          - generic [ref=f44e18]: Twilio Docs
+        - navigation "main" [ref=f44e20]:
+          - link "Glossary" [ref=f44e21] [cursor=pointer]:
+            - /url: /docs/glossary
+          - separator [ref=f44e23]
+          - link "Messaging" [ref=f44e24] [cursor=pointer]:
+            - /url: /docs/messaging
+          - link "Voice" [ref=f44e26] [cursor=pointer]:
+            - /url: /docs/voice
+          - link "Video" [ref=f44e28] [cursor=pointer]:
+            - /url: /docs/video
+          - link "Conversations" [ref=f44e30] [cursor=pointer]:
+            - /url: /docs/conversations
+          - link "Flex" [ref=f44e32] [cursor=pointer]:
+            - /url: /docs/flex
+          - link "Studio" [ref=f44e34] [cursor=pointer]:
+            - /url: /docs/studio
+          - link "All docs..." [ref=f44e36] [cursor=pointer]:
+            - /url: /docs
+    - generic [ref=f44e38]:
+      - generic [ref=f44e40]:
+        - navigation "Libraries and help" [ref=f44e41]:
+          - list [ref=f44e43]:
+            - listitem [ref=f44e44]:
+              - link "Build with AI" [ref=f44e45] [cursor=pointer]:
+                - /url: /docs/ai
+            - listitem [ref=f44e46]:
+              - link "SDKs" [ref=f44e47] [cursor=pointer]:
+                - /url: /docs/libraries
+            - listitem [ref=f44e48]:
+              - link [ref=f44e49] [cursor=pointer]:
+                - /url: https://help.twilio.com
+                - generic [ref=f44e50]:
+                  - text: Help Center
+                  - img "Help Center" [ref=f44e52]
+        - search [ref=f44e54]:
+          - button "Search (Command+K)" [ref=f44e55] [cursor=pointer]:
+            - generic [ref=f44e56]: Search
+            - generic [ref=f44e60]:
+              - generic [ref=f44e61]: ⌘
+              - generic [ref=f44e62]: K
+        - navigation "Log in or sign up" [ref=f44e63]:
+          - list [ref=f44e65]:
+            - listitem [ref=f44e66]:
+              - link "Log in" [ref=f44e67] [cursor=pointer]:
+                - /url: https://www.twilio.com/login
+            - listitem [ref=f44e68]:
+              - link "Sign up" [ref=f44e69] [cursor=pointer]:
+                - /url: https://www.twilio.com/try-twilio
+      - main [ref=f44e71]:
+        - generic [ref=f44e72]:
+          - generic [ref=f44e74]:
+            - navigation [ref=f44e75]:
+              - button [ref=f44e76] [cursor=pointer]
+            - button [ref=f44e82] [cursor=pointer]
+          - article [ref=f44e87]:
+            - generic [ref=f44e88]:
+              - heading "What are Masked Phone Numbers?" [level=1] [ref=f44e90]
+              - generic [ref=f44e92]:
+                - button [ref=f44e93] [cursor=pointer]:
+                  - img "Positive Feedback" [ref=f44e96]
+                - button [ref=f44e98] [cursor=pointer]:
+                  - img "Negative Feedback" [ref=f44e101]
+            - separator [ref=f44e103]
+            - paragraph [ref=f44e104]:
+              - emphasis [ref=f44e105]: Masked Phone Numbers
+              - text: are a common pattern to anonymize communication between multiple parties and hide participant phone numbers. Instead of dialing directly from phone to phone, users communicate via a third ('proxy') phone number that forwards a call to the eventual destination.
+            - separator [ref=f44e106]
+            - generic [ref=f44e107]:
+              - generic [ref=f44e108]:
+                - generic [ref=f44e110]:
+                  - heading "Why businesses mask phone numbers" [level=2] [ref=f44e111]
+                  - link [ref=f44e112] [cursor=pointer]:
+                    - /url: "#why-businesses-mask-phone-numbers"
+                    - img "why-businesses-mask-phone-numbers page anchor" [ref=f44e114]
+                - generic [ref=f44e118]:
+                  - button [ref=f44e119] [cursor=pointer]:
+                    - img "Positive Feedback" [ref=f44e122]
+                  - button [ref=f44e124] [cursor=pointer]:
+                    - img "Negative Feedback" [ref=f44e127]
+              - paragraph [ref=f44e129]: Businesses mask phone numbers to protect participant privacy during short, transactional interactions. Many business use cases require a flurry of communications over a limited time frame. Having a service provider and a customer trade phone numbers for a transaction that will be over quickly is wholly unnecessary. While communications via text message and phone are necessary for logistical purposes, there often isn't a social need for two parties to trade phone numbers.
+              - paragraph [ref=f44e130]:
+                - text: This is where the need for so-called masked phone numbers arises. Also known as
+                - emphasis [ref=f44e131]: proxied
+                - text: ","
+                - emphasis [ref=f44e132]: anonymized
+                - text: ", or"
+                - emphasis [ref=f44e133]: cloaked
+                - text: phone communications, your business can enable this time-boxed communication without revealing unnecessary customer - or worker - information.
+              - paragraph [ref=f44e134]: "Many business cases have use for this pattern; a non-exhaustive list of where masked phone numbers might make sense is:"
+              - list [ref=f44e135]:
+                - listitem [ref=f44e136]: Real Estate Agencies
+                - listitem [ref=f44e137]: Ride-sharing Services
+                - listitem [ref=f44e138]: Delivery Companies
+                - listitem [ref=f44e139]: Food Delivery Services
+                - listitem [ref=f44e140]: Peer-to-Peer Vacation Rentals
+                - listitem [ref=f44e141]: Dating Applications
+              - paragraph [ref=f44e142]: While setting up the infrastructure for anonymous communications is often a good choice for your users and workers, it also has a strong business case. With masked phone numbers, you add friction for users attempting to move off your platform for transactions, keeping more business with your company.
+              - paragraph [ref=f44e143]:
+                - text: See more of our
+                - link "guidance on anonymous communications." [ref=f44e144] [cursor=pointer]:
+                  - /url: /docs/proxy
+            - generic [ref=f44e145]:
+              - generic [ref=f44e146]:
+                - generic [ref=f44e148]:
+                  - heading "Business needs and safety" [level=3] [ref=f44e149]
+                  - link [ref=f44e150] [cursor=pointer]:
+                    - /url: "#business-needs-and-safety"
+                    - img "business-needs-and-safety page anchor" [ref=f44e152]
+                - generic [ref=f44e156]:
+                  - button [ref=f44e157] [cursor=pointer]:
+                    - img "Positive Feedback" [ref=f44e160]
+                  - button [ref=f44e162] [cursor=pointer]:
+                    - img "Negative Feedback" [ref=f44e165]
+              - paragraph [ref=f44e167]:
+                - text: In many cases, revealing a private phone number is a major cause of friction. In
+                - emphasis [ref=f44e168]: extreme
+                - text: cases, keeping phone numbers and other personally identifiable information private can even be a safety issue.
+              - paragraph [ref=f44e169]: For limited duration conversations needed for logistics, there is no need for one party to continue to contact the other when the transaction or service is complete. By proxying communications from the start, your business can avoid any potential problems down the road - or even just annoyance from accidental dials.
+              - separator [ref=f44e170]
+            - generic [ref=f44e171]:
+              - generic [ref=f44e172]:
+                - generic [ref=f44e174]:
+                  - heading "Twilio's solution for masked communication" [level=2] [ref=f44e175]
+                  - link [ref=f44e176] [cursor=pointer]:
+                    - /url: "#twilios-solution-for-masked-communication"
+                    - img "twilios-solution-for-masked-communication page anchor" [ref=f44e178]
+                - generic [ref=f44e182]:
+                  - button [ref=f44e183] [cursor=pointer]:
+                    - img "Positive Feedback" [ref=f44e186]
+                  - button [ref=f44e188] [cursor=pointer]:
+                    - img "Negative Feedback" [ref=f44e191]
+              - paragraph [ref=f44e193]:
+                - link "Twilio's Proxy" [ref=f44e194] [cursor=pointer]:
+                  - /url: /docs/proxy
+                - text: automatically puts the infrastructure in place for your business to support masked phone numbers. From a phone number pool, Proxy will automatically assign and route communications back and forth, without revealing 'true' phone numbers unnecessarily.
+              - generic [ref=f44e196]:
+                - img "Diagram showing Twilio proxy session creation between customer and delivery driver using proxy numbers." [ref=f44e197]
+                - button [ref=f44e198] [cursor=pointer]
+              - paragraph [ref=f44e204]:
+                - text: For the self-service types, our
+                - link "Voice APIs" [ref=f44e205] [cursor=pointer]:
+                  - /url: /docs/iam/api
+                - text: help you build your own masked communication infrastructure. We have extensive documentation on
+                - link "building masked numbers into your web application" [ref=f44e206] [cursor=pointer]:
+                  - /url: /docs/messaging/tutorials/masked-numbers/python
+                - text: .
+              - paragraph [ref=f44e207]:
+                - text: Want to learn more about masked phone numbers?
+                - link [ref=f44e208] [cursor=pointer]:
+                  - /url: https://www.twilio.com/en-us/help/sales
+                  - generic [ref=f44e209]:
+                    - text: Talk to Twilio Sales
+                    - img "(link takes you to an external page)" [ref=f44e212]
+                - text: ", and we'll be happy to talk you through how anonymous calling can help your bottom line."
+      - contentinfo [ref=f44e214]:
+        - generic [ref=f44e218]:
+          - heading "Need some help?" [level=2] [ref=f44e220]
+          - navigation [ref=f44e221]:
+            - paragraph [ref=f44e223]:
+              - text: We all do sometimes; code is hard. Get help now from our
+              - link [ref=f44e224] [cursor=pointer]:
+                - /url: https://help.twilio.com
+                - generic [ref=f44e225]:
+                  - text: support team
+                  - img "(link takes you to an external page)" [ref=f44e228]
+              - text: ", or lean on the wisdom of the crowd by browsing the"
+              - link [ref=f44e230] [cursor=pointer]:
+                - /url: https://stackoverflow.com/questions/tagged/twilio
+                - generic [ref=f44e231]:
+                  - text: Twilio tag
+                  - img "(link takes you to an external page)" [ref=f44e234]
+              - text: on Stack Overflow.
+          - generic [ref=f44e237]:
+            - link "Terms of service" [ref=f44e239] [cursor=pointer]:
+              - /url: /en-us/legal/tos
+            - link "Privacy Policy" [ref=f44e241] [cursor=pointer]:
+              - /url: /en-us/legal/privacy
+            - paragraph [ref=f44e243]: Copyright © 2026 Twilio Inc.
+  - alert [ref=f44e244]

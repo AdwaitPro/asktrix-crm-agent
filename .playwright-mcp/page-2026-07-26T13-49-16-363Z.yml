@@ -1,0 +1,453 @@
+- generic [active] [ref=f6e1]:
+  - banner [ref=f6e2]:
+    - generic [ref=f6e4]:
+      - generic [ref=f6e6]:
+        - button "English" [ref=f6e9] [cursor=pointer]:
+          - figure [ref=f6e10]
+        - generic [ref=f6e17]:
+          - button "Support" [ref=f6e19] [cursor=pointer]:
+            - text: Support
+            - figure [ref=f6e20]
+          - button "Login" [ref=f6e23] [cursor=pointer]:
+            - text: Login
+            - figure [ref=f6e24]
+      - generic [ref=f6e27]:
+        - link "Twilio" [ref=f6e29] [cursor=pointer]:
+          - /url: https://www.twilio.com/en-us
+        - navigation [ref=f6e36]:
+          - button "Products" [ref=f6e38] [cursor=pointer]:
+            - text: Products
+            - figure [ref=f6e39]
+          - button "Solutions" [ref=f6e42] [cursor=pointer]:
+            - text: Solutions
+            - figure [ref=f6e43]
+          - button "Why Twilio" [ref=f6e46] [cursor=pointer]:
+            - text: Why Twilio
+            - figure [ref=f6e47]
+          - button "Resources" [ref=f6e50] [cursor=pointer]:
+            - text: Resources
+            - figure [ref=f6e51]
+          - button "Pricing" [ref=f6e54] [cursor=pointer]:
+            - text: Pricing
+            - figure [ref=f6e55]
+        - generic [ref=f6e57]:
+          - button "Search" [ref=f6e59] [cursor=pointer]:
+            - figure [ref=f6e60]
+          - generic [ref=f6e63]:
+            - link "Contact sales" [ref=f6e64] [cursor=pointer]:
+              - /url: https://www.twilio.com/en-us/help/sales
+            - link "Start for free" [ref=f6e66] [cursor=pointer]:
+              - /url: https://www.twilio.com/try-twilio
+  - main [ref=f6e68]:
+    - generic [ref=f6e71]:
+      - generic [ref=f6e72]:
+        - generic [ref=f6e73]: Guidelines
+        - heading "India (IN)" [level=1] [ref=f6e76]
+      - link "Back to Guidelines" [ref=f6e78] [cursor=pointer]:
+        - /url: /en-us/guidelines
+        - generic [ref=f6e79]:
+          - img "Caret left" [ref=f6e81]
+          - text: Back to Guidelines
+    - generic [ref=f6e85]:
+      - table [ref=f6e89]:
+        - rowgroup [ref=f6e90]:
+          - row [ref=f6e91]:
+            - columnheader "Locale Summary" [ref=f6e92]:
+              - paragraph [ref=f6e95]:
+                - generic [ref=f6e96]: Locale Summary
+            - columnheader [ref=f6e97]
+        - rowgroup [ref=f6e98]:
+          - row [ref=f6e99]:
+            - cell "Locale name" [ref=f6e100]:
+              - paragraph [ref=f6e103]:
+                - generic [ref=f6e104]: Locale name
+            - cell [ref=f6e105]:
+              - paragraph [ref=f6e108]: India
+          - row [ref=f6e109]:
+            - cell [ref=f6e110]:
+              - paragraph [ref=f6e113]:
+                - generic [ref=f6e114]: ISO code
+                - text: The International Organization for Standardization two character representation for the given locale.
+            - cell [ref=f6e116]:
+              - paragraph [ref=f6e119]: IN
+          - row [ref=f6e120]:
+            - cell "Region" [ref=f6e121]:
+              - paragraph [ref=f6e124]:
+                - generic [ref=f6e125]: Region
+            - cell [ref=f6e126]:
+              - paragraph [ref=f6e129]: Asia
+          - row [ref=f6e130]:
+            - cell [ref=f6e131]:
+              - paragraph [ref=f6e134]:
+                - generic [ref=f6e135]: Dialing code
+                - text: The dialing prefix used to establish a call or send an SMS from one locale to the given locale.
+            - cell [ref=f6e137]:
+              - paragraph [ref=f6e140]: "+91"
+      - table [ref=f6e144]:
+        - rowgroup [ref=f6e145]:
+          - row [ref=f6e146]:
+            - columnheader [ref=f6e147]:
+              - paragraph [ref=f6e150]:
+                - generic [ref=f6e151]: Reachability
+                - text: Can Twilio complete calls to numbers in this locale?
+            - columnheader "Inbound Ability to call numbers. Calls are inbound from PSTN to Twilio numbers." [ref=f6e153]:
+              - paragraph [ref=f6e156]:
+                - generic [ref=f6e157]: Inbound
+                - generic [ref=f6e158]: Ability to call numbers. Calls are inbound from PSTN to Twilio numbers.
+            - columnheader [ref=f6e159]:
+              - paragraph [ref=f6e162]:
+                - generic [ref=f6e163]: Outbound
+                - text: Ability to call non-Twilio numbers. Calls are outbound from Twilio to PSTN numbers.
+        - rowgroup [ref=f6e164]:
+          - row [ref=f6e165]:
+            - cell [ref=f6e166]:
+              - paragraph [ref=f6e169]:
+                - generic [ref=f6e170]: Domestic
+                - text: For calls within the locale
+            - cell [ref=f6e172]:
+              - paragraph [ref=f6e175]: N/A
+            - cell [ref=f6e176]:
+              - paragraph [ref=f6e179]: N/A
+          - row [ref=f6e180]:
+            - cell [ref=f6e181]:
+              - paragraph [ref=f6e184]:
+                - generic [ref=f6e185]: International
+                - text: Can in-locale numbers be reached from outside the locale?
+            - cell [ref=f6e187]:
+              - paragraph [ref=f6e190]: N/A
+            - cell [ref=f6e191]:
+              - paragraph [ref=f6e194]: "Yes"
+          - row [ref=f6e195]:
+            - cell [ref=f6e196]:
+              - paragraph [ref=f6e199]:
+                - generic [ref=f6e200]: Toll-Free
+                - text: Can in-locale Toll-Free numbers be reached from within the locale?
+            - cell [ref=f6e202]:
+              - paragraph [ref=f6e205]: "Yes"
+            - cell [ref=f6e206]:
+              - paragraph [ref=f6e209]: "No"
+          - row [ref=f6e210]:
+            - cell [ref=f6e211]:
+              - paragraph [ref=f6e214]:
+                - generic [ref=f6e215]:
+                  - generic [ref=f6e216]: Outbound restrictions
+                  - text: Regulatory and/or Carrier restrictions on outbound calls made from Twilio to non-Twilio numbers in this locale
+            - cell [ref=f6e217]:
+              - paragraph [ref=f6e220]: Outbound calls to India can only be made from international (non-Indian) numbers.
+            - cell [ref=f6e221]
+          - row [ref=f6e222]:
+            - cell [ref=f6e223]:
+              - paragraph [ref=f6e226]:
+                - generic [ref=f6e227]:
+                  - generic [ref=f6e228]: Outbound requirements
+                  - text: Conditions that must be met before outbound calls are allowed from Twilio to non-Twilio numbers in this locale
+            - cell [ref=f6e229]:
+              - paragraph [ref=f6e232]: N/A
+            - cell [ref=f6e233]
+          - row [ref=f6e234]:
+            - cell [ref=f6e235]:
+              - paragraph [ref=f6e238]:
+                - generic [ref=f6e239]: Best practices
+                - text: Useful tips for best performance on outbound calls to non-Twilio numbers in this locale
+            - cell [ref=f6e241]:
+              - generic [ref=f6e243]:
+                - paragraph [ref=f6e244]: Twilio recommends that customers review their proposed use-cases with qualified legal counsel to make sure that they comply with all applicable laws, in accordance with Twilio's Terms of Service (ToS). The best-practice guidance below is of a general nature, and is not to be taken as legal advice.
+                - paragraph [ref=f6e245]
+                - paragraph [ref=f6e246]: Customers must gain consent from the call recipient to receive commercial communications related to the customer’s specific purpose, product or service. If consent is not obtained, the Telecommunications Regulatory Authority of India (TRAI) will consider such calls Unsolicited Commercial Communications (UCC), which is subject to blocking or account termination action for local law compliance purposes.
+                - paragraph [ref=f6e247]
+                - paragraph [ref=f6e248]: The Department of Telecommunications (DoT) and TRAI manage a consumer portal for the recipients of UCC (and/or communications of a generally suspicious/fraudulent nature) to report voice calls that they did not consent to receive. This means the local authorities actively monitor for, and enforce, account blockings of non-compliant use-cases.
+                - paragraph [ref=f6e249]
+            - cell [ref=f6e250]
+      - table [ref=f6e254]:
+        - rowgroup [ref=f6e255]:
+          - row [ref=f6e256]:
+            - columnheader [ref=f6e257]:
+              - paragraph [ref=f6e260]:
+                - generic [ref=f6e261]: Caller ID
+                - text: Can Twilio complete calls to numbers in this locale?
+            - columnheader [ref=f6e263]:
+              - paragraph [ref=f6e266]:
+                - generic [ref=f6e267]: Inbound
+                - text: Inbound call receives originator's Caller-ID. Calls are inbound from PSTN to Twilio numbers.
+            - columnheader [ref=f6e268]:
+              - paragraph [ref=f6e271]:
+                - generic [ref=f6e272]: Outbound
+                - text: Outbound call preserves sent Caller-ID. Calls are outbound from Twilio to PSTN numbers.
+        - rowgroup [ref=f6e273]:
+          - row [ref=f6e274]:
+            - cell [ref=f6e275]:
+              - paragraph [ref=f6e278]:
+                - generic [ref=f6e279]: Domestic
+                - text: For calls within the locale
+            - cell [ref=f6e281]:
+              - paragraph [ref=f6e284]: N/A
+            - cell [ref=f6e285]:
+              - paragraph [ref=f6e288]: N/A
+          - row [ref=f6e289]:
+            - cell [ref=f6e290]:
+              - paragraph [ref=f6e293]:
+                - generic [ref=f6e294]: International
+                - text: Can in-locale numbers be reached from outside the locale?
+            - cell [ref=f6e296]:
+              - paragraph [ref=f6e299]: N/A
+            - cell [ref=f6e300]:
+              - paragraph [ref=f6e303]: +E.164
+          - row [ref=f6e304]:
+            - cell [ref=f6e305]:
+              - paragraph [ref=f6e308]:
+                - generic [ref=f6e309]: Toll-Free
+                - text: Can in-locale Toll-Free numbers be reached from within the locale?
+            - cell [ref=f6e311]:
+              - paragraph [ref=f6e314]: +E.164
+            - cell [ref=f6e315]:
+              - paragraph [ref=f6e318]: N/A
+      - table [ref=f6e322]:
+        - rowgroup [ref=f6e323]:
+          - row [ref=f6e324]:
+            - columnheader "DTMF" [ref=f6e325]:
+              - paragraph [ref=f6e328]:
+                - generic [ref=f6e329]: DTMF
+            - columnheader "Inbound Inbound call receives DTMF from PSTN. Calls are inbound from PSTN to Twilio numbers." [ref=f6e330]:
+              - paragraph [ref=f6e333]:
+                - generic [ref=f6e334]: Inbound
+                - generic [ref=f6e335]: Inbound call receives DTMF from PSTN. Calls are inbound from PSTN to Twilio numbers.
+            - columnheader "Outbound Outbound call sends DTMF to PSTN. Calls are outbound from Twilio to PSTN numbers." [ref=f6e336]:
+              - paragraph [ref=f6e339]:
+                - generic [ref=f6e340]: Outbound
+                - generic [ref=f6e341]: Outbound call sends DTMF to PSTN. Calls are outbound from Twilio to PSTN numbers.
+        - rowgroup [ref=f6e342]:
+          - row [ref=f6e343]:
+            - cell [ref=f6e344]:
+              - paragraph [ref=f6e347]:
+                - generic [ref=f6e348]: RFC.2833 format
+                - text: Is RFC.2833 DTMF format supported?
+            - cell [ref=f6e350]:
+              - paragraph [ref=f6e353]: N/A
+            - cell [ref=f6e354]:
+              - paragraph [ref=f6e357]: Yes (Not guaranteed)
+      - table [ref=f6e361]:
+        - rowgroup [ref=f6e362]:
+          - row [ref=f6e363]:
+            - columnheader [ref=f6e364]:
+              - paragraph [ref=f6e367]:
+                - generic [ref=f6e368]: Emergency Calling
+                - text: Calls are outbound from Twilio to Emergency (911/933) numbers.
+            - columnheader "Outbound Ability to make Emergency Calls. Calls are inbound from PSTN to Twilio numbers." [ref=f6e370]:
+              - paragraph [ref=f6e373]:
+                - generic [ref=f6e374]: Outbound
+                - generic [ref=f6e375]: Ability to make Emergency Calls. Calls are inbound from PSTN to Twilio numbers.
+        - rowgroup [ref=f6e376]:
+          - row [ref=f6e377]:
+            - cell [ref=f6e378]:
+              - paragraph [ref=f6e381]:
+                - generic [ref=f6e382]: Emergency services
+                - text: Are calls to Emergency Services Numbers in the locale allowed over Twilio?
+            - cell [ref=f6e384]:
+              - paragraph [ref=f6e387]: "No"
+      - separator [ref=f6e391]
+      - paragraph [ref=f6e395]: For the benefit of all our customers, these guidelines are provided to help you comply with applicable requirements and to help ensure Twilio's platform remains compliant with global telecommunications ecosystem requirements. These guidelines represent our current understanding of common compliance requirements generally applicable to Twilio and its customers, and do not constitute legal advice. By posting these guidelines, Twilio makes no assurances regarding the legal compliance of your application built using our APIs. You are expected to understand and abide by all compliance obligations applicable to your specific application. You should check these pages regularly for updates as telecommunications ecosystem requirements continue to evolve and change, and the information below may be updated or changed without notice.
+  - contentinfo [ref=f6e396]:
+    - generic [ref=f6e400]:
+      - generic [ref=f6e401]:
+        - figure [ref=f6e404]:
+          - link [ref=f6e405] [cursor=pointer]:
+            - /url: /en-us
+            - generic "Twilio" [ref=f6e406]:
+              - img "Twilio" [ref=f6e407]
+        - list [ref=f6e420]:
+          - listitem [ref=f6e421]:
+            - link "Twilio careers" [ref=f6e424] [cursor=pointer]:
+              - /url: http://jobs.twilio.com/
+          - listitem [ref=f6e426]:
+            - link "Twilio.org" [ref=f6e429] [cursor=pointer]:
+              - /url: https://www.twilio.org/en-us
+          - listitem [ref=f6e431]:
+            - link "Press and media" [ref=f6e434] [cursor=pointer]:
+              - /url: /en-us/press
+          - listitem [ref=f6e436]:
+            - link "Investor relations" [ref=f6e439] [cursor=pointer]:
+              - /url: https://investors.twilio.com/
+          - listitem [ref=f6e441]:
+            - link "Legal" [ref=f6e444] [cursor=pointer]:
+              - /url: /en-us/legal/tos
+          - listitem [ref=f6e446]:
+            - link "Privacy" [ref=f6e449] [cursor=pointer]:
+              - /url: /en-us/legal/privacy
+          - listitem [ref=f6e451]:
+            - link "Security" [ref=f6e454] [cursor=pointer]:
+              - /url: /en-us/security
+          - listitem [ref=f6e456]:
+            - link "Sitemap" [ref=f6e459] [cursor=pointer]:
+              - /url: https://www.twilio.com/sitemap.xml
+          - listitem [ref=f6e461]:
+            - link "LLMS" [ref=f6e464] [cursor=pointer]:
+              - /url: https://www.twilio.com/llms.txt
+        - list [ref=f6e469]:
+          - listitem [ref=f6e470]:
+            - link "Twilio on Facebook" [ref=f6e471] [cursor=pointer]:
+              - /url: https://www.facebook.com/TeamTwilio
+          - listitem [ref=f6e475]:
+            - link "Twilio on X" [ref=f6e476] [cursor=pointer]:
+              - /url: https://x.com/twilio
+              - img "Twitter Logo" [ref=f6e478]
+          - listitem [ref=f6e480]:
+            - link "Twilio on LinkedIn" [ref=f6e481] [cursor=pointer]:
+              - /url: https://www.linkedin.com/company/twilio-inc-
+          - listitem [ref=f6e485]:
+            - link "Twilio on Youtube" [ref=f6e486] [cursor=pointer]:
+              - /url: https://www.youtube.com/@twilio
+        - paragraph [ref=f6e489]: Copyright © 2026 Twilio Inc. All rights reserved.
+      - generic [ref=f6e491]:
+        - button "Considering Twilio?"
+        - list [ref=f6e493]:
+          - listitem [ref=f6e494]:
+            - link "About Twilio" [ref=f6e497] [cursor=pointer]:
+              - /url: /en-us/company
+          - listitem [ref=f6e499]:
+            - link "Customer Engagement Platform (CEP)" [ref=f6e502] [cursor=pointer]:
+              - /url: /en-us/customer-engagement-platform
+          - listitem [ref=f6e504]:
+            - link "Communications" [ref=f6e507] [cursor=pointer]:
+              - /url: /en-us/cpaas
+          - listitem [ref=f6e509]:
+            - link "Conversational AI" [ref=f6e512] [cursor=pointer]:
+              - /url: /en-us/products/conversational-ai
+          - listitem [ref=f6e514]:
+            - link "User authentication and identity" [ref=f6e517] [cursor=pointer]:
+              - /url: /en-us/user-authentication-identity
+          - listitem [ref=f6e519]:
+            - link "Customer Data Platform (CDP)" [ref=f6e522] [cursor=pointer]:
+              - /url: /en-us/customer-data-platform
+          - listitem [ref=f6e524]:
+            - link "AI" [ref=f6e527] [cursor=pointer]:
+              - /url: /en-us/ai
+          - listitem [ref=f6e529]:
+            - link "Customer stories" [ref=f6e532] [cursor=pointer]:
+              - /url: https://customers.twilio.com/en-us
+          - listitem [ref=f6e534]:
+            - link "Events" [ref=f6e537] [cursor=pointer]:
+              - /url: /en-us/events
+          - listitem [ref=f6e539]:
+            - link "Contact sales" [ref=f6e542] [cursor=pointer]:
+              - /url: /en-us/help/sales
+          - listitem [ref=f6e544]:
+            - link "Why Twilio" [ref=f6e547] [cursor=pointer]:
+              - /url: /en-us/why-twilio
+              - figure [ref=f6e549]
+      - generic [ref=f6e552]:
+        - button "Products and Features"
+        - list [ref=f6e554]:
+          - listitem [ref=f6e555]:
+            - link "SMTP" [ref=f6e558] [cursor=pointer]:
+              - /url: /en-us/products/email-api/smtp-service
+          - listitem [ref=f6e560]:
+            - link "Branded Calling" [ref=f6e563] [cursor=pointer]:
+              - /url: /en-us/voice/branded-calling
+          - listitem [ref=f6e565]:
+            - link "Twilio Segment" [ref=f6e568] [cursor=pointer]:
+              - /url: /en-us/customer-data-platform
+          - listitem [ref=f6e570]:
+            - link "Twilio Engage" [ref=f6e573] [cursor=pointer]:
+              - /url: /en-us/products/engage
+          - listitem [ref=f6e575]:
+            - link "Connections" [ref=f6e578] [cursor=pointer]:
+              - /url: /en-us/products/connections
+          - listitem [ref=f6e580]:
+            - link "SendGrid Email API" [ref=f6e583] [cursor=pointer]:
+              - /url: /en-us/products/email-api
+          - listitem [ref=f6e585]:
+            - link "RCS messaging" [ref=f6e588] [cursor=pointer]:
+              - /url: /en-us/messaging/channels/rcs
+          - listitem [ref=f6e590]:
+            - link "Latest innovations" [ref=f6e593] [cursor=pointer]:
+              - /url: /en-us/products/beta
+          - listitem [ref=f6e595]:
+            - link "Pre-built solutions" [ref=f6e598] [cursor=pointer]:
+              - /url: /en-us/partners/saas
+          - listitem [ref=f6e600]:
+            - link "Support plans" [ref=f6e603] [cursor=pointer]:
+              - /url: /en-us/support-plans
+          - listitem [ref=f6e605]:
+            - link "All products" [ref=f6e608] [cursor=pointer]:
+              - /url: /en-us/products
+              - figure [ref=f6e610]
+      - generic [ref=f6e613]:
+        - button "Use Cases"
+        - list [ref=f6e615]:
+          - listitem [ref=f6e616]:
+            - link "Voice AI" [ref=f6e619] [cursor=pointer]:
+              - /url: /en-us/use-cases/voice-AI
+          - listitem [ref=f6e621]:
+            - link "AI agent productivity" [ref=f6e624] [cursor=pointer]:
+              - /url: /en-us/solutions/agent-productivity
+          - listitem [ref=f6e626]:
+            - link "Customer data management" [ref=f6e629] [cursor=pointer]:
+              - /url: /en-us/use-cases/customer-data-management-integration
+          - listitem [ref=f6e631]:
+            - link "Audience segmentation" [ref=f6e634] [cursor=pointer]:
+              - /url: /en-us/use-cases/segmentation-audience-activation
+          - listitem [ref=f6e636]:
+            - link "Contact center" [ref=f6e639] [cursor=pointer]:
+              - /url: /en-us/flex/use-cases/contact-center
+          - listitem [ref=f6e641]:
+            - link "SMS marketing" [ref=f6e644] [cursor=pointer]:
+              - /url: /en-us/solutions/text-marketing
+          - listitem [ref=f6e646]:
+            - link "Customer acquisition" [ref=f6e649] [cursor=pointer]:
+              - /url: /en-us/use-cases/customer-acquisition-activation
+          - listitem [ref=f6e651]:
+            - link "Fraud prevention" [ref=f6e654] [cursor=pointer]:
+              - /url: /en-us/use-cases/fraud-prevention
+          - listitem [ref=f6e656]:
+            - link "Voice response system (IVR)" [ref=f6e659] [cursor=pointer]:
+              - /url: /en-us/use-cases/ivr
+          - listitem [ref=f6e661]:
+            - link "Bulk text messaging" [ref=f6e664] [cursor=pointer]:
+              - /url: /en-us/use-cases/mass-texting
+          - listitem [ref=f6e666]:
+            - link "Mass email sender" [ref=f6e669] [cursor=pointer]:
+              - /url: /en-us/resource-center/bulk-email-guide
+          - listitem [ref=f6e671]:
+            - link "All use cases" [ref=f6e674] [cursor=pointer]:
+              - /url: https://www.twilio.com/en-us/solutions#use-cases
+              - figure [ref=f6e676]
+      - generic [ref=f6e679]:
+        - button "Developers"
+        - list [ref=f6e681]:
+          - listitem [ref=f6e682]:
+            - link "Developer resources" [ref=f6e685] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs#developer-toolkit
+          - listitem [ref=f6e687]:
+            - link "Twilio Essentials" [ref=f6e690] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs#twilio-essentials
+          - listitem [ref=f6e692]:
+            - link "SDKs" [ref=f6e695] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/libraries
+          - listitem [ref=f6e697]:
+            - link "CDP integrations" [ref=f6e700] [cursor=pointer]:
+              - /url: /en-us/catalog
+          - listitem [ref=f6e702]:
+            - link "Serverless" [ref=f6e705] [cursor=pointer]:
+              - /url: /en-us/serverless
+          - listitem [ref=f6e707]:
+            - link "Conversations" [ref=f6e710] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/conversations
+          - listitem [ref=f6e712]:
+            - link "SMTP Email API" [ref=f6e715] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/sendgrid/for-developers/sending-email/getting-started-smtp
+          - listitem [ref=f6e717]:
+            - link "SMS API" [ref=f6e720] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/messaging/api
+          - listitem [ref=f6e722]:
+            - link "WhatsApp API" [ref=f6e725] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/whatsapp
+          - listitem [ref=f6e727]:
+            - link "Voice API" [ref=f6e730] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/voice
+          - listitem [ref=f6e732]:
+            - link "Connections" [ref=f6e735] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs/segment/connections
+          - listitem [ref=f6e737]:
+            - link "All docs" [ref=f6e740] [cursor=pointer]:
+              - /url: https://www.twilio.com/docs
+              - figure [ref=f6e742]

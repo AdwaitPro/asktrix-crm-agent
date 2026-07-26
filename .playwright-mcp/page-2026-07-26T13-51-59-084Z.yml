@@ -1,0 +1,237 @@
+- generic [active] [ref=f25e1]:
+  - generic [ref=f25e4]:
+    - generic:
+      - generic [ref=f25e5]:
+        - link "Skip to content" [ref=f25e6] [cursor=pointer]:
+          - /url: "#twilio-docs-content-area"
+        - link "Skip to navigation" [ref=f25e7] [cursor=pointer]:
+          - /url: "#twilio-docs-sidebar-nav"
+        - link "Skip to topbar" [ref=f25e8] [cursor=pointer]:
+          - /url: "#twilio-docs-topbar"
+      - complementary [ref=f25e9]:
+        - generic [ref=f25e10]:
+          - link [ref=f25e11] [cursor=pointer]:
+            - /url: /docs
+            - img "Go to the Twilio Docs home page" [ref=f25e14]
+          - generic [ref=f25e16]: Twilio Docs
+        - navigation "main" [ref=f25e18]:
+          - 'link "Proxy: One-to-one masked communications" [ref=f25e19] [cursor=pointer]':
+            - /url: /docs/proxy
+          - button "Getting started" [ref=f25e23] [cursor=pointer]
+          - button "API reference" [ref=f25e31] [cursor=pointer]
+          - button "Proxy usage guides" [ref=f25e39] [cursor=pointer]
+          - separator [ref=f25e45]
+          - link "Messaging" [ref=f25e46] [cursor=pointer]:
+            - /url: /docs/messaging
+          - link "Voice" [ref=f25e48] [cursor=pointer]:
+            - /url: /docs/voice
+          - link "Video" [ref=f25e50] [cursor=pointer]:
+            - /url: /docs/video
+          - link "Conversations" [ref=f25e52] [cursor=pointer]:
+            - /url: /docs/conversations
+          - link "Flex" [ref=f25e54] [cursor=pointer]:
+            - /url: /docs/flex
+          - link "Studio" [ref=f25e56] [cursor=pointer]:
+            - /url: /docs/studio
+          - link "All docs..." [ref=f25e58] [cursor=pointer]:
+            - /url: /docs
+    - generic [ref=f25e60]:
+      - generic [ref=f25e62]:
+        - navigation "Libraries and help" [ref=f25e63]:
+          - list [ref=f25e65]:
+            - listitem [ref=f25e66]:
+              - link "Build with AI" [ref=f25e67] [cursor=pointer]:
+                - /url: /docs/ai
+            - listitem [ref=f25e68]:
+              - link "SDKs" [ref=f25e69] [cursor=pointer]:
+                - /url: /docs/libraries
+            - listitem [ref=f25e70]:
+              - link [ref=f25e71] [cursor=pointer]:
+                - /url: https://help.twilio.com
+                - generic [ref=f25e72]:
+                  - text: Help Center
+                  - img "Help Center" [ref=f25e74]
+        - search [ref=f25e76]:
+          - button "Search (Command+K)" [ref=f25e77] [cursor=pointer]:
+            - generic [ref=f25e78]: Search
+            - generic [ref=f25e82]:
+              - generic [ref=f25e83]: ⌘
+              - generic [ref=f25e84]: K
+        - navigation "Log in or sign up" [ref=f25e85]:
+          - list [ref=f25e87]:
+            - listitem [ref=f25e88]:
+              - link "Log in" [ref=f25e89] [cursor=pointer]:
+                - /url: https://www.twilio.com/login
+            - listitem [ref=f25e90]:
+              - link "Sign up" [ref=f25e91] [cursor=pointer]:
+                - /url: https://www.twilio.com/try-twilio
+      - main [ref=f25e93]:
+        - generic [ref=f25e94]:
+          - generic [ref=f25e96]:
+            - navigation [ref=f25e97]:
+              - button [ref=f25e98] [cursor=pointer]
+            - button [ref=f25e104] [cursor=pointer]
+          - article [ref=f25e109]:
+            - generic [ref=f25e110]:
+              - 'heading "Proxy: One-to-one Masked Communications" [level=1] [ref=f25e112]'
+              - generic [ref=f25e114]:
+                - button [ref=f25e115] [cursor=pointer]:
+                  - img "Positive Feedback" [ref=f25e118]
+                - button [ref=f25e120] [cursor=pointer]:
+                  - img "Negative Feedback" [ref=f25e123]
+            - separator [ref=f25e125]
+            - generic [ref=f25e127]:
+              - generic [ref=f25e128]: (new)
+              - generic [ref=f25e133]:
+                - heading "Public Beta" [level=2] [ref=f25e134]
+                - generic [ref=f25e135]:
+                  - paragraph [ref=f25e136]: Twilio's Proxy API is currently available as a Public Beta product. Some features are not yet implemented and others may be changed before the product is declared as Generally Available.
+                  - paragraph [ref=f25e137]:
+                    - text: Public Beta products are
+                    - link [ref=f25e138] [cursor=pointer]:
+                      - /url: https://help.twilio.com/hc/en-us/articles/115002413087-Twilio-Beta-product-support
+                      - generic [ref=f25e139]:
+                        - text: not covered by a Twilio SLA
+                        - img "(link takes you to an external page)" [ref=f25e142]
+                    - text: .
+            - paragraph [ref=f25e144]:
+              - text: Twilio Proxy simplifies the task of masking the communications between two parties (aka
+              - link "masked phone numbers" [ref=f25e145] [cursor=pointer]:
+                - /url: /docs/glossary/what-are-masked-phone-numbers
+              - text: or masked calling). Proxy automatically provides a number and associates two numbers together in order to forward messages and calls back and forth.
+            - generic [ref=f25e147]:
+              - img "Twilio proxy session connects customer and delivery driver using proxy numbers." [ref=f25e148]
+              - button [ref=f25e149] [cursor=pointer]
+            - paragraph [ref=f25e155]: With Proxy, Twilio facilitates any use case that can benefit from a temporary conversation between two parties.
+            - paragraph [ref=f25e156]:
+              - emphasis [ref=f25e157]:
+                - text: Not a developer? See the
+                - link "Proxy product page" [ref=f25e158] [cursor=pointer]:
+                  - /url: /docs/proxy
+                - text: .
+            - separator [ref=f25e159]
+            - generic [ref=f25e160]:
+              - generic [ref=f25e161]:
+                - generic [ref=f25e163]:
+                  - heading "Get started with Proxy" [level=2] [ref=f25e164]
+                  - link [ref=f25e165] [cursor=pointer]:
+                    - /url: "#get-started-with-proxy"
+                    - img "get-started-with-proxy page anchor" [ref=f25e167]
+                - generic [ref=f25e171]:
+                  - button [ref=f25e172] [cursor=pointer]:
+                    - img "Positive Feedback" [ref=f25e175]
+                  - button [ref=f25e177] [cursor=pointer]:
+                    - img "Negative Feedback" [ref=f25e180]
+              - paragraph [ref=f25e182]: Follow our quickstart for the fastest experience adding masked phone numbers for SMS and Voice communications.
+              - list [ref=f25e183]:
+                - listitem [ref=f25e184]:
+                  - link "Proxy Quickstart" [ref=f25e185] [cursor=pointer]:
+                    - /url: /docs/proxy/quickstart
+              - separator [ref=f25e186]
+            - generic [ref=f25e187]:
+              - generic [ref=f25e188]:
+                - generic [ref=f25e190]:
+                  - heading "Build your app" [level=2] [ref=f25e191]
+                  - link [ref=f25e192] [cursor=pointer]:
+                    - /url: "#build-your-app"
+                    - img "build-your-app page anchor" [ref=f25e194]
+                - generic [ref=f25e198]:
+                  - button [ref=f25e199] [cursor=pointer]:
+                    - img "Positive Feedback" [ref=f25e202]
+                  - button [ref=f25e204] [cursor=pointer]:
+                    - img "Negative Feedback" [ref=f25e207]
+              - paragraph [ref=f25e209]: These guides cover the details you need to take a Proxy use case from prototype to production.
+            - generic [ref=f25e210]:
+              - generic [ref=f25e211]:
+                - generic [ref=f25e213]:
+                  - heading "Usage guides" [level=3] [ref=f25e214]
+                  - link [ref=f25e215] [cursor=pointer]:
+                    - /url: "#usage-guides"
+                    - img "usage-guides page anchor" [ref=f25e217]
+                - generic [ref=f25e221]:
+                  - button [ref=f25e222] [cursor=pointer]:
+                    - img "Positive Feedback" [ref=f25e225]
+                  - button [ref=f25e227] [cursor=pointer]:
+                    - img "Negative Feedback" [ref=f25e230]
+              - list [ref=f25e232]:
+                - listitem [ref=f25e233]:
+                  - link "Phone Number Management" [ref=f25e234] [cursor=pointer]:
+                    - /url: /docs/proxy/understanding-phone-number-management
+                - listitem [ref=f25e235]:
+                  - link "How many Phone Numbers do I need?" [ref=f25e236] [cursor=pointer]:
+                    - /url: /docs/proxy/phone-numbers-needed
+                - listitem [ref=f25e237]:
+                  - link "Reserved Phone Numbers" [ref=f25e238] [cursor=pointer]:
+                    - /url: /docs/proxy/reserved-phone-numbers
+                - listitem [ref=f25e239]:
+                  - link "Out-of-Session Callback Response Guide" [ref=f25e240] [cursor=pointer]:
+                    - /url: /docs/proxy/out-session-callback-response-guide
+                - listitem [ref=f25e241]:
+                  - link "Using the Reserved Numbers and Auto-Create functionalities to support the \"online directory\" scenarios" [ref=f25e242] [cursor=pointer]:
+                    - /url: /docs/proxy/using-the-reserved-numbers-and-auto-create-functionalities-to-support-the-online-directory-scenarios
+            - generic [ref=f25e243]:
+              - generic [ref=f25e244]:
+                - generic [ref=f25e246]:
+                  - heading "API reference" [level=3] [ref=f25e247]
+                  - link [ref=f25e248] [cursor=pointer]:
+                    - /url: "#api-reference"
+                    - img "api-reference page anchor" [ref=f25e250]
+                - generic [ref=f25e254]:
+                  - button [ref=f25e255] [cursor=pointer]:
+                    - img "Positive Feedback" [ref=f25e258]
+                  - button [ref=f25e260] [cursor=pointer]:
+                    - img "Negative Feedback" [ref=f25e263]
+              - list [ref=f25e265]:
+                - listitem [ref=f25e266]:
+                  - link "Proxy API Overview" [ref=f25e267] [cursor=pointer]:
+                    - /url: /docs/proxy/api
+                - listitem [ref=f25e268]:
+                  - link "Proxy Webhooks" [ref=f25e269] [cursor=pointer]:
+                    - /url: /docs/proxy/api/webhooks
+                - listitem [ref=f25e270]:
+                  - link "Proxy Phone Numbers" [ref=f25e271] [cursor=pointer]:
+                    - /url: /docs/proxy/api/phone-number
+                - listitem [ref=f25e272]:
+                  - link "Proxy Session" [ref=f25e273] [cursor=pointer]:
+                    - /url: /docs/proxy/api/session
+              - generic [ref=f25e275]:
+                - generic [ref=f25e276]: (warning)
+                - generic [ref=f25e281]:
+                  - heading "Legal implications of managing communications between users" [level=2] [ref=f25e282]
+                  - generic [ref=f25e283]:
+                    - paragraph [ref=f25e284]:
+                      - text: If you choose to manage communications between your users, including voice calls, text-based messages (e.g., SMS), and chat, you may need to comply with certain laws and regulations, including those regarding obtaining consent. Additional information regarding legal compliance considerations and best practices for using Twilio to manage and record communications between your users, such as when using Twilio Proxy, are available in
+                      - link [ref=f25e285] [cursor=pointer]:
+                        - /url: https://help.twilio.com/hc/en-us/articles/360011435554-Best-Practices-for-Using-Twilio-to-Manage-and-Record-Communications-Between-Users
+                        - generic [ref=f25e286]:
+                          - text: Best Practices for Using Twilio to Manage and Record Communications Between Users
+                          - img "(link takes you to an external page)" [ref=f25e289]
+                      - text: .
+                    - paragraph [ref=f25e291]:
+                      - emphasis [ref=f25e292]: Notice
+                      - text: ": Twilio recommends that you consult with your legal counsel to make sure that you are complying with all applicable laws in connection with communications you record or store using Twilio."
+      - contentinfo [ref=f25e293]:
+        - generic [ref=f25e297]:
+          - heading "Need some help?" [level=2] [ref=f25e299]
+          - navigation [ref=f25e300]:
+            - paragraph [ref=f25e302]:
+              - text: We all do sometimes; code is hard. Get help now from our
+              - link [ref=f25e303] [cursor=pointer]:
+                - /url: https://help.twilio.com
+                - generic [ref=f25e304]:
+                  - text: support team
+                  - img "(link takes you to an external page)" [ref=f25e307]
+              - text: ", or lean on the wisdom of the crowd by browsing the"
+              - link [ref=f25e309] [cursor=pointer]:
+                - /url: https://stackoverflow.com/questions/tagged/twilio
+                - generic [ref=f25e310]:
+                  - text: Twilio tag
+                  - img "(link takes you to an external page)" [ref=f25e313]
+              - text: on Stack Overflow.
+          - generic [ref=f25e316]:
+            - link "Terms of service" [ref=f25e318] [cursor=pointer]:
+              - /url: /en-us/legal/tos
+            - link "Privacy Policy" [ref=f25e320] [cursor=pointer]:
+              - /url: /en-us/legal/privacy
+            - paragraph [ref=f25e322]: Copyright © 2026 Twilio Inc.
+  - alert [ref=f25e323]

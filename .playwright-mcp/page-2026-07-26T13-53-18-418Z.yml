@@ -1,0 +1,323 @@
+- generic [active] [ref=f35e1]:
+  - generic [ref=f35e4]:
+    - generic:
+      - generic [ref=f35e5]:
+        - link "Skip to content" [ref=f35e6] [cursor=pointer]:
+          - /url: "#twilio-docs-content-area"
+        - link "Skip to navigation" [ref=f35e7] [cursor=pointer]:
+          - /url: "#twilio-docs-sidebar-nav"
+        - link "Skip to topbar" [ref=f35e8] [cursor=pointer]:
+          - /url: "#twilio-docs-topbar"
+      - complementary [ref=f35e9]:
+        - generic [ref=f35e10]:
+          - link [ref=f35e11] [cursor=pointer]:
+            - /url: /docs
+            - img "Go to the Twilio Docs home page" [ref=f35e14]
+          - generic [ref=f35e16]: Twilio Docs
+        - navigation "main" [ref=f35e18]:
+          - 'link "Proxy: One-to-one masked communications" [ref=f35e19] [cursor=pointer]':
+            - /url: /docs/proxy
+          - button "Getting started" [ref=f35e23] [cursor=pointer]
+          - generic [ref=f35e29]:
+            - button "API reference" [expanded] [ref=f35e31] [cursor=pointer]
+            - generic [ref=f35e37]:
+              - link "Proxy REST API overview" [ref=f35e38] [cursor=pointer]:
+                - /url: /docs/proxy/api
+              - link "Service" [ref=f35e40] [cursor=pointer]:
+                - /url: /docs/proxy/api/service
+              - link "Phone number" [ref=f35e42] [cursor=pointer]:
+                - /url: /docs/proxy/api/phone-number
+              - link "Session resource" [ref=f35e44] [cursor=pointer]:
+                - /url: /docs/proxy/api/session
+              - link "Participant" [ref=f35e46] [cursor=pointer]:
+                - /url: /docs/proxy/api/participant
+              - link "Interaction" [ref=f35e48] [cursor=pointer]:
+                - /url: /docs/proxy/api/interaction
+              - link "Webhooks" [ref=f35e50] [cursor=pointer]:
+                - /url: /docs/proxy/api/webhooks
+              - link "Sending messages" [ref=f35e52] [cursor=pointer]:
+                - /url: /docs/proxy/api/sending-messages
+          - button "Proxy usage guides" [ref=f35e56] [cursor=pointer]
+          - separator [ref=f35e62]
+          - link "Messaging" [ref=f35e63] [cursor=pointer]:
+            - /url: /docs/messaging
+          - link "Voice" [ref=f35e65] [cursor=pointer]:
+            - /url: /docs/voice
+          - link "Video" [ref=f35e67] [cursor=pointer]:
+            - /url: /docs/video
+          - link "Conversations" [ref=f35e69] [cursor=pointer]:
+            - /url: /docs/conversations
+          - link "Flex" [ref=f35e71] [cursor=pointer]:
+            - /url: /docs/flex
+          - link "Studio" [ref=f35e73] [cursor=pointer]:
+            - /url: /docs/studio
+          - link "All docs..." [ref=f35e75] [cursor=pointer]:
+            - /url: /docs
+    - generic [ref=f35e77]:
+      - generic [ref=f35e79]:
+        - navigation "Libraries and help" [ref=f35e80]:
+          - list [ref=f35e82]:
+            - listitem [ref=f35e83]:
+              - link "Build with AI" [ref=f35e84] [cursor=pointer]:
+                - /url: /docs/ai
+            - listitem [ref=f35e85]:
+              - link "SDKs" [ref=f35e86] [cursor=pointer]:
+                - /url: /docs/libraries
+            - listitem [ref=f35e87]:
+              - link [ref=f35e88] [cursor=pointer]:
+                - /url: https://help.twilio.com
+                - generic [ref=f35e89]:
+                  - text: Help Center
+                  - img "Help Center" [ref=f35e91]
+        - search [ref=f35e93]:
+          - button "Search (Command+K)" [ref=f35e94] [cursor=pointer]:
+            - generic [ref=f35e95]: Search
+            - generic [ref=f35e99]:
+              - generic [ref=f35e100]: ⌘
+              - generic [ref=f35e101]: K
+        - navigation "Log in or sign up" [ref=f35e102]:
+          - list [ref=f35e104]:
+            - listitem [ref=f35e105]:
+              - link "Log in" [ref=f35e106] [cursor=pointer]:
+                - /url: https://www.twilio.com/login
+            - listitem [ref=f35e107]:
+              - link "Sign up" [ref=f35e108] [cursor=pointer]:
+                - /url: https://www.twilio.com/try-twilio
+      - main [ref=f35e110]:
+        - generic [ref=f35e111]:
+          - generic [ref=f35e113]:
+            - navigation [ref=f35e114]:
+              - button [ref=f35e115] [cursor=pointer]
+            - button [ref=f35e121] [cursor=pointer]
+          - article [ref=f35e126]:
+            - generic [ref=f35e127]:
+              - heading "The Proxy API Overview" [level=1] [ref=f35e129]
+              - generic [ref=f35e131]:
+                - button [ref=f35e132] [cursor=pointer]:
+                  - img "Positive Feedback" [ref=f35e135]
+                - button [ref=f35e137] [cursor=pointer]:
+                  - img "Negative Feedback" [ref=f35e140]
+            - separator [ref=f35e142]
+            - generic [ref=f35e144]:
+              - generic [ref=f35e145]: (new)
+              - generic [ref=f35e150]:
+                - heading "Public Beta" [level=2] [ref=f35e151]
+                - generic [ref=f35e152]:
+                  - paragraph [ref=f35e153]: Twilio's Proxy API is currently available as a Public Beta product. Some features are not yet implemented and others may be changed before the product is declared as Generally Available.
+                  - paragraph [ref=f35e154]:
+                    - text: Public Beta products are
+                    - link [ref=f35e155] [cursor=pointer]:
+                      - /url: https://help.twilio.com/hc/en-us/articles/115002413087-Twilio-Beta-product-support
+                      - generic [ref=f35e156]:
+                        - text: not covered by a Twilio SLA
+                        - img "(link takes you to an external page)" [ref=f35e159]
+                    - text: .
+            - separator [ref=f35e161]
+            - generic [ref=f35e162]:
+              - generic [ref=f35e163]:
+                - generic [ref=f35e165]:
+                  - heading "How it works" [level=2] [ref=f35e166]
+                  - link [ref=f35e167] [cursor=pointer]:
+                    - /url: "#how-it-works"
+                    - img "how-it-works page anchor" [ref=f35e169]
+                - generic [ref=f35e173]:
+                  - button [ref=f35e174] [cursor=pointer]:
+                    - img "Positive Feedback" [ref=f35e177]
+                  - button [ref=f35e179] [cursor=pointer]:
+                    - img "Negative Feedback" [ref=f35e182]
+              - paragraph [ref=f35e184]: Twilio Proxy is exposed as a REST API that allows you to create masked/anonymized text and voice conversations between users.
+              - generic [ref=f35e186]:
+                - img "Proxy Overview Graphic." [ref=f35e187]
+                - button [ref=f35e188] [cursor=pointer]
+              - paragraph [ref=f35e194]: "The Proxy REST API allows you to create and manage:"
+              - list [ref=f35e195]:
+                - listitem [ref=f35e196]:
+                  - link "Services" [ref=f35e197] [cursor=pointer]:
+                    - /url: /docs/proxy/api/service
+                - listitem [ref=f35e198]:
+                  - link "Sessions" [ref=f35e199] [cursor=pointer]:
+                    - /url: /docs/proxy/api/session
+                - listitem [ref=f35e200]:
+                  - link "Participants" [ref=f35e201] [cursor=pointer]:
+                    - /url: /docs/proxy/api/participant
+                - listitem [ref=f35e202]:
+                  - link "Interactions" [ref=f35e203] [cursor=pointer]:
+                    - /url: /docs/proxy/api/interaction
+              - paragraph [ref=f35e204]:
+                - text: Additionally, you can add
+                - link "phone numbers" [ref=f35e205] [cursor=pointer]:
+                  - /url: /docs/proxy/api/phone-number
+                - text: with Voice or SMS capabilities to a phone number pool.
+            - generic [ref=f35e206]:
+              - generic [ref=f35e207]:
+                - generic [ref=f35e209]:
+                  - heading "REST API resources diagram" [level=3] [ref=f35e210]
+                  - link [ref=f35e211] [cursor=pointer]:
+                    - /url: "#rest-api-resources-diagram"
+                    - img "rest-api-resources-diagram page anchor" [ref=f35e213]
+                - generic [ref=f35e217]:
+                  - button [ref=f35e218] [cursor=pointer]:
+                    - img "Positive Feedback" [ref=f35e221]
+                  - button [ref=f35e223] [cursor=pointer]:
+                    - img "Negative Feedback" [ref=f35e226]
+              - generic [ref=f35e229]:
+                - img "Diagram showing service with sessions, participants, interactions, and phone numbers." [ref=f35e230]
+                - button [ref=f35e231] [cursor=pointer]
+              - separator [ref=f35e237]
+            - generic [ref=f35e238]:
+              - generic [ref=f35e239]:
+                - generic [ref=f35e241]:
+                  - heading "API base URL" [level=2] [ref=f35e242]
+                  - link [ref=f35e243] [cursor=pointer]:
+                    - /url: "#api-base-url"
+                    - img "api-base-url page anchor" [ref=f35e245]
+                - generic [ref=f35e249]:
+                  - button [ref=f35e250] [cursor=pointer]:
+                    - img "Positive Feedback" [ref=f35e253]
+                  - button [ref=f35e255] [cursor=pointer]:
+                    - img "Negative Feedback" [ref=f35e258]
+              - paragraph [ref=f35e260]: "All URLs in the reference documentation use the following base URL:"
+              - generic [ref=f35e263]:
+                - button "Copy code block" [ref=f35e266] [cursor=pointer]
+                - generic [ref=f35e273]: https://proxy.twilio.com/v1
+              - paragraph [ref=f35e277]:
+                - emphasis [ref=f35e278]: All requests to the Proxy REST API are served over HTTPS. Unencrypted HTTP is not supported.
+              - separator [ref=f35e279]
+            - generic [ref=f35e280]:
+              - generic [ref=f35e281]:
+                - generic [ref=f35e283]:
+                  - heading "Authentication" [level=2] [ref=f35e284]
+                  - link [ref=f35e285] [cursor=pointer]:
+                    - /url: "#authentication"
+                    - img "authentication page anchor" [ref=f35e287]
+                - generic [ref=f35e291]:
+                  - button [ref=f35e292] [cursor=pointer]:
+                    - img "Positive Feedback" [ref=f35e295]
+                  - button [ref=f35e297] [cursor=pointer]:
+                    - img "Negative Feedback" [ref=f35e300]
+              - paragraph [ref=f35e302]:
+                - text: To authenticate requests to the Twilio APIs, Twilio supports
+                - link [ref=f35e303] [cursor=pointer]:
+                  - /url: https://en.wikipedia.org/wiki/Basic_access_authentication
+                  - generic [ref=f35e304]:
+                    - text: HTTP Basic authentication
+                    - img "(link takes you to an external page)" [ref=f35e307]
+                - text: . Use your
+                - emphasis [ref=f35e309]: API key
+                - text: as the username and your
+                - emphasis [ref=f35e310]: API key secret
+                - text: as the password. You can create an API key either
+                - link "in the Twilio Console" [ref=f35e311] [cursor=pointer]:
+                  - /url: /docs/iam/api-keys/keys-in-console
+                - text: or
+                - link "using the API" [ref=f35e312] [cursor=pointer]:
+                  - /url: /docs/iam/api-keys/key-resource-v1
+                - text: .
+              - paragraph [ref=f35e313]:
+                - strong [ref=f35e314]: Note
+                - text: ": Twilio recommends using API keys for authentication in production apps. For local testing, you can use your Account SID as the username and your Auth token as the password. You can find your Account SID and Auth Token in the"
+                - link [ref=f35e315] [cursor=pointer]:
+                  - /url: https://www.twilio.com/console
+                  - generic [ref=f35e316]:
+                    - text: Twilio Console
+                    - img "(link takes you to an external page)" [ref=f35e319]
+                - text: .
+              - paragraph [ref=f35e321]:
+                - text: Learn more about
+                - link "Twilio API authentication" [ref=f35e322] [cursor=pointer]:
+                  - /url: /docs/usage/requests-to-twilio
+                - text: .
+              - separator [ref=f35e323]
+            - generic [ref=f35e324]:
+              - generic [ref=f35e325]:
+                - generic [ref=f35e327]:
+                  - heading "SDKs" [level=2] [ref=f35e328]
+                  - link [ref=f35e329] [cursor=pointer]:
+                    - /url: "#sdks"
+                    - img "sdks page anchor" [ref=f35e331]
+                - generic [ref=f35e335]:
+                  - button [ref=f35e336] [cursor=pointer]:
+                    - img "Positive Feedback" [ref=f35e339]
+                  - button [ref=f35e341] [cursor=pointer]:
+                    - img "Negative Feedback" [ref=f35e344]
+              - paragraph [ref=f35e346]:
+                - text: If you use one of our SDKs for
+                - link [ref=f35e347] [cursor=pointer]:
+                  - /url: https://github.com/twilio/twilio-csharp
+                  - generic [ref=f35e348]:
+                    - text: C#
+                    - img "(link takes you to an external page)" [ref=f35e351]
+                - text: ","
+                - link [ref=f35e353] [cursor=pointer]:
+                  - /url: https://github.com/twilio/twilio-java
+                  - generic [ref=f35e354]:
+                    - text: Java
+                    - img "(link takes you to an external page)" [ref=f35e357]
+                - text: ","
+                - link [ref=f35e359] [cursor=pointer]:
+                  - /url: https://github.com/twilio/twilio-node
+                  - generic [ref=f35e360]:
+                    - text: Node.js
+                    - img "(link takes you to an external page)" [ref=f35e363]
+                - text: ","
+                - link [ref=f35e365] [cursor=pointer]:
+                  - /url: https://github.com/twilio/twilio-php
+                  - generic [ref=f35e366]:
+                    - text: PHP
+                    - img "(link takes you to an external page)" [ref=f35e369]
+                - text: ","
+                - link [ref=f35e371] [cursor=pointer]:
+                  - /url: https://github.com/twilio/twilio-python
+                  - generic [ref=f35e372]:
+                    - text: Python
+                    - img "(link takes you to an external page)" [ref=f35e375]
+                - text: ", or"
+                - link [ref=f35e377] [cursor=pointer]:
+                  - /url: https://github.com/twilio/twilio-ruby
+                  - generic [ref=f35e378]:
+                    - text: Ruby
+                    - img "(link takes you to an external page)" [ref=f35e381]
+                - text: ; you needn't worry about the URL for the API or how to do HTTP Basic authentication. The SDKs take care of it for you.
+              - separator [ref=f35e383]
+            - generic [ref=f35e384]:
+              - generic [ref=f35e385]:
+                - generic [ref=f35e387]:
+                  - heading "Getting started" [level=2] [ref=f35e388]
+                  - link [ref=f35e389] [cursor=pointer]:
+                    - /url: "#getting-started"
+                    - img "getting-started page anchor" [ref=f35e391]
+                - generic [ref=f35e395]:
+                  - button [ref=f35e396] [cursor=pointer]:
+                    - img "Positive Feedback" [ref=f35e399]
+                  - button [ref=f35e401] [cursor=pointer]:
+                    - img "Negative Feedback" [ref=f35e404]
+              - paragraph [ref=f35e406]:
+                - text: Refer to our
+                - link "quickstart guide" [ref=f35e407] [cursor=pointer]:
+                  - /url: /docs/proxy/quickstart
+                - text: for a step-by-step introduction to Proxy, or browse the Proxy resources listed in the left-hand navigation for API Reference material.
+      - contentinfo [ref=f35e408]:
+        - generic [ref=f35e412]:
+          - heading "Need some help?" [level=2] [ref=f35e414]
+          - navigation [ref=f35e415]:
+            - paragraph [ref=f35e417]:
+              - text: We all do sometimes; code is hard. Get help now from our
+              - link [ref=f35e418] [cursor=pointer]:
+                - /url: https://help.twilio.com
+                - generic [ref=f35e419]:
+                  - text: support team
+                  - img "(link takes you to an external page)" [ref=f35e422]
+              - text: ", or lean on the wisdom of the crowd by browsing the"
+              - link [ref=f35e424] [cursor=pointer]:
+                - /url: https://stackoverflow.com/questions/tagged/twilio
+                - generic [ref=f35e425]:
+                  - text: Twilio tag
+                  - img "(link takes you to an external page)" [ref=f35e428]
+              - text: on Stack Overflow.
+          - generic [ref=f35e431]:
+            - link "Terms of service" [ref=f35e433] [cursor=pointer]:
+              - /url: /en-us/legal/tos
+            - link "Privacy Policy" [ref=f35e435] [cursor=pointer]:
+              - /url: /en-us/legal/privacy
+            - paragraph [ref=f35e437]: Copyright © 2026 Twilio Inc.
+  - alert [ref=f35e438]

@@ -1,0 +1,33 @@
+# --- Secrets: never commit ---
+local.properties
+*.keystore
+*.jks
+signing.properties
+play-service-account*.json
+google-services.json
+secrets.properties
+.env
+.env.*
+
+# --- Gradle / build ---
+.gradle/
+build/
+captures/
+.cxx/
+*.hprof
+
+# --- IDE ---
+.idea/
+*.iml
+.kotlin/
+
+# --- OS ---
+.DS_Store
+
+# --- Node (mock server / tooling only) ---
+node_modules/
+
+# --- Generated ---
+api/generated/
+docs/build/
+*.log
