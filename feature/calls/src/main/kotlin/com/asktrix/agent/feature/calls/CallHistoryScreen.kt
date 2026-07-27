@@ -18,7 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.CallMade
-import androidx.compose.material.icons.outlined.CallMissed
+import androidx.compose.material.icons.automirrored.outlined.CallMissed
 import androidx.compose.material.icons.outlined.FiberManualRecord
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.CircularProgressIndicator
@@ -34,7 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.asktrix.agent.core.data.model.CallDirection
 import com.asktrix.agent.core.data.model.CallRecord
@@ -120,7 +120,7 @@ private fun CallRow(record: CallRecord) {
             ) {
                 Icon(
                     imageVector = when (record.direction) {
-                        CallDirection.MISSED -> Icons.Outlined.CallMissed
+                        CallDirection.MISSED -> Icons.AutoMirrored.Outlined.CallMissed
                         else -> Icons.AutoMirrored.Outlined.CallMade
                     },
                     contentDescription = null,

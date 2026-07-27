@@ -7,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.EventAvailable
 import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.Phone
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -31,6 +32,7 @@ import com.asktrix.agent.feature.auth.LoginRoute
 import com.asktrix.agent.feature.calls.CallHistoryRoute
 import com.asktrix.agent.feature.client.ClientDetailRoute
 import com.asktrix.agent.feature.dashboard.DashboardRoute
+import com.asktrix.agent.feature.settings.SettingsRoute
 
 /**
  * The navigation graph.
@@ -84,6 +86,18 @@ fun AsktrixApp(onReady: () -> Unit) {
 
             composable(Route.ATTENDANCE) { AttendanceRoute() }
 
+            composable(Route.SETTINGS) {
+                SettingsRoute(
+                    onSignedOut = {
+                        navController.navigate(Route.LOGIN) {
+                            // Sign-out wipes the back stack entirely: nothing behind the login
+                            // screen should survive, since the cache it rendered is gone (§3).
+                            popUpTo(0) { inclusive = true }
+                        }
+                    },
+                )
+            }
+
             composable("${Route.CLIENT}/{clientId}") {
                 ClientDetailRoute(onBack = { navController.popBackStack() })
             }
@@ -125,6 +139,7 @@ private val BOTTOM_ITEMS = listOf(
     BottomItem(Route.DASHBOARD, "Clients", Icons.Outlined.Groups),
     BottomItem(Route.CALLS, "Calls", Icons.Outlined.Phone),
     BottomItem(Route.ATTENDANCE, "Attendance", Icons.Outlined.EventAvailable),
+    BottomItem(Route.SETTINGS, "Settings", Icons.Outlined.Settings),
 )
 
 private val TOP_LEVEL_ROUTES = BOTTOM_ITEMS.map { it.route }.toSet()
@@ -134,5 +149,6 @@ object Route {
     const val DASHBOARD = "dashboard"
     const val CALLS = "calls"
     const val ATTENDANCE = "attendance"
+    const val SETTINGS = "settings"
     const val CLIENT = "client"
 }

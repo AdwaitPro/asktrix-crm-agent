@@ -5,6 +5,7 @@ import com.asktrix.agent.core.common.session.SessionTokenStore
 import com.asktrix.agent.core.datastore.EncryptedSessionStore
 import com.asktrix.agent.core.network.di.NetworkModule
 import com.asktrix.agent.feature.auth.AppVersion
+import com.asktrix.agent.feature.settings.AppVersionName
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -29,6 +30,10 @@ object AppModule {
     @Provides
     @Singleton
     fun appVersion(): AppVersion = AppVersion(BuildConfig.VERSION_NAME)
+
+    @Provides
+    @Singleton
+    fun appVersionName(): AppVersionName = AppVersionName(BuildConfig.VERSION_NAME)
 }
 
 @Module

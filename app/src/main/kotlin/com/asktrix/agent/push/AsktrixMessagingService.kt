@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
  * Everything here is a nudge to sync rather than a state change in itself, which also means a lost
  * or duplicated push is harmless.
  */
+@Suppress("OVERRIDE_DEPRECATION")
 @AndroidEntryPoint
 class AsktrixMessagingService : FirebaseMessagingService() {
 
@@ -38,6 +39,9 @@ class AsktrixMessagingService : FirebaseMessagingService() {
         }
     }
 
+    // FirebaseMessagingService has deprecated this signature, but it remains the callback the SDK
+    // actually invokes on message delivery. Suppressed rather than annotated: marking our override
+    // @Deprecated would propagate a warning to no one, since nothing in this app calls it.
     override fun onMessageReceived(message: RemoteMessage) {
         // Any push means the server has something for us. Draining the outbox also pulls fresh data
         // down, so one handler covers call outcomes, new assignments and follow-up reminders alike.

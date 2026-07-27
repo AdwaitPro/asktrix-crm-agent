@@ -34,6 +34,28 @@ fun secret(key: String, default: String): String {
 android {
     namespace = "com.asktrix.agent"
 
+    /*
+     * Release signing reads from local.properties or CI secrets and is never committed.
+     *
+     * When the keystore is absent the signing config is simply not created, so a release build
+     * fails loudly at signing rather than silently producing a debug-signed APK that looks
+     * shippable. That failure mode matters: a debug-signed release is the kind of thing that
+     * reaches a fleet before anyone notices.
+     */
+    val keystorePath = secret("ASKTRIX_KEYSTORE_PATH", "")
+    val hasKeystore = keystorePath.isNotBlank() && file(keystorePath).exists()
+
+    signingConfigs {
+        if (hasKeystore) {
+            create("release") {
+                storeFile = file(keystorePath)
+                storePassword = secret("ASKTRIX_KEYSTORE_PASSWORD", "")
+                keyAlias = secret("ASKTRIX_KEY_ALIAS", "")
+                keyPassword = secret("ASKTRIX_KEY_PASSWORD", "")
+            }
+        }
+    }
+
     defaultConfig {
         applicationId = "com.asktrix.agent"
         versionCode = 1
@@ -73,6 +95,9 @@ android {
             )
         }
         release {
+            if (hasKeystore) {
+                signingConfig = signingConfigs.getByName("release")
+            }
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(

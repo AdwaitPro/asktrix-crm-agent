@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Build, test, lint, static analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # The build must not require google-services.json. It is gitignored, so CI proves the
+      # FCM-optional path works — the same path a fresh clone takes.
+      - name: Verify
+        run: ./gradlew assembleDebug lintDebug testDebugUnitTest detekt --stacktrace
+
+      - name: Secret scan
+        run: |
+          set -e
+          echo "Scanning for committed secrets…"
+          # Fail on anything that looks like a real credential in tracked files.
+          if git grep -nIE \
+              '(BEGIN [A-Z ]*PRIVATE KEY|postgres(ql)?://[^ ]*:[^ ]*@|AIza[0-9A-Za-z_-]{20,}|sk-[a-zA-Z0-9]{20,})' \
+              -- ':!*.md' ':!docs/*' ; then
+            echo "::error::Possible secret committed. Move it to local.properties or a CI secret."
+            exit 1
+          fi
+          echo "Clean."
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: |
+            **/build/reports/
+            **/build/test-results/
+          retention-days: 7
