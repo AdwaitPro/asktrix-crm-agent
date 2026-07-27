@@ -186,13 +186,26 @@ function register(app, asyncRoute, verifyPassword) {
         `played recording ${req.params.callRecordId}`],
     );
 
+    // Real recordings live in Postgres so the service runs anywhere, including a read-only
+    // serverless filesystem. Seeded demo calls fall back to the generated sample.
+    const stored = await query(
+      'SELECT mime_type, bytes FROM call_recordings WHERE call_record_id = $1',
+      [req.params.callRecordId],
+    );
+
+    res.setHeader('cache-control', 'no-store');
+
+    if (stored.rows.length) {
+      res.setHeader('content-type', stored.rows[0].mime_type);
+      return res.send(stored.rows[0].bytes);
+    }
+
     const file = nodePath.join(__dirname, '..', 'recordings', 'sample.wav');
     if (!fs.existsSync(file)) {
-      return res.status(503).json({ code: 'SERVER_ERROR', message: 'Recording store unavailable.' });
+      return res.status(404).json({ code: 'NOT_FOUND', message: 'Recording not stored.' });
     }
     res.setHeader('content-type', 'audio/wav');
-    res.setHeader('cache-control', 'no-store');
-    fs.createReadStream(file).pipe(res);
+    return fs.createReadStream(file).pipe(res);
   }));
 
   // ---------------------------------------------------------------- clients --

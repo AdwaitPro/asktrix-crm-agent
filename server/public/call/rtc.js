@@ -22,14 +22,19 @@ class AsktrixCall {
     this.onState = onState || (() => {});
     this.onRemoteStream = onRemoteStream || (() => {});
     this.pc = null;
-    this.socket = null;
+    this.token = null;
+    this.polling = false;
+    this.lastSignalId = 0;
+    this.offered = false;
+    this.ended = false;
     this.localStream = null;
     this.recorder = null;
     this.chunks = [];
     this.startedAt = null;
   }
 
-  async start(extraQuery = '') {
+  async start(token = null) {
+    this.token = token;
     this.onState('requesting-microphone');
     this.localStream = await navigator.mediaDevices.getUserMedia({
       audio: {
@@ -64,27 +69,62 @@ class AsktrixCall {
       if (['failed', 'disconnected'].includes(state)) this.onState('lost');
     };
 
-    const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-    this.socket = new WebSocket(
-      `${protocol}://${location.host}/rtc?room=${encodeURIComponent(this.room)}`
-      + `&role=${this.role}${extraQuery}`,
-    );
+    // Announce arrival, then poll for the peer's messages. Call setup is a handful of small
+    // messages, so polling is entirely adequate and works on any host, including serverless.
+    const join = await fetch(`/rtc/${encodeURIComponent(this.room)}/join`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ role: this.role, token: this.token }),
+    });
+    if (!join.ok) {
+      this.onState('rejected', 'This call link is not valid');
+      return;
+    }
 
-    this.socket.onmessage = (event) => this.handleSignal(JSON.parse(event.data));
-    this.socket.onclose = (event) => {
-      if (event.code >= 4000) this.onState('rejected', event.reason);
-    };
+    const state = await join.json();
+    this.polling = true;
+    this.poll();
 
     this.onState('waiting');
+
+    // The agent is the caller, so the agent offers as soon as the customer is present.
+    if (this.role === 'agent' && state.peerPresent) await this.makeOffer();
+  }
+
+  /**
+   * Polls for messages addressed to this side.
+   *
+   * Fast while the call is being set up, then slower once connected, since after that the only
+   * message that can arrive is a hangup.
+   */
+  async poll() {
+    while (this.polling) {
+      try {
+        const response = await fetch(
+          `/rtc/${encodeURIComponent(this.room)}/poll?role=${this.role}&since=${this.lastSignalId}`,
+        );
+        if (response.ok) {
+          const data = await response.json();
+          for (const message of data.messages) {
+            this.lastSignalId = Math.max(this.lastSignalId, message.id);
+            await this.handleSignal(message);
+          }
+          // The agent waits for the customer to open the link before offering.
+          if (this.role === 'agent' && data.peerPresent && !this.offered) await this.makeOffer();
+          if (data.finished && !this.ended) {
+            this.ended = true;
+            this.onState('ended');
+            this.stop(false);
+          }
+        }
+      } catch { /* a dropped poll is retried on the next tick */ }
+
+      await new Promise((r) => setTimeout(r, this.startedAt ? 3000 : 900));
+    }
   }
 
   async handleSignal(message) {
     switch (message.type) {
-      case 'peer-joined':
-        // The agent is the caller, so the agent always creates the offer.
-        if (this.role === 'agent') await this.makeOffer();
-        break;
-
       case 'offer': {
         await this.pc.setRemoteDescription(new RTCSessionDescription(message.sdp));
         const answer = await this.pc.createAnswer();
@@ -117,6 +157,8 @@ class AsktrixCall {
   }
 
   async makeOffer() {
+    if (this.offered) return;
+    this.offered = true;
     const offer = await this.pc.createOffer({ offerToReceiveAudio: true });
     await this.pc.setLocalDescription(offer);
     this.send({ type: 'offer', sdp: offer });
@@ -168,9 +210,9 @@ class AsktrixCall {
 
     if (notifyPeer) this.send({ type: 'hangup', durationSeconds: duration });
 
+    this.polling = false;
     this.localStream?.getTracks().forEach((t) => t.stop());
     this.pc?.close();
-    this.socket?.close();
     return duration;
   }
 
@@ -178,7 +220,7 @@ class AsktrixCall {
     if (!this.chunks.length) return;
     const blob = new Blob(this.chunks, { type: this.chunks[0].type });
     try {
-      await fetch(`/rtc/recording/${encodeURIComponent(this.room)}`, {
+      await fetch(`/rtc/${encodeURIComponent(this.room)}/recording`, {
         method: 'POST',
         headers: { 'content-type': blob.type || 'application/octet-stream' },
         body: blob,
@@ -188,7 +230,12 @@ class AsktrixCall {
   }
 
   send(message) {
-    if (this.socket?.readyState === WebSocket.OPEN) this.socket.send(JSON.stringify(message));
+    // Fire and forget: a lost signalling message is recovered by the peer's next poll.
+    fetch(`/rtc/${encodeURIComponent(this.room)}/signal`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ from: this.role, message }),
+    }).catch(() => {});
   }
 }
 

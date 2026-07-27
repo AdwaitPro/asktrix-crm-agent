@@ -5,6 +5,7 @@ const express = require('express');
 const crypto = require('crypto');
 const path = require('path');
 const admin = require('./admin');
+const rtc = require('./rtc');
 const { query, tx } = require('./db');
 const { findLeaks } = require('./mask');
 const S = require('./serialize');
@@ -72,6 +73,15 @@ async function idempotent(req, res, handler) {
   );
   return res.status(result.status).json(result.body);
 }
+
+/**
+ * How calls are placed.
+ *
+ *   webrtc     app-to-app over data. Free forever, no carrier, recording is lawful and on-device.
+ *   simulated  walks the state machine without placing anything, for demos.
+ *   acefone    the licensed-carrier PSTN bridge, once a subscription exists.
+ */
+const CALL_MODE = process.env.CALL_MODE || 'webrtc';
 
 const asyncRoute = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 
@@ -365,10 +375,32 @@ app.post('/calls', requireAuth, asyncRoute(async (req, res) => {
        VALUES ($1,$2,$3,$4,'REQUESTED',$5) RETURNING *`,
       [sessionId, clientId, req.employee.employee_id, req.deviceId, reason || null],
     );
-    // The provider owns the audio path. Here that provider is simulated; the app's view of the
-    // world — request, then observe state transitions — is identical either way (ADR-0002).
-    simulateCall(sessionId, clientId, req.employee, req.deviceId);
-    return { status: 202, body: S.callSession(created[0]) };
+
+    const body = S.callSession(created[0]);
+
+    if (CALL_MODE === 'webrtc') {
+      // App-to-app over data: no carrier, no phone number, and the media path is ours so the call
+      // can lawfully be recorded on the device (docs/adr/0006-webrtc-calling.md).
+      const room = await rtc.createRoom({
+        callSessionId: sessionId,
+        clientId,
+        employeeId: req.employee.employee_id,
+        deviceId: req.deviceId,
+      });
+      const origin = `${req.protocol}://${req.get('host')}`;
+      body.rtc = {
+        roomId: room.roomId,
+        agentUrl: `${origin}/call/agent.html?room=${room.roomId}`
+          + `&name=${encodeURIComponent(client.name)}`,
+        // The link the customer opens. They install nothing.
+        customerUrl: `${origin}/call/customer.html?room=${room.roomId}&t=${room.customerToken}`,
+      };
+    } else {
+      // Simulated carrier bridge, for demonstrating the flow without a telephony account.
+      simulateCall(sessionId, clientId, req.employee, req.deviceId);
+    }
+
+    return { status: 202, body };
   });
 }));
 
@@ -542,16 +574,25 @@ app.post('/device/compliance', requireAuth, asyncRoute(async (req, res) => {
 // ====================================================================== Admin (§25-§27) ===
 admin.register(app, asyncRoute, verifyPassword);
 
+// ============================================================ WebRTC calling (§5, §6) ===
+rtc.register(app, asyncRoute);
+
 // ================================================================================ Error handler ==
 app.use((err, req, res, _next) => {
   console.error(`[error] ${req.method} ${req.path}:`, err.message);
   res.status(500).json({ code: 'SERVER_ERROR', message: 'Something went wrong on the server.' });
 });
 
-const port = parseInt(process.env.PORT || '4010', 10);
-app.listen(port, '0.0.0.0', () => {
-  console.log(`Asktrix dev CRM listening on http://0.0.0.0:${port}`);
-  console.log('Android emulator reaches this at http://10.0.2.2:' + port + '/');
-});
+// Listen only when started directly. On a serverless platform the module is imported and the
+// platform owns the listener.
+if (require.main === module) {
+  const port = parseInt(process.env.PORT || '4010', 10);
+  app.listen(port, '0.0.0.0', () => {
+    console.log(`Asktrix CRM listening on http://0.0.0.0:${port}`);
+    console.log(`Admin console: http://localhost:${port}/admin/`);
+    console.log(`Android emulator reaches this at http://10.0.2.2:${port}/`);
+  });
+
+}
 
 module.exports = app;

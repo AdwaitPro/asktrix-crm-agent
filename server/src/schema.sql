@@ -11,6 +11,9 @@
 DROP TABLE IF EXISTS pii_access_log    CASCADE;
 DROP TABLE IF EXISTS location_pings    CASCADE;
 DROP TABLE IF EXISTS attendance        CASCADE;
+DROP TABLE IF EXISTS rtc_rooms         CASCADE;
+DROP TABLE IF EXISTS rtc_signals       CASCADE;
+DROP TABLE IF EXISTS call_recordings   CASCADE;
 DROP TABLE IF EXISTS call_records      CASCADE;
 DROP TABLE IF EXISTS call_sessions     CASCADE;
 DROP TABLE IF EXISTS timeline_entries  CASCADE;
@@ -155,6 +158,14 @@ CREATE TABLE call_sessions (
 );
 CREATE INDEX idx_sessions_employee ON call_sessions(employee_id, requested_at DESC);
 
+CREATE TABLE call_recordings (
+    call_record_id TEXT PRIMARY KEY,
+    mime_type      TEXT NOT NULL,
+    bytes          BYTEA NOT NULL,
+    duration_secs  INTEGER,
+    created_at     TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
 CREATE TABLE call_records (
     call_record_id   TEXT PRIMARY KEY,
     call_session_id  TEXT REFERENCES call_sessions(call_session_id) ON DELETE SET NULL,
@@ -229,3 +240,34 @@ CREATE TABLE pii_access_log (
     accessed_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX idx_pii_log_client ON pii_access_log(client_id, accessed_at DESC);
+
+-- WebRTC signalling over HTTP (docs/adr/0006-webrtc-calling.md).
+--
+-- Signalling is a handful of small messages exchanged while a call is being set up, so it does not
+-- need a socket. Storing them makes the service deployable on any platform, including serverless,
+-- where a long-lived WebSocket cannot be held open. The media itself never touches this server: it
+-- flows peer to peer.
+CREATE TABLE rtc_rooms (
+    room_id         TEXT PRIMARY KEY,
+    call_session_id TEXT NOT NULL,
+    client_id       TEXT NOT NULL,
+    employee_id     TEXT NOT NULL,
+    device_id       TEXT,
+    -- Single-use secret in the customer's link, so a forwarded link cannot join someone else's call.
+    customer_token  TEXT NOT NULL,
+    agent_joined    BOOLEAN NOT NULL DEFAULT FALSE,
+    customer_joined BOOLEAN NOT NULL DEFAULT FALSE,
+    connected_at    TIMESTAMPTZ,
+    finished_at     TIMESTAMPTZ,
+    created_at      TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE rtc_signals (
+    id         BIGSERIAL PRIMARY KEY,
+    room_id    TEXT NOT NULL REFERENCES rtc_rooms(room_id) ON DELETE CASCADE,
+    -- Who the message is FOR, so each side polls only its own queue.
+    for_role   TEXT NOT NULL CHECK (for_role IN ('agent','customer')),
+    payload    JSONB NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX idx_rtc_signals_room ON rtc_signals(room_id, for_role, id);

@@ -92,7 +92,7 @@
         onState: setState,
         onRemoteStream: (stream) => { remote.srcObject = stream; },
       });
-      await call.start('&t=' + encodeURIComponent(token || ''));
+      await call.start(token);
       action.disabled = false;
       action.textContent = 'End call';
       action.className = 'btn btn--end';
