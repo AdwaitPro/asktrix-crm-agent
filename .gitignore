@@ -35,3 +35,6 @@ docs/build/
 # Server secrets
 server/.env
 server/node_modules/
+
+# Firebase config: identifies your project. Not a credential, but no reason to publish it.
+app/google-services.json

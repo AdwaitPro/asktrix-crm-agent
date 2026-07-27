@@ -5,6 +5,19 @@ plugins {
     id("asktrix.android.hilt")
 }
 
+/*
+ * FCM (§24) is optional at build time.
+ *
+ * google-services.json is gitignored, so a fresh clone or a CI runner without it must still build.
+ * The plugin is applied only when the file exists, and BuildConfig.FCM_ENABLED tells the app whether
+ * to register a push token or fall back to sync-on-open.
+ */
+val googleServicesConfig = file("google-services.json")
+val fcmEnabled = googleServicesConfig.exists()
+if (fcmEnabled) {
+    apply(plugin = "com.google.gms.google-services")
+}
+
 /**
  * Reads a build secret from `local.properties` (gitignored) with an environment-variable fallback for
  * CI. Never hardcode a value here — see docs/adr/0001-sdk-levels.md and CLAUDE.md.
@@ -29,6 +42,10 @@ android {
 
     buildFeatures {
         buildConfig = true
+    }
+
+    defaultConfig {
+        buildConfigField("boolean", "FCM_ENABLED", fcmEnabled.toString())
     }
 
     // Three variants, each with its own CRM base URL. The dev default points at the local mock
@@ -92,6 +109,11 @@ dependencies {
     implementation(projects.feature.calls)
     implementation(projects.feature.attendance)
     implementation(projects.feature.settings)
+
+    if (fcmEnabled) {
+        implementation(platform(libs.firebase.bom))
+        implementation(libs.firebase.messaging)
+    }
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.splashscreen)

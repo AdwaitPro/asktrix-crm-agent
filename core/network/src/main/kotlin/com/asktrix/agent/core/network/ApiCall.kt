@@ -60,7 +60,12 @@ private fun <T> Response<T>.toError(json: Json): AsktrixError {
     }.getOrNull()
 
     // Prefer the server's own error code; fall back to the status when the body is unparseable.
-    return when (parsed?.code) {
+    return parsed?.let(::fromServerCode) ?: fromHttpStatus(code(), parsed)
+}
+
+/** Maps the CRM's own error code, which is more specific than the HTTP status. */
+private fun fromServerCode(parsed: ApiErrorDto): AsktrixError? =
+    when (parsed.code) {
         "UNAUTHENTICATED" -> AsktrixError.Unauthenticated(parsed.message)
         "FORBIDDEN" -> AsktrixError.Forbidden(parsed.message)
         "DEVICE_NOT_BOUND" -> AsktrixError.DeviceNotBound(parsed.message)
@@ -71,21 +76,21 @@ private fun <T> Response<T>.toError(json: Json): AsktrixError {
             com.asktrix.agent.core.common.result.IntegrityFailureReason.ATTESTATION_REJECTED,
             parsed.message,
         )
-        else -> when (code()) {
-            HTTP_UNAUTHORIZED -> AsktrixError.Unauthenticated(parsed?.message)
-            HTTP_FORBIDDEN -> AsktrixError.Forbidden(parsed?.message)
-            HTTP_NOT_FOUND -> AsktrixError.NotFound(parsed?.message)
-            HTTP_CONFLICT -> AsktrixError.Validation(emptyMap(), parsed?.message ?: "conflict")
-            HTTP_UNPROCESSABLE -> AsktrixError.Validation(
-                parsed?.fieldErrors.orEmpty(),
-                parsed?.message,
-            )
-            // Rate limiting and 5xx are transient: the outbox should back off and retry.
-            HTTP_TOO_MANY_REQUESTS -> AsktrixError.ServerUnavailable(code(), parsed?.message)
-            in HTTP_SERVER_ERROR_MIN..MAX_STATUS -> AsktrixError.ServerUnavailable(code(), parsed?.message)
-            else -> AsktrixError.Unexpected("HTTP ${code()}")
-        }
+        else -> null
     }
-}
+
+/** Fallback when the error body is missing or carries a code we do not recognise. */
+private fun fromHttpStatus(code: Int, parsed: ApiErrorDto?): AsktrixError =
+    when (code) {
+        HTTP_UNAUTHORIZED -> AsktrixError.Unauthenticated(parsed?.message)
+        HTTP_FORBIDDEN -> AsktrixError.Forbidden(parsed?.message)
+        HTTP_NOT_FOUND -> AsktrixError.NotFound(parsed?.message)
+        HTTP_CONFLICT -> AsktrixError.Validation(emptyMap(), parsed?.message ?: "conflict")
+        HTTP_UNPROCESSABLE -> AsktrixError.Validation(parsed?.fieldErrors.orEmpty(), parsed?.message)
+        // Rate limiting and 5xx are transient: the outbox should back off and retry.
+        HTTP_TOO_MANY_REQUESTS -> AsktrixError.ServerUnavailable(code, parsed?.message)
+        in HTTP_SERVER_ERROR_MIN..MAX_STATUS -> AsktrixError.ServerUnavailable(code, parsed?.message)
+        else -> AsktrixError.Unexpected("HTTP $code")
+    }
 
 private const val MAX_STATUS = 599

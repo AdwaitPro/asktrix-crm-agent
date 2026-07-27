@@ -49,6 +49,7 @@ sqlcipher = "4.17.0"
 playServicesLocation = "21.4.0"
 playIntegrity = "1.6.0"
 firebaseBom = "34.16.0"
+googleServices = "4.5.0"
 
 # --- Images ---
 coil = "3.5.0"
@@ -163,4 +164,5 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }

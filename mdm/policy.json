@@ -1,0 +1,138 @@
+{
+  "_comment": [
+    "Android Enterprise policy for the Asktrix agent fleet.",
+    "",
+    "IMPORTANT: this is an Android Management API policy document, applied by whichever EMM the",
+    "company subscribes to (see docs/adr/0004-device-management.md). The Asktrix app is NOT the",
+    "Device Policy Controller — Google restricts AMAPI to commercial EMM vendors, and Play Protect",
+    "has blocked non-approved custom DPCs at provisioning since 2026.",
+    "",
+    "Every field below is a documented AMAPI policy key. Fields the requirements ask for that have",
+    "no supported key are listed in the 'notEnforceable' block at the end rather than being faked."
+  ],
+
+  "name": "enterprises/ENTERPRISE_ID/policies/asktrix-agent-fleet",
+  "version": "1",
+
+  "applications": [
+    {
+      "packageName": "com.asktrix.agent",
+      "installType": "FORCE_INSTALLED",
+      "defaultPermissionPolicy": "GRANT",
+      "_comment_permissions": [
+        "GRANT auto-grants runtime permissions the app declares — including location and camera —",
+        "so a field agent never has to reason about a permission dialog.",
+        "NOTE: ACCESS_BACKGROUND_LOCATION is NOT silently grantable by a device owner on modern",
+        "Android; the app still runs its own two-step request flow, which is why LocationSampler",
+        "checks it separately."
+      ],
+      "userControlSettings": "USER_CONTROL_DISALLOWED",
+      "_comment_userControl": [
+        "Blocks force-stop and clear-data for this package (§14-§20), and as a documented side",
+        "effect exempts it from App Standby buckets — which is the closest thing AMAPI offers to",
+        "protection from aggressive background management."
+      ]
+    }
+  ],
+
+  "_comment_restrictions": "§14-§21 and §25-§27, each mapped to a documented AMAPI policy key.",
+
+  "screenCaptureDisabled": true,
+  "factoryResetDisabled": true,
+  "safeBootDisabled": true,
+  "installUnknownSourcesAllowed": false,
+  "debuggingFeaturesAllowed": false,
+  "usbFileTransferDisabled": true,
+  "mountPhysicalMediaDisabled": true,
+  "bluetoothSharingDisabled": true,
+  "bluetoothConfigDisabled": true,
+  "outgoingBeamDisabled": true,
+  "shareLocationDisabled": false,
+  "_comment_shareLocation": [
+    "MUST stay false. Setting it true disables location sharing entirely and would break §10 and",
+    "§11. This is the one restriction that must NOT be maximised."
+  ],
+  "credentialsConfigDisabled": true,
+  "networkEscapeHatchEnabled": true,
+  "_comment_networkEscapeHatch": [
+    "Lets an agent join a Wi-Fi network if mobile data fails, so a device cannot become unusable in",
+    "the field. Worth the small extra surface."
+  ],
+  "addUserDisabled": true,
+  "removeUserDisabled": true,
+  "modifyAccountsDisabled": true,
+  "dataRoamingDisabled": false,
+  "setUserIconDisabled": true,
+  "setWallpaperDisabled": true,
+  "cameraDisabled": false,
+  "_comment_camera": "Kept enabled for the optional §11 attendance photo.",
+
+  "playStoreMode": "WHITELIST",
+  "_comment_playStore": [
+    "Only apps listed in 'applications' are installable or visible. This is how §14-§20's 'restrict",
+    "Play Store' and 'restrict browsers' are actually enforced: the browser is simply not on the",
+    "list, so it cannot be installed. Pre-installed system browsers are handled by kioskCustomization",
+    "plus the lock-task allowlist below."
+  ],
+
+  "permittedInputMethods": [],
+  "_comment_inputMethods": [
+    "Empty array means system input methods only — a third-party keyboard could exfiltrate typed",
+    "text, including internal remarks."
+  ],
+
+  "keyguardDisabledFeatures": ["UNREDACTED_NOTIFICATIONS"],
+  "_comment_keyguard": "Notification content is hidden on the lock screen (§4).",
+
+  "passwordPolicies": [
+    {
+      "passwordScope": "SCOPE_DEVICE",
+      "passwordQuality": "NUMERIC_COMPLEX",
+      "passwordMinimumLength": 6,
+      "maximumFailedPasswordsForWipe": 10,
+      "passwordExpirationTimeout": "7776000s"
+    }
+  ],
+
+  "advancedSecurityOverrides": {
+    "developerSettings": "DEVELOPER_SETTINGS_DISABLED",
+    "untrustedAppsPolicy": "DISALLOW_INSTALL",
+    "googlePlayProtectVerifyApps": "VERIFY_APPS_ENFORCED",
+    "commonCriteriaMode": "COMMON_CRITERIA_MODE_DISABLED"
+  },
+
+  "statusReportingSettings": {
+    "applicationReportsEnabled": true,
+    "deviceSettingsEnabled": true,
+    "softwareInfoEnabled": true,
+    "memoryInfoEnabled": true,
+    "networkInfoEnabled": true,
+    "powerManagementEventsEnabled": true,
+    "hardwareStatusEnabled": true,
+    "systemPropertiesEnabled": true,
+    "commonCriteriaModeEnabled": false
+  },
+  "_comment_statusReporting": [
+    "§25-§27 admin visibility. powerManagementEvents is the useful one: it surfaces the OEM",
+    "battery-manager kills that silently break background location in the field."
+  ],
+
+  "systemUpdate": { "type": "WINDOWED", "startMinutes": 120, "endMinutes": 300 },
+  "_comment_systemUpdate": "Updates apply 02:00-05:00 local, never mid-shift.",
+
+  "_comment_notEnforceable": [
+    "Requirements with NO supported policy key. Documented rather than faked:",
+    "",
+    "1. 'Disable Nearby Share / Quick Share' — there is no dedicated AMAPI key. The nearest",
+    "   enforceable controls are bluetoothSharingDisabled, outgoingBeamDisabled, and",
+    "   playStoreMode=WHITELIST preventing sharing apps. Verify residual Quick Share behaviour",
+    "   per OEM on real hardware.",
+    "2. 'Disable copy/paste out of the app' — DISALLOW_CROSS_PROFILE_COPY_PASTE applies to work",
+    "   profiles, not fully managed devices. On a fully managed device this must be enforced in the",
+    "   app: the Asktrix contact fields have no copy affordance and no text selection.",
+    "3. 'Block all browsers' — enforced by omission from the whitelist rather than by a key.",
+    "4. 'Disable Settings entirely' — no single key. kioskCustomization.systemNavigation plus",
+    "   lock-task mode is the mechanism if full kiosk is wanted; the individual *Disabled keys",
+    "   above cover the settings that actually matter without the kiosk UX cost."
+  ]
+}

@@ -65,6 +65,26 @@
             </intent-filter>
         </activity>
 
+        <!-- §22: resume background sync after a reboot or an app update. -->
+        <receiver
+            android:name=".boot.BootReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- §24: FCM. Payloads carry identifiers only, never customer data. -->
+        <service
+            android:name=".push.AsktrixMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <!-- WorkManager is initialised on demand through Hilt, not by the default initializer. -->
         <provider
             android:name="androidx.startup.InitializationProvider"

@@ -24,6 +24,16 @@ style:
     ignoreCompanionObjectPropertyDeclaration: true
     ignoreAnnotation: true
     ignoreEnums: true
+    # Compose layout values (dp, sp, alpha, weights) are inherently literal — naming every corner
+    # radius would obscure the layout rather than clarify it. Business-logic magic numbers, which
+    # are what this rule is actually for, still fail the build.
+    ignoreAnnotated: ['Composable', 'Preview']
+
+  UnusedPrivateMember:
+    active: true
+    # @Preview functions are invoked by the IDE and the screenshot tooling, not by app code, so
+    # detekt cannot see their call site.
+    ignoreAnnotated: ['Preview', 'Composable']
 
 complexity:
   LongParameterList:

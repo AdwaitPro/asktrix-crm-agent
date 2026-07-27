@@ -130,7 +130,10 @@ class LocationTrackingService : Service() {
                 JsonArray(
                     listOf(
                         buildJsonObject {
-                            put("sampledAt", JsonPrimitive(java.time.Instant.ofEpochMilli(sample.sampledAtMillis).toString()))
+                            val sampledAt = java.time.Instant
+                                .ofEpochMilli(sample.sampledAtMillis)
+                                .toString()
+                            put("sampledAt", JsonPrimitive(sampledAt))
                             put(
                                 "location",
                                 JsonObject(

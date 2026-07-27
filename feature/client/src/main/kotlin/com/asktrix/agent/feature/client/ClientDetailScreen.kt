@@ -364,7 +364,8 @@ private fun CallOutcomeCard(state: CallState, durationSeconds: Int?, onDismiss: 
                 Text(state.label, style = MaterialTheme.typography.titleSmall)
                 if (durationSeconds != null && durationSeconds > 0) {
                     Text(
-                        text = "${durationSeconds / SECONDS_PER_MINUTE}m ${durationSeconds % SECONDS_PER_MINUTE}s · recorded by the CRM",
+                        text = "${durationSeconds / SECONDS_PER_MINUTE}m " +
+                            "${durationSeconds % SECONDS_PER_MINUTE}s · recorded by the CRM",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -526,8 +527,14 @@ private fun ClientDetailPreview() {
                     ),
                 ),
                 timeline = listOf(
-                    TimelineEntry("t1", TimelineKind.CALL, "Call completed — 1m 59s (recorded)", "Aarav Sharma", "c1", Instant.now()),
-                    TimelineEntry("t2", TimelineKind.STATUS_CHANGE, "Case opened — SVC-GST-2291", "Aarav Sharma", null, Instant.now()),
+                    TimelineEntry(
+                        "t1", TimelineKind.CALL, "Call completed — 1m 59s (recorded)",
+                        "Aarav Sharma", "c1", Instant.now(),
+                    ),
+                    TimelineEntry(
+                        "t2", TimelineKind.STATUS_CHANGE, "Case opened — SVC-GST-2291",
+                        "Aarav Sharma", null, Instant.now(),
+                    ),
                 ),
             ),
             onBack = {},

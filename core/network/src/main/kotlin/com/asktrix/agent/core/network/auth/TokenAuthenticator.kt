@@ -37,25 +37,26 @@ class TokenAuthenticator(
 
     override fun authenticate(route: Route?, response: Response): Request? {
         if (responseDepth(response) >= MAX_REFRESH_ATTEMPTS) return null
-
         val current = runBlocking { tokens.current() } ?: return null
 
-        // Another request may already have refreshed while this one was queued.
+        // Another request may already have refreshed while this one sat queued behind it.
         val staleToken = response.request.header("Authorization")?.removePrefix("Bearer ")
-        if (staleToken != null && staleToken != current.accessToken) {
-            return response.request.newBuilder()
-                .header("Authorization", "Bearer ${current.accessToken}")
-                .build()
-        }
+        val alreadyRefreshed = staleToken != null && staleToken != current.accessToken
 
-        val refreshed = runBlocking { refresh(current) }
-        if (refreshed == null) {
-            runBlocking { tokens.clear() }
-            return null
+        val token = if (alreadyRefreshed) {
+            current.accessToken
+        } else {
+            runBlocking { refresh(current) }?.accessToken
+                ?: run {
+                    // The server refused the refresh token: the session is over. Clearing tokens
+                    // also triggers the cache purge required by §3.
+                    runBlocking { tokens.clear() }
+                    return null
+                }
         }
 
         return response.request.newBuilder()
-            .header("Authorization", "Bearer ${refreshed.accessToken}")
+            .header("Authorization", "Bearer $token")
             .build()
     }
 

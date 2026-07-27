@@ -18,7 +18,10 @@ interface ClientDao {
      * Expired rows are filtered in the query rather than by the caller, so there is no code path
      * that can accidentally serve stale customer data (§3).
      */
-    @Query("SELECT * FROM cached_clients WHERE expiresAtMillis > :now ORDER BY COALESCE(followUpAtMillis, lastInteractionAtMillis, cachedAtMillis) DESC")
+    @Query(
+        "SELECT * FROM cached_clients WHERE expiresAtMillis > :now " +
+            "ORDER BY COALESCE(followUpAtMillis, lastInteractionAtMillis, cachedAtMillis) DESC",
+    )
     fun observeAll(now: Long): Flow<List<CachedClientEntity>>
 
     @Query("SELECT * FROM cached_clients WHERE clientId = :clientId AND expiresAtMillis > :now")
@@ -40,7 +43,10 @@ interface ClientDao {
 @Dao
 interface TimelineDao {
 
-    @Query("SELECT * FROM cached_timeline WHERE clientId = :clientId AND expiresAtMillis > :now ORDER BY occurredAtMillis DESC")
+    @Query(
+        "SELECT * FROM cached_timeline WHERE clientId = :clientId " +
+            "AND expiresAtMillis > :now ORDER BY occurredAtMillis DESC",
+    )
     fun observeFor(clientId: String, now: Long): Flow<List<CachedTimelineEntity>>
 
     @Upsert
@@ -56,10 +62,16 @@ interface TimelineDao {
 @Dao
 interface CallRecordDao {
 
-    @Query("SELECT * FROM cached_call_records WHERE expiresAtMillis > :now ORDER BY startedAtMillis DESC")
+    @Query(
+        "SELECT * FROM cached_call_records WHERE expiresAtMillis > :now " +
+            "ORDER BY startedAtMillis DESC",
+    )
     fun observeAll(now: Long): Flow<List<CachedCallRecordEntity>>
 
-    @Query("SELECT * FROM cached_call_records WHERE clientId = :clientId AND expiresAtMillis > :now ORDER BY startedAtMillis DESC")
+    @Query(
+        "SELECT * FROM cached_call_records WHERE clientId = :clientId " +
+            "AND expiresAtMillis > :now ORDER BY startedAtMillis DESC",
+    )
     fun observeFor(clientId: String, now: Long): Flow<List<CachedCallRecordEntity>>
 
     @Upsert
@@ -76,19 +88,31 @@ interface OutboxDao {
     suspend fun enqueue(item: OutboxEntity)
 
     /** Work that is due now, oldest first — FIFO preserves the order the employee acted in. */
-    @Query("SELECT * FROM outbox WHERE state = 'PENDING' AND nextAttemptAtMillis <= :now ORDER BY createdAtMillis ASC LIMIT :limit")
+    @Query(
+        "SELECT * FROM outbox WHERE state = 'PENDING' AND nextAttemptAtMillis <= :now " +
+            "ORDER BY createdAtMillis ASC LIMIT :limit",
+    )
     suspend fun due(now: Long, limit: Int = 25): List<OutboxEntity>
 
-    @Query("SELECT * FROM outbox WHERE state IN ('PENDING','IN_FLIGHT') ORDER BY createdAtMillis ASC")
+    @Query(
+        "SELECT * FROM outbox WHERE state IN ('PENDING','IN_FLIGHT') " +
+            "ORDER BY createdAtMillis ASC",
+    )
     fun observePending(): Flow<List<OutboxEntity>>
 
     @Query("SELECT COUNT(*) FROM outbox WHERE state IN ('PENDING','IN_FLIGHT')")
     fun observePendingCount(): Flow<Int>
 
-    @Query("SELECT * FROM outbox WHERE targetId = :targetId AND state IN ('PENDING','IN_FLIGHT')")
+    @Query(
+        "SELECT * FROM outbox WHERE targetId = :targetId " +
+            "AND state IN ('PENDING','IN_FLIGHT')",
+    )
     fun observePendingFor(targetId: String): Flow<List<OutboxEntity>>
 
-    @Query("UPDATE outbox SET state = :state, attempts = :attempts, nextAttemptAtMillis = :nextAttemptAtMillis, lastError = :lastError WHERE id = :id")
+    @Query(
+        "UPDATE outbox SET state = :state, attempts = :attempts, " +
+            "nextAttemptAtMillis = :nextAttemptAtMillis, lastError = :lastError WHERE id = :id",
+    )
     suspend fun update(id: String, state: String, attempts: Int, nextAttemptAtMillis: Long, lastError: String?)
 
     @Query("DELETE FROM outbox WHERE id = :id")
