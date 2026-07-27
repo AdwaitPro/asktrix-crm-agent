@@ -1,0 +1,1231 @@
+openapi: 3.1.0
+
+info:
+  title: Asktrix CRM — Mobile Agent API
+  version: 0.1.0
+  description: |
+    Contract between the Asktrix CRM backend and the Android agent app.
+
+    **STATUS: PROPOSAL.** The Asktrix CRM exposes no APIs as of 2026-07-26. This document is written
+    as the contract for the CRM team to implement. The mobile app is built against it and against a
+    mock server. Nothing here should be read as describing an endpoint that exists today.
+
+    ## Non-negotiable privacy invariant
+
+    **No schema in this document contains a full customer phone number or email address.** Contact
+    details exist only as pre-masked strings (`phoneMasked`, `emailMasked`) produced server-side.
+
+    This is deliberate and load-bearing (§4, ADR-0003). The threat model is an insider with a company
+    device in hand all day. Client-side masking is defeated in minutes with an HTTP proxy, so the
+    unmasked value must never leave the server. Calls are placed by `clientId`; the CRM resolves the
+    real number and hands it to the telephony provider, never to the device.
+
+    Reviewers: adding a `phone` or `email` field to any response schema breaks §4. Do not do it.
+
+    ## Conventions
+
+    - All timestamps are RFC 3339 UTC. Clients must not trust the device clock for ordering; the
+      server is authoritative.
+    - Every mutating request carries an `Idempotency-Key` header. Replaying a key returns the
+      original result rather than performing the action twice (§9, §23).
+    - Auth is a short-lived bearer access token plus a rotating refresh token, bound to a device.
+    - List endpoints are cursor-paginated.
+
+servers:
+  - url: http://localhost:4010
+    description: Local mock / development server
+  - url: https://crm.asktrix.example/api/mobile/v1
+    description: Production (placeholder — real host to be supplied by the CRM team)
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Auth
+    description: Login, token refresh, device binding (§14–§20)
+  - name: Clients
+    description: Assigned clients and client detail (§3, §4, §12)
+  - name: Timeline
+    description: Interaction history (§8)
+  - name: Calls
+    description: Click-to-call and call history (§5, §6, §7)
+  - name: Attendance
+    description: Check-in / check-out (§11)
+  - name: Location
+    description: GPS sampling during working hours (§10)
+  - name: Device
+    description: Push registration, compliance reporting (§24, §25–§27)
+
+paths:
+  # ---------------------------------------------------------------- Auth ----
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Authenticate an employee and bind the session to this device
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSession'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: |
+            Credentials are valid but this device is not permitted — unenrolled device, integrity
+            failure, or the employee is already bound to a different device.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Exchange a refresh token for a new token pair
+      description: |
+        Refresh tokens are single-use and rotate on every call. Presenting a previously-used refresh
+        token indicates theft: the server must revoke the entire token family and return 401.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken, deviceId]
+              properties:
+                refreshToken:
+                  type: string
+                deviceId:
+                  type: string
+      responses:
+        '200':
+          description: New token pair issued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSession'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: End the session and revoke the token family
+      description: |
+        On success the client must purge its entire encrypted local cache (§3). The server revokes
+        the refresh token family so the device cannot silently resume.
+      responses:
+        '204':
+          description: Session ended
+
+  /auth/session:
+    get:
+      tags: [Auth]
+      summary: Current employee, role and permissions
+      responses:
+        '200':
+          description: Session detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  # ------------------------------------------------------------- Clients ----
+  /clients:
+    get:
+      tags: [Clients]
+      summary: Clients assigned to the authenticated employee (§12)
+      description: |
+        Returns **only** clients assigned to the caller. Server-side authorisation, never a client
+        filter — the device must never receive a record it is not entitled to see.
+      parameters:
+        - name: status
+          in: query
+          description: Filter by process status
+          schema:
+            $ref: '#/components/schemas/ProcessStatus'
+        - name: needsFollowUp
+          in: query
+          description: Only clients with a follow-up due on or before today
+          schema:
+            type: boolean
+        - name: query
+          in: query
+          description: Free-text search over client name and client ID only — never contact details
+          schema:
+            type: string
+            maxLength: 64
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Assigned clients
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientSummaryPage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /clients/{clientId}:
+    get:
+      tags: [Clients]
+      summary: Full client detail with masked contact fields (§3, §4)
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+      responses:
+        '200':
+          description: Client detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /clients/{clientId}/status:
+    post:
+      tags: [Clients]
+      summary: Apply a quick status update (§13)
+      description: |
+        Backs the quick-action buttons: Documents Received, Client Not Responding, Payment Received,
+        Waiting Government Approval, Completed, Callback Scheduled.
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatusUpdateRequest'
+      responses:
+        '200':
+          description: Status applied; the resulting timeline entry is returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimelineEntry'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          description: |
+            The client was modified since `expectedVersion`. The response carries the current server
+            state so the client can resolve the conflict without a second round trip.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConflictResponse'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+
+  /clients/{clientId}/remarks:
+    post:
+      tags: [Clients]
+      summary: Add an internal remark
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [body]
+              properties:
+                body:
+                  type: string
+                  minLength: 1
+                  maxLength: 2000
+                recordedAt:
+                  type: string
+                  format: date-time
+                  description: Device time the remark was written; the server records its own receipt time
+      responses:
+        '201':
+          description: Remark recorded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimelineEntry'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+
+  # ------------------------------------------------------------ Timeline ----
+  /clients/{clientId}/timeline:
+    get:
+      tags: [Timeline]
+      summary: Interaction timeline — calls, remarks, status changes, payments, follow-ups (§8)
+      parameters:
+        - $ref: '#/components/parameters/ClientId'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Timeline entries, newest first
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimelinePage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  # --------------------------------------------------------------- Calls ----
+  /calls:
+    post:
+      tags: [Calls]
+      summary: Request a click-to-call (§5)
+      description: |
+        The device sends only a `clientId`. The CRM resolves the customer number server-side and asks
+        the telephony provider to bridge the two legs (ADR-0002).
+
+        **The response must never contain the customer's number.** The device does not dial and has
+        no telephony permissions.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [clientId]
+              properties:
+                clientId:
+                  type: string
+                serviceId:
+                  type: string
+                  description: Optional service context, when the client has more than one
+                reason:
+                  type: string
+                  maxLength: 120
+                  description: Non-sensitive call purpose, recorded on the timeline
+      responses:
+        '202':
+          description: |
+            Call request accepted. The provider places the agent leg first; the outcome arrives by
+            FCM push, or by polling this session.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallSession'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          description: This employee already has a call in progress
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '503':
+          description: The telephony provider rejected or could not place the call
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /calls/{callSessionId}:
+    get:
+      tags: [Calls]
+      summary: Current state of a call session
+      parameters:
+        - name: callSessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Call session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallSession'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /calls/history:
+    get:
+      tags: [Calls]
+      summary: Call history for the authenticated employee (§7)
+      description: |
+        The CRM and the telephony provider hold the authoritative call record. The device never reads
+        the system call log, so `READ_CALL_LOG` is not required (ADR-0002).
+      parameters:
+        - name: clientId
+          in: query
+          schema:
+            type: string
+        - name: since
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Call records, newest first
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallRecordPage'
+
+  # ---------------------------------------------------------- Attendance ----
+  /attendance:
+    post:
+      tags: [Attendance]
+      summary: Check in or check out with GPS and an optional photo (§11)
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttendanceRequest'
+      responses:
+        '201':
+          description: Attendance recorded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttendanceRecord'
+        '409':
+          description: Inconsistent with the current state — e.g. checking in while already checked in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+
+  /attendance/today:
+    get:
+      tags: [Attendance]
+      summary: Today's attendance state for the authenticated employee
+      responses:
+        '200':
+          description: Attendance state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttendanceToday'
+
+  /attendance/{attendanceId}/photo:
+    put:
+      tags: [Attendance]
+      summary: Upload the optional attendance photo
+      description: |
+        Separated from the attendance record so a failed or deferred photo upload never blocks the
+        check-in itself. The outbox retries the photo independently.
+      parameters:
+        - name: attendanceId
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          image/jpeg:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '204':
+          description: Photo stored
+        '413':
+          description: Photo exceeds the permitted size
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  # ------------------------------------------------------------ Location ----
+  /location/pings:
+    post:
+      tags: [Location]
+      summary: Upload a batch of GPS samples (§10)
+      description: |
+        Samples are batched rather than sent individually — the device is frequently offline and
+        per-sample requests would drain battery.
+
+        **Working hours are enforced server-side.** The device clock and timezone are user-influenced
+        and this is a compliance boundary, so the server discards out-of-hours samples and reports
+        how many it rejected rather than trusting the client's gate.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [pings]
+              properties:
+                pings:
+                  type: array
+                  minItems: 1
+                  maxItems: 200
+                  items:
+                    $ref: '#/components/schemas/LocationPing'
+      responses:
+        '202':
+          description: Batch accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [accepted, rejectedOutsideWorkingHours]
+                properties:
+                  accepted:
+                    type: integer
+                  rejectedOutsideWorkingHours:
+                    type: integer
+                    description: Samples discarded because they fell outside working hours
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+
+  /location/policy:
+    get:
+      tags: [Location]
+      summary: Sampling policy and working hours for this employee
+      description: |
+        Server-controlled so sampling cadence and working hours can change without an app release.
+      responses:
+        '200':
+          description: Location policy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationPolicy'
+
+  # -------------------------------------------------------------- Device ----
+  /device/push-token:
+    put:
+      tags: [Device]
+      summary: Register or update the FCM registration token (§24)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token]
+              properties:
+                token:
+                  type: string
+      responses:
+        '204':
+          description: Token stored
+
+  /device/compliance:
+    post:
+      tags: [Device]
+      summary: Report device integrity and managed-configuration compliance (§14–§20, §25–§27)
+      description: |
+        The device reports; the server decides. A client-side integrity check is defence-in-depth
+        only — the authoritative verdict is the server's verification of the attestation statement.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComplianceReport'
+      responses:
+        '200':
+          description: Verdict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplianceVerdict'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    ClientId:
+      name: clientId
+      in: path
+      required: true
+      schema:
+        type: string
+      example: CLI-10241
+
+    Cursor:
+      name: cursor
+      in: query
+      description: Opaque cursor from the previous page's `nextCursor`
+      schema:
+        type: string
+
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 25
+
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: |
+        Client-generated UUID. Replaying a key returns the original result without repeating the
+        action. This is what makes the offline outbox safe to retry (§9, §23).
+      schema:
+        type: string
+        format: uuid
+
+  responses:
+    Unauthorized:
+      description: Missing, expired, or rejected access token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          example:
+            code: UNAUTHENTICATED
+            message: Session expired. Sign in again.
+    Forbidden:
+      description: Authenticated, but not permitted to access this resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          example:
+            code: FORBIDDEN
+            message: This client is not assigned to you.
+    NotFound:
+      description: No such resource, or it is not visible to this employee
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    ValidationFailed:
+      description: The request failed validation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          example:
+            code: VALIDATION_FAILED
+            message: One or more fields are invalid.
+            fieldErrors:
+              status: Unknown status value
+
+  schemas:
+    # ------------------------------------------------------------- Errors --
+    ApiError:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          enum:
+            - UNAUTHENTICATED
+            - FORBIDDEN
+            - DEVICE_NOT_BOUND
+            - NOT_FOUND
+            - VALIDATION_FAILED
+            - CONFLICT
+            - CALL_NOT_PLACED
+            - INTEGRITY_FAILURE
+            - RATE_LIMITED
+            - SERVER_ERROR
+        message:
+          type: string
+          description: |
+            Human-readable and safe to display. Must never contain customer contact details,
+            KYC content, or credentials.
+        fieldErrors:
+          type: object
+          additionalProperties:
+            type: string
+        retryAfterSeconds:
+          type: integer
+          description: Present on RATE_LIMITED and transient server errors
+
+    ConflictResponse:
+      type: object
+      required: [code, message, current]
+      properties:
+        code:
+          type: string
+          const: CONFLICT
+        message:
+          type: string
+        current:
+          $ref: '#/components/schemas/ClientDetail'
+
+    # --------------------------------------------------------------- Auth --
+    LoginRequest:
+      type: object
+      required: [employeeCode, password, device]
+      properties:
+        employeeCode:
+          type: string
+          minLength: 1
+          maxLength: 64
+        password:
+          type: string
+          format: password
+          minLength: 8
+        device:
+          $ref: '#/components/schemas/DeviceBinding'
+
+    DeviceBinding:
+      type: object
+      required: [deviceId, model, manufacturer, osVersion, appVersion]
+      description: |
+        Identifies the handset for device binding and for the OSP call-record obligation, which
+        requires the identity of the device used to make each call.
+      properties:
+        deviceId:
+          type: string
+          description: App-generated, Keystore-backed, stable per install. Not a hardware identifier.
+        model:
+          type: string
+        manufacturer:
+          type: string
+        osVersion:
+          type: string
+        appVersion:
+          type: string
+        attestationStatement:
+          type: string
+          description: Base64 Keystore key-attestation certificate chain, verified server-side
+
+    AuthSession:
+      type: object
+      required: [accessToken, refreshToken, expiresInSeconds, employee]
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        expiresInSeconds:
+          type: integer
+          example: 900
+        employee:
+          $ref: '#/components/schemas/Employee'
+
+    Employee:
+      type: object
+      required: [employeeId, employeeCode, displayName, role, permissions]
+      properties:
+        employeeId:
+          type: string
+        employeeCode:
+          type: string
+        displayName:
+          type: string
+        role:
+          type: string
+          enum:
+            - CUSTOMER_SUPPORT
+            - SALES
+            - DOCUMENTATION
+            - ACCOUNTS
+            - RELATIONSHIP_MANAGER
+            - TEAM_LEADER
+          description: The six user groups in §2
+        permissions:
+          type: array
+          items:
+            type: string
+          description: |
+            Server-issued capability list. The UI hides what is absent, but the server enforces —
+            hiding a button is not authorisation.
+
+    # ------------------------------------------------------------ Clients --
+    ProcessStatus:
+      type: string
+      enum:
+        - NEW
+        - DOCUMENTS_PENDING
+        - DOCUMENTS_RECEIVED
+        - CLIENT_NOT_RESPONDING
+        - PAYMENT_PENDING
+        - PAYMENT_RECEIVED
+        - WAITING_GOVERNMENT_APPROVAL
+        - CALLBACK_SCHEDULED
+        - COMPLETED
+
+    PaymentStatus:
+      type: string
+      enum: [NOT_DUE, PENDING, PARTIAL, RECEIVED, REFUNDED]
+
+    GovernmentStatus:
+      type: string
+      enum: [NOT_APPLICABLE, NOT_SUBMITTED, SUBMITTED, UNDER_REVIEW, APPROVED, REJECTED]
+
+    MaskedContact:
+      type: object
+      description: |
+        **The only representation of customer contact details anywhere in this API.**
+
+        Values arrive already masked from the server. There is no unmasked counterpart field, and
+        none may be added (§4, ADR-0003).
+      required: [phoneMasked, emailMasked, callable]
+      properties:
+        phoneMasked:
+          type: string
+          example: 98XXXXXX12
+          description: Display-only. Never a dialable number.
+        emailMasked:
+          type: string
+          example: siv****@gmail.com
+          description: Display-only. Never a sendable address.
+        callable:
+          type: boolean
+          description: Whether a click-to-call may be placed for this client right now
+
+    ClientSummary:
+      type: object
+      required: [clientId, name, processStatus, paymentStatus, documentsPending, version]
+      properties:
+        clientId:
+          type: string
+          example: CLI-10241
+        name:
+          type: string
+          example: Sivakumar R
+        serviceId:
+          type: string
+          example: SVC-GST-2291
+        processStatus:
+          $ref: '#/components/schemas/ProcessStatus'
+        paymentStatus:
+          $ref: '#/components/schemas/PaymentStatus'
+        documentsPending:
+          type: integer
+          minimum: 0
+        followUpAt:
+          type: string
+          format: date-time
+        lastInteractionAt:
+          type: string
+          format: date-time
+        version:
+          type: integer
+          description: Optimistic-concurrency version, passed back as `expectedVersion` on writes
+
+    ClientDetail:
+      allOf:
+        - $ref: '#/components/schemas/ClientSummary'
+        - type: object
+          required: [contact, governmentStatus, assignedEmployeeId]
+          properties:
+            contact:
+              $ref: '#/components/schemas/MaskedContact'
+            governmentStatus:
+              $ref: '#/components/schemas/GovernmentStatus'
+            assignedEmployeeId:
+              type: string
+            internalRemarks:
+              type: array
+              items:
+                $ref: '#/components/schemas/Remark'
+            documents:
+              type: array
+              items:
+                $ref: '#/components/schemas/DocumentRef'
+            cacheTtlSeconds:
+              type: integer
+              description: |
+                How long the device may retain this record in its encrypted cache before it must be
+                discarded or refreshed (§3). Server-controlled.
+              example: 3600
+
+    Remark:
+      type: object
+      required: [remarkId, body, authorName, createdAt]
+      properties:
+        remarkId:
+          type: string
+        body:
+          type: string
+        authorName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    DocumentRef:
+      type: object
+      required: [documentId, kind, status]
+      description: |
+        Metadata only. KYC file content is never delivered to the device — the requirement is that
+        the employee sees *which* documents are outstanding, not their contents.
+      properties:
+        documentId:
+          type: string
+        kind:
+          type: string
+          example: PAN
+        status:
+          type: string
+          enum: [PENDING, RECEIVED, VERIFIED, REJECTED]
+        receivedAt:
+          type: string
+          format: date-time
+
+    ClientSummaryPage:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientSummary'
+        nextCursor:
+          type: string
+        serverTime:
+          type: string
+          format: date-time
+          description: Authoritative server clock, used by the client to measure its own skew
+
+    StatusUpdateRequest:
+      type: object
+      required: [status]
+      properties:
+        status:
+          $ref: '#/components/schemas/ProcessStatus'
+        note:
+          type: string
+          maxLength: 500
+        followUpAt:
+          type: string
+          format: date-time
+          description: Required when status is CALLBACK_SCHEDULED
+        occurredAt:
+          type: string
+          format: date-time
+          description: Device time the action was taken, for offline actions synced later
+        expectedVersion:
+          type: integer
+          description: Version the client last saw; a mismatch yields 409 with the current state
+
+    # ----------------------------------------------------------- Timeline --
+    TimelineEntry:
+      type: object
+      required: [entryId, kind, occurredAt, summary]
+      properties:
+        entryId:
+          type: string
+        kind:
+          type: string
+          enum: [CALL, REMARK, STATUS_CHANGE, PAYMENT, DOCUMENT, FOLLOW_UP, EMAIL]
+        occurredAt:
+          type: string
+          format: date-time
+        summary:
+          type: string
+        actorName:
+          type: string
+        callRecordId:
+          type: string
+          description: Present when kind is CALL
+
+    TimelinePage:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimelineEntry'
+        nextCursor:
+          type: string
+
+    # -------------------------------------------------------------- Calls --
+    CallState:
+      type: string
+      enum:
+        - REQUESTED
+        - RINGING_AGENT
+        - RINGING_CUSTOMER
+        - BRIDGED
+        - COMPLETED
+        - BUSY
+        - NO_ANSWER
+        - FAILED
+        - CANCELLED
+
+    CallSession:
+      type: object
+      required: [callSessionId, clientId, state, requestedAt]
+      description: |
+        Carries no phone number for either leg. The device shows the client's name and the call
+        state; the provider owns the audio path entirely.
+      properties:
+        callSessionId:
+          type: string
+        clientId:
+          type: string
+        state:
+          $ref: '#/components/schemas/CallState'
+        requestedAt:
+          type: string
+          format: date-time
+        connectedAt:
+          type: string
+          format: date-time
+        endedAt:
+          type: string
+          format: date-time
+        durationSeconds:
+          type: integer
+        failureReason:
+          type: string
+          description: Non-sensitive provider reason, safe to display
+
+    CallRecord:
+      type: object
+      required: [callRecordId, clientId, direction, state, startedAt]
+      properties:
+        callRecordId:
+          type: string
+        callSessionId:
+          type: string
+        clientId:
+          type: string
+        clientName:
+          type: string
+        direction:
+          type: string
+          enum: [OUTBOUND, INBOUND, MISSED]
+        state:
+          $ref: '#/components/schemas/CallState'
+        startedAt:
+          type: string
+          format: date-time
+        durationSeconds:
+          type: integer
+        recordingAvailable:
+          type: boolean
+          description: |
+            Whether a recording exists in the CRM. The device never downloads or plays recordings —
+            it only reports that one was captured (§6).
+
+    CallRecordPage:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CallRecord'
+        nextCursor:
+          type: string
+
+    # --------------------------------------------------------- Attendance --
+    AttendanceRequest:
+      type: object
+      required: [kind, occurredAt, location]
+      properties:
+        kind:
+          type: string
+          enum: [CHECK_IN, CHECK_OUT]
+        occurredAt:
+          type: string
+          format: date-time
+        location:
+          $ref: '#/components/schemas/GeoPoint'
+        hasPhoto:
+          type: boolean
+          default: false
+          description: When true the client will PUT the photo separately
+
+    AttendanceRecord:
+      type: object
+      required: [attendanceId, kind, occurredAt, recordedAt]
+      properties:
+        attendanceId:
+          type: string
+        kind:
+          type: string
+          enum: [CHECK_IN, CHECK_OUT]
+        occurredAt:
+          type: string
+          format: date-time
+          description: Device-reported time
+        recordedAt:
+          type: string
+          format: date-time
+          description: Server receipt time — authoritative for payroll
+        location:
+          $ref: '#/components/schemas/GeoPoint'
+        photoUploaded:
+          type: boolean
+
+    AttendanceToday:
+      type: object
+      required: [checkedIn]
+      properties:
+        checkedIn:
+          type: boolean
+        checkInAt:
+          type: string
+          format: date-time
+        checkOutAt:
+          type: string
+          format: date-time
+        workedSeconds:
+          type: integer
+
+    # ----------------------------------------------------------- Location --
+    GeoPoint:
+      type: object
+      required: [latitude, longitude, accuracyMetres]
+      properties:
+        latitude:
+          type: number
+          format: double
+          minimum: -90
+          maximum: 90
+        longitude:
+          type: number
+          format: double
+          minimum: -180
+          maximum: 180
+        accuracyMetres:
+          type: number
+          format: float
+          minimum: 0
+        altitudeMetres:
+          type: number
+          format: float
+
+    LocationPing:
+      type: object
+      required: [sampledAt, location]
+      properties:
+        sampledAt:
+          type: string
+          format: date-time
+        location:
+          $ref: '#/components/schemas/GeoPoint'
+        isMocked:
+          type: boolean
+          description: |
+            Whether the OS flagged this fix as mock-provided. Reported honestly; the server decides
+            what to do about it.
+        batteryPercent:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: Helps diagnose OEM battery-manager kills in the field
+
+    LocationPolicy:
+      type: object
+      required: [enabled, sampleIntervalSeconds, workingHours, timezone]
+      properties:
+        enabled:
+          type: boolean
+        sampleIntervalSeconds:
+          type: integer
+          default: 600
+          description: §10 requires 600 (10 minutes)
+        workingHours:
+          type: array
+          items:
+            type: object
+            required: [dayOfWeek, startLocalTime, endLocalTime]
+            properties:
+              dayOfWeek:
+                type: string
+                enum: [MON, TUE, WED, THU, FRI, SAT, SUN]
+              startLocalTime:
+                type: string
+                example: "09:30"
+              endLocalTime:
+                type: string
+                example: "18:30"
+        timezone:
+          type: string
+          example: Asia/Kolkata
+
+    # ------------------------------------------------------------- Device --
+    ComplianceReport:
+      type: object
+      required: [deviceId, checks]
+      properties:
+        deviceId:
+          type: string
+        attestationStatement:
+          type: string
+          description: Base64 Keystore key-attestation chain for server-side verification
+        integrityToken:
+          type: string
+          description: Play Integrity token, when the build is Play-distributed
+        checks:
+          type: object
+          description: |
+            Client-side heuristics. Advisory only and trivially bypassable — never the control.
+          properties:
+            rootIndicators:
+              type: boolean
+            emulatorIndicators:
+              type: boolean
+            debuggerAttached:
+              type: boolean
+            developerOptionsEnabled:
+              type: boolean
+            screenLockSet:
+              type: boolean
+            isDeviceOwnerManaged:
+              type: boolean
+            backgroundRestricted:
+              type: boolean
+              description: ActivityManager.isBackgroundRestricted() — detects OEM battery restriction
+            appStandbyBucket:
+              type: integer
+
+    ComplianceVerdict:
+      type: object
+      required: [compliant, action]
+      properties:
+        compliant:
+          type: boolean
+        action:
+          type: string
+          enum: [NONE, WARN, PURGE_CACHE, BLOCK_SESSION, REMOTE_WIPE]
+          description: |
+            PURGE_CACHE and above require the client to erase its encrypted cache immediately (§3).
+        reason:
+          type: string

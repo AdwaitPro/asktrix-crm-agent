@@ -31,3 +31,7 @@ node_modules/
 api/generated/
 docs/build/
 *.log
+
+# Server secrets
+server/.env
+server/node_modules/
