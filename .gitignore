@@ -44,3 +44,6 @@ server/firebase-service-account.json
 
 # Generated demo audio, not source
 server/recordings/
+
+# CI config lives in ci/ and is copied to .github/workflows when the token has workflow scope.
+.github/
