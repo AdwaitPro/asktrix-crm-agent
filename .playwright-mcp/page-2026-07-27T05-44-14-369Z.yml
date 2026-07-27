@@ -1,0 +1,288 @@
+- generic [ref=f8e1]:
+  - generic [ref=f8e2]:
+    - complementary [ref=f8e3]:
+      - generic [ref=f8e4]:
+        - generic [ref=f8e5]: A
+        - generic [ref=f8e6]:
+          - generic [ref=f8e7]: Asktrix
+          - generic [ref=f8e8]: Admin
+      - navigation [ref=f8e9]:
+        - button "Overview" [ref=f8e10] [cursor=pointer]
+        - button "Employees" [ref=f8e11] [cursor=pointer]
+        - button "Location" [active] [ref=f8e12] [cursor=pointer]
+        - button "Calls" [ref=f8e13] [cursor=pointer]
+        - button "Clients" [ref=f8e14] [cursor=pointer]
+        - button "Devices" [ref=f8e15] [cursor=pointer]
+        - button "Audit log" [ref=f8e16] [cursor=pointer]
+      - generic [ref=f8e17]:
+        - generic [ref=f8e18]:
+          - generic [ref=f8e19]: Rohit Desai
+          - generic [ref=f8e20]: TEAM LEADER
+        - button "Sign out" [ref=f8e21] [cursor=pointer]
+    - main [ref=f8e22]:
+      - generic [ref=f8e23]:
+        - heading "Location" [level=1] [ref=f8e30]
+        - generic [ref=f8e25]:
+          - generic [ref=f8e26]: Live
+          - button "Refresh" [ref=f8e28] [cursor=pointer]
+      - generic [ref=f8e31]:
+        - generic [ref=f8e301]:
+          - generic [ref=f8e302]: Employee
+          - combobox "Employee" [ref=f8e303]:
+            - option "Aarav Sharma" [selected]
+            - option "Meera Iyer"
+            - option "Rohit Desai"
+        - generic [ref=f8e304]:
+          - generic [ref=f8e306]:
+            - generic [ref=f8e307]: Location trace
+            - generic [ref=f8e308]: Sampled every 10 minutes, working hours only (§10)
+          - generic [ref=f8e310]:
+            - generic [ref=f8e311]:
+              - generic [ref=f8e312]:
+                - generic:
+                  - region "Map" [ref=f8e313]
+                  - button "Map marker" [ref=f8e314] [cursor=pointer]
+                  - button "Map marker" [ref=f8e315] [cursor=pointer]
+                - generic:
+                  - generic [ref=f8e316]:
+                    - button "Zoom in" [ref=f8e317] [cursor=pointer]
+                    - button "Zoom out" [ref=f8e319] [cursor=pointer]
+                  - generic: 3 km
+                  - group [ref=f8e322]:
+                    - generic "Toggle attribution" [ref=f8e323] [cursor=pointer]
+                    - generic [ref=f8e324]:
+                      - link "OpenFreeMap" [ref=f8e325] [cursor=pointer]:
+                        - /url: https://openfreemap.org
+                      - link "© OpenMapTiles" [ref=f8e326] [cursor=pointer]:
+                        - /url: https://www.openmaptiles.org/
+                      - text: Data from
+                      - link "OpenStreetMap" [ref=f8e327] [cursor=pointer]:
+                        - /url: https://www.openstreetmap.org/copyright
+              - generic [ref=f8e328]: 84 points, 21 Jul, 12:43 am to 27 Jul, 08:59 am
+            - generic [ref=f8e329]:
+              - generic [ref=f8e330]:
+                - generic [ref=f8e331]: 12.8999, 77.6519
+                - generic [ref=f8e332]: 27 Jul, 08:59 am
+              - generic [ref=f8e333]:
+                - generic [ref=f8e334]: 12.9001, 77.6476
+                - generic [ref=f8e335]: 27 Jul, 08:14 am
+              - generic [ref=f8e336]:
+                - generic [ref=f8e337]: 12.9122, 77.6447
+                - generic [ref=f8e338]: 27 Jul, 07:29 am
+              - generic [ref=f8e339]:
+                - generic [ref=f8e340]: 12.9143, 77.6375
+                - generic [ref=f8e341]: 27 Jul, 06:44 am
+              - generic [ref=f8e342]:
+                - generic [ref=f8e343]: 12.9269, 77.6272
+                - generic [ref=f8e344]: 27 Jul, 05:59 am
+              - generic [ref=f8e345]:
+                - generic [ref=f8e346]: 12.9355, 77.6236
+                - generic [ref=f8e347]: 27 Jul, 05:14 am
+              - generic [ref=f8e348]:
+                - generic [ref=f8e349]: 12.9608, 77.6038
+                - generic [ref=f8e350]: 27 Jul, 04:29 am
+              - generic [ref=f8e351]:
+                - generic [ref=f8e352]: 12.9706, 77.5972
+                - generic [ref=f8e353]: 27 Jul, 03:44 am
+              - generic [ref=f8e354]:
+                - generic [ref=f8e355]: 12.9749, 77.6051
+                - generic [ref=f8e356]: 27 Jul, 02:59 am
+              - generic [ref=f8e357]:
+                - generic [ref=f8e358]: 12.9705, 77.6198
+                - generic [ref=f8e359]: 27 Jul, 02:14 am
+              - generic [ref=f8e360]:
+                - generic [ref=f8e361]: 12.9714, 77.6422
+                - generic [ref=f8e362]: 27 Jul, 01:29 am
+              - generic [ref=f8e363]:
+                - generic [ref=f8e364]: 12.9788, 77.6416
+                - generic [ref=f8e365]: 27 Jul, 12:44 am
+              - generic [ref=f8e366]:
+                - generic [ref=f8e367]: 12.9002, 77.6518
+                - generic [ref=f8e368]: 26 Jul, 08:59 am
+              - generic [ref=f8e369]:
+                - generic [ref=f8e370]: 12.9019, 77.6475
+                - generic [ref=f8e371]: 26 Jul, 08:14 am
+              - generic [ref=f8e372]:
+                - generic [ref=f8e373]: 12.9124, 77.6449
+                - generic [ref=f8e374]: 26 Jul, 07:29 am
+              - generic [ref=f8e375]:
+                - generic [ref=f8e376]: 12.9134, 77.6390
+                - generic [ref=f8e377]: 26 Jul, 06:44 am
+              - generic [ref=f8e378]:
+                - generic [ref=f8e379]: 12.9285, 77.6263
+                - generic [ref=f8e380]: 26 Jul, 05:59 am
+              - generic [ref=f8e381]:
+                - generic [ref=f8e382]: 12.9345, 77.6252
+                - generic [ref=f8e383]: 26 Jul, 05:14 am
+              - generic [ref=f8e384]:
+                - generic [ref=f8e385]: 12.9614, 77.6037
+                - generic [ref=f8e386]: 26 Jul, 04:29 am
+              - generic [ref=f8e387]:
+                - generic [ref=f8e388]: 12.9695, 77.5989
+                - generic [ref=f8e389]: 26 Jul, 03:44 am
+              - generic [ref=f8e390]:
+                - generic [ref=f8e391]: 12.9758, 77.6048
+                - generic [ref=f8e392]: 26 Jul, 02:59 am
+              - generic [ref=f8e393]:
+                - generic [ref=f8e394]: 12.9700, 77.6211
+                - generic [ref=f8e395]: 26 Jul, 02:14 am
+              - generic [ref=f8e396]:
+                - generic [ref=f8e397]: 12.9712, 77.6418
+                - generic [ref=f8e398]: 26 Jul, 01:29 am
+              - generic [ref=f8e399]:
+                - generic [ref=f8e400]: 12.9789, 77.6409
+                - generic [ref=f8e401]: 26 Jul, 12:44 am
+              - generic [ref=f8e402]:
+                - generic [ref=f8e403]: 12.9001, 77.6513
+                - generic [ref=f8e404]: 25 Jul, 08:59 am
+              - generic [ref=f8e405]:
+                - generic [ref=f8e406]: 12.9017, 77.6475
+                - generic [ref=f8e407]: 25 Jul, 08:14 am
+              - generic [ref=f8e408]:
+                - generic [ref=f8e409]: 12.9116, 77.6454
+                - generic [ref=f8e410]: 25 Jul, 07:29 am
+              - generic [ref=f8e411]:
+                - generic [ref=f8e412]: 12.9134, 77.6375
+                - generic [ref=f8e413]: 25 Jul, 06:44 am
+              - generic [ref=f8e414]:
+                - generic [ref=f8e415]: 12.9289, 77.6271
+                - generic [ref=f8e416]: 25 Jul, 05:59 am
+              - generic [ref=f8e417]:
+                - generic [ref=f8e418]: 12.9355, 77.6246
+                - generic [ref=f8e419]: 25 Jul, 05:14 am
+              - generic [ref=f8e420]:
+                - generic [ref=f8e421]: 12.9606, 77.6055
+                - generic [ref=f8e422]: 25 Jul, 04:29 am
+              - generic [ref=f8e423]:
+                - generic [ref=f8e424]: 12.9690, 77.5989
+                - generic [ref=f8e425]: 25 Jul, 03:44 am
+              - generic [ref=f8e426]:
+                - generic [ref=f8e427]: 12.9754, 77.6046
+                - generic [ref=f8e428]: 25 Jul, 02:59 am
+              - generic [ref=f8e429]:
+                - generic [ref=f8e430]: 12.9696, 77.6203
+                - generic [ref=f8e431]: 25 Jul, 02:14 am
+              - generic [ref=f8e432]:
+                - generic [ref=f8e433]: 12.9727, 77.6403
+                - generic [ref=f8e434]: 25 Jul, 01:29 am
+              - generic [ref=f8e435]:
+                - generic [ref=f8e436]: 12.9783, 77.6416
+                - generic [ref=f8e437]: 25 Jul, 12:44 am
+              - generic [ref=f8e438]:
+                - generic [ref=f8e439]: 12.8999, 77.6525
+                - generic [ref=f8e440]: 24 Jul, 08:58 am
+              - generic [ref=f8e441]:
+                - generic [ref=f8e442]: 12.9010, 77.6483
+                - generic [ref=f8e443]: 24 Jul, 08:13 am
+              - generic [ref=f8e444]:
+                - generic [ref=f8e445]: 12.9114, 77.6447
+                - generic [ref=f8e446]: 24 Jul, 07:28 am
+              - generic [ref=f8e447]:
+                - generic [ref=f8e448]: 12.9145, 77.6374
+                - generic [ref=f8e449]: 24 Jul, 06:43 am
+        - generic [ref=f8e450]:
+          - generic [ref=f8e452]:
+            - generic [ref=f8e453]: Attendance history
+            - generic [ref=f8e454]: Check-in and check-out with position (§11)
+          - table [ref=f8e456]:
+            - rowgroup [ref=f8e457]:
+              - row [ref=f8e458]:
+                - columnheader "Type" [ref=f8e459]
+                - columnheader "Time (IST)" [ref=f8e460]
+                - columnheader "Recorded by server" [ref=f8e461]
+                - columnheader "Position" [ref=f8e462]
+                - columnheader "Photo" [ref=f8e463]
+            - rowgroup [ref=f8e464]:
+              - row [ref=f8e465]:
+                - cell "check in" [ref=f8e466]
+                - cell "27 Jul, 12:58 am" [ref=f8e468]
+                - cell "27 Jul, 12:58 am" [ref=f8e469]
+                - cell "12.9784, 77.6408" [ref=f8e470]
+                - cell "—" [ref=f8e471]
+              - row [ref=f8e472]:
+                - cell "check out" [ref=f8e473]
+                - cell "26 Jul, 09:40 am" [ref=f8e475]
+                - cell "26 Jul, 09:40 am" [ref=f8e476]
+                - cell "12.8998, 77.6520" [ref=f8e477]
+                - cell "—" [ref=f8e478]
+              - row [ref=f8e479]:
+                - cell "check in" [ref=f8e480]
+                - cell "26 Jul, 12:46 am" [ref=f8e482]
+                - cell "26 Jul, 12:46 am" [ref=f8e483]
+                - cell "12.9784, 77.6408" [ref=f8e484]
+                - cell "—" [ref=f8e485]
+              - row [ref=f8e486]:
+                - cell "check out" [ref=f8e487]
+                - cell "25 Jul, 09:38 am" [ref=f8e489]
+                - cell "25 Jul, 09:38 am" [ref=f8e490]
+                - cell "12.8998, 77.6520" [ref=f8e491]
+                - cell "—" [ref=f8e492]
+              - row [ref=f8e493]:
+                - cell "check in" [ref=f8e494]
+                - cell "25 Jul, 12:36 am" [ref=f8e496]
+                - cell "25 Jul, 12:36 am" [ref=f8e497]
+                - cell "12.9784, 77.6408" [ref=f8e498]
+                - cell "—" [ref=f8e499]
+              - row [ref=f8e500]:
+                - cell "check out" [ref=f8e501]
+                - cell "24 Jul, 08:54 am" [ref=f8e503]
+                - cell "24 Jul, 08:54 am" [ref=f8e504]
+                - cell "12.8998, 77.6520" [ref=f8e505]
+                - cell "—" [ref=f8e506]
+              - row [ref=f8e507]:
+                - cell "check in" [ref=f8e508]
+                - cell "24 Jul, 12:51 am" [ref=f8e510]
+                - cell "24 Jul, 12:51 am" [ref=f8e511]
+                - cell "12.9784, 77.6408" [ref=f8e512]
+                - cell "yes" [ref=f8e513]
+              - row [ref=f8e515]:
+                - cell "check out" [ref=f8e516]
+                - cell "23 Jul, 08:59 am" [ref=f8e518]
+                - cell "23 Jul, 08:59 am" [ref=f8e519]
+                - cell "12.8998, 77.6520" [ref=f8e520]
+                - cell "—" [ref=f8e521]
+              - row [ref=f8e522]:
+                - cell "check in" [ref=f8e523]
+                - cell "23 Jul, 12:32 am" [ref=f8e525]
+                - cell "23 Jul, 12:32 am" [ref=f8e526]
+                - cell "12.9784, 77.6408" [ref=f8e527]
+                - cell "yes" [ref=f8e528]
+              - row [ref=f8e530]:
+                - cell "check out" [ref=f8e531]
+                - cell "22 Jul, 09:30 am" [ref=f8e533]
+                - cell "22 Jul, 09:30 am" [ref=f8e534]
+                - cell "12.8998, 77.6520" [ref=f8e535]
+                - cell "—" [ref=f8e536]
+              - row [ref=f8e537]:
+                - cell "check in" [ref=f8e538]
+                - cell "22 Jul, 12:14 am" [ref=f8e540]
+                - cell "22 Jul, 12:14 am" [ref=f8e541]
+                - cell "12.9784, 77.6408" [ref=f8e542]
+                - cell "yes" [ref=f8e543]
+              - row [ref=f8e545]:
+                - cell "check out" [ref=f8e546]
+                - cell "21 Jul, 09:43 am" [ref=f8e548]
+                - cell "21 Jul, 09:43 am" [ref=f8e549]
+                - cell "12.8998, 77.6520" [ref=f8e550]
+                - cell "—" [ref=f8e551]
+              - row [ref=f8e552]:
+                - cell "check in" [ref=f8e553]
+                - cell "21 Jul, 12:59 am" [ref=f8e555]
+                - cell "21 Jul, 12:59 am" [ref=f8e556]
+                - cell "12.9784, 77.6408" [ref=f8e557]
+                - cell "—" [ref=f8e558]
+  - generic [ref=f8e291]:
+    - region "Map" [ref=f8e292]
+    - group [ref=f8e293]:
+      - generic "Toggle attribution" [ref=f8e294] [cursor=pointer]
+      - generic [ref=f8e295]:
+        - link "MapLibre" [ref=f8e296] [cursor=pointer]:
+          - /url: https://maplibre.org/
+        - text: "|"
+        - link "OpenFreeMap" [ref=f8e297] [cursor=pointer]:
+          - /url: https://openfreemap.org
+        - link "© OpenMapTiles" [ref=f8e298] [cursor=pointer]:
+          - /url: https://www.openmaptiles.org/
+        - text: Data from
+        - link "OpenStreetMap" [ref=f8e299] [cursor=pointer]:
+          - /url: https://www.openstreetmap.org/copyright

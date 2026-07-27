@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Asktrix call</title>
+  <link rel="stylesheet" href="call.css" />
+</head>
+<body>
+<div class="wrap">
+  <div class="mark">A</div>
+  <div class="who" id="agent-name">Asktrix</div>
+  <div class="sub" id="sub">is calling you about your application</div>
+
+  <div class="orb" id="orb"><div class="orb__core"></div></div>
+
+  <div class="timer" id="timer"></div>
+  <div class="status" id="status">Tap answer to connect</div>
+
+  <button class="btn btn--go" id="action">Answer</button>
+
+  <div class="notice">
+    <strong>This call is recorded.</strong> It is recorded for quality and record-keeping, kept
+    securely, and deleted according to our retention policy. You can end the call at any time.
+    <br /><br />
+    The call runs over your internet connection, so no phone number is exchanged in either
+    direction.
+  </div>
+
+  <audio id="remote" autoplay playsinline></audio>
+</div>
+
+<script src="rtc.js"></script>
+<script>
+  const params = new URLSearchParams(location.search);
+  const room = params.get('room');
+  const token = params.get('t');
+
+  const statusEl = document.getElementById('status');
+  const timerEl = document.getElementById('timer');
+  const orb = document.getElementById('orb');
+  const action = document.getElementById('action');
+  const remote = document.getElementById('remote');
+
+  let call = null;
+  let tick = null;
+
+  const COPY = {
+    'requesting-microphone': 'Allow microphone access to continue',
+    waiting: 'Connecting',
+    ringing: 'Connecting',
+    connected: 'Connected',
+    ended: 'Call ended',
+    lost: 'Connection lost',
+    rejected: 'This call link is no longer valid',
+  };
+
+  function setState(state, detail) {
+    statusEl.textContent = COPY[state] || state;
+    if (state === 'connected') {
+      orb.classList.add('is-live');
+      action.textContent = 'End call';
+      action.className = 'btn btn--end';
+      const startedAt = Date.now();
+      tick = setInterval(() => {
+        const s = Math.floor((Date.now() - startedAt) / 1000);
+        timerEl.textContent =
+          String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+      }, 1000);
+    }
+    if (['ended', 'lost', 'rejected'].includes(state)) {
+      clearInterval(tick);
+      orb.classList.remove('is-live');
+      action.disabled = true;
+      action.textContent = 'Call ended';
+      document.getElementById('sub').textContent = detail || 'You can close this page';
+    }
+  }
+
+  action.addEventListener('click', async () => {
+    if (call) {
+      await call.stop();
+      setState('ended');
+      return;
+    }
+    action.disabled = true;
+    action.textContent = 'Connecting';
+    try {
+      call = new AsktrixCall({
+        room,
+        role: 'customer',
+        onState: setState,
+        onRemoteStream: (stream) => { remote.srcObject = stream; },
+      });
+      await call.start('&t=' + encodeURIComponent(token || ''));
+      action.disabled = false;
+      action.textContent = 'End call';
+      action.className = 'btn btn--end';
+    } catch (e) {
+      setState('rejected', 'Microphone access is needed to take this call');
+    }
+  });
+</script>
+</body>
+</html>

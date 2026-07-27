@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Call</title>
+  <link rel="stylesheet" href="call.css" />
+</head>
+<body>
+<div class="wrap">
+  <div class="mark">A</div>
+  <div class="who" id="client-name">Client</div>
+  <div class="sub" id="sub">Calling over the internet, no number dialled</div>
+
+  <div class="orb" id="orb"><div class="orb__core"></div></div>
+
+  <div class="timer" id="timer"></div>
+  <div class="status" id="status">Preparing</div>
+
+  <button class="btn btn--end" id="action">End call</button>
+
+  <div class="notice" id="share">
+    Waiting for the client to join. They have been sent a one-time link.
+    <br /><br />
+    <strong>The recording starts when they answer</strong> and uploads to the CRM when the call ends.
+  </div>
+
+  <audio id="remote" autoplay playsinline></audio>
+</div>
+
+<script src="rtc.js"></script>
+<script>
+  const params = new URLSearchParams(location.search);
+  const room = params.get('room');
+  document.getElementById('client-name').textContent = params.get('name') || 'Client';
+
+  const statusEl = document.getElementById('status');
+  const timerEl = document.getElementById('timer');
+  const orb = document.getElementById('orb');
+  const action = document.getElementById('action');
+  const remote = document.getElementById('remote');
+  const share = document.getElementById('share');
+
+  let tick = null;
+
+  const COPY = {
+    'requesting-microphone': 'Allow microphone access',
+    waiting: 'Waiting for the client to join',
+    ringing: 'Ringing the client',
+    connected: 'Connected, recording',
+    ended: 'Call ended',
+    lost: 'Connection lost',
+    rejected: 'Could not start this call',
+  };
+
+  function setState(state, detail) {
+    statusEl.textContent = COPY[state] || state;
+    if (state === 'connected') {
+      orb.classList.add('is-live');
+      share.innerHTML = '<strong>Recording.</strong> The audio uploads to the CRM when the call ends.';
+      const startedAt = Date.now();
+      tick = setInterval(() => {
+        const s = Math.floor((Date.now() - startedAt) / 1000);
+        timerEl.textContent =
+          String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+      }, 1000);
+    }
+    if (['ended', 'lost', 'rejected'].includes(state)) {
+      clearInterval(tick);
+      orb.classList.remove('is-live');
+      action.disabled = true;
+      action.textContent = 'Call ended';
+      if (detail) document.getElementById('sub').textContent = detail;
+      // Let the Android host know it can close the call screen.
+      if (window.AsktrixHost && window.AsktrixHost.onCallEnded) window.AsktrixHost.onCallEnded();
+    }
+  }
+
+  const call = new AsktrixCall({
+    room,
+    role: 'agent',
+    onState: setState,
+    onRemoteStream: (stream) => { remote.srcObject = stream; },
+  });
+
+  call.start().catch(() => setState('rejected', 'Microphone access is needed to place calls'));
+
+  action.addEventListener('click', async () => {
+    action.disabled = true;
+    statusEl.textContent = 'Ending';
+    await call.stop();
+    setState('ended');
+  });
+
+  window.addEventListener('pagehide', () => { call.stop(); });
+</script>
+</body>
+</html>

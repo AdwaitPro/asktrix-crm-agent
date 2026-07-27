@@ -115,16 +115,13 @@
 
 <!--
   MapLibre GL is vendored locally rather than pulled from a CDN, so the console loads even on a
-  restricted network. It ships as ESM, so it is imported in a module script and handed to the
-  classic script below. Map tiles come from OpenFreeMap: no API key, no registration, no request
-  limits, MIT licensed, commercial use permitted.
+  restricted network. Pinned to the 5.x UMD build: 6.x is ESM-only, splits into chunks, and did not
+  finish loading its style in testing. 5.x defines the maplibregl global directly.
+
+  Map tiles come from OpenFreeMap: no API key, no registration, no request limits, MIT licensed,
+  commercial use permitted.
 -->
-<script type="module">
-  // MapLibre 6 ships named exports only; there is no default export.
-  import * as maplibregl from './vendor/maplibre-gl.mjs';
-  window.maplibregl = maplibregl;
-  window.dispatchEvent(new Event('maplibre-ready'));
-</script>
+<script src="vendor/maplibre-gl.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

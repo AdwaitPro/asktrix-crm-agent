@@ -425,14 +425,22 @@ function drawTrace(points) {
       );
     };
 
-    // Keyed on the style being ready rather than the map's 'load' event. Some browsers with
-    // software WebGL render tiles perfectly but never emit 'load', and gating on it there throws
-    // away a working map.
-    if (mapInstance.isStyleLoaded()) addLayers();
-    else mapInstance.once('styledata', addLayers);
+    // 'load' is the only event that guarantees the style is ready for addSource/addLayer.
+    // 'styledata' fires earlier and more than once, and calling addSource then throws and leaves
+    // the style in a broken state, which renders as a black canvas with the controls still on top.
+    // Errors are caught so a failure to draw the route never takes the basemap down with it.
+    const safeAddLayers = () => {
+      try {
+        addLayers();
+      } catch (err) {
+        console.warn('route overlay failed, basemap unaffected', err);
+      }
+    };
+    if (mapInstance.loaded()) safeAddLayers();
+    else mapInstance.on('load', safeAddLayers);
 
-    // Fall back only when the style itself cannot be fetched, which is what an unreachable tile
-    // server actually looks like. Benign per-tile errors must not tear down a working map.
+    // Fall back only when the style itself never arrives, which is what an unreachable tile server
+    // looks like. Individual tile errors must not tear down a working map.
     let styleArrived = false;
     mapInstance.on('styledata', () => { styleArrived = true; });
     setTimeout(() => {
