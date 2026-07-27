@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.asktrix.agent.feature.auth.LoginRoute
+import com.asktrix.agent.feature.client.ClientDetailRoute
 import com.asktrix.agent.feature.dashboard.DashboardRoute
 
 /**
@@ -38,6 +39,9 @@ fun AsktrixApp(onReady: () -> Unit) {
                     navController.navigate("${Route.CLIENT}/$clientId")
                 },
             )
+        }
+        composable("${Route.CLIENT}/{clientId}") {
+            ClientDetailRoute(onBack = { navController.popBackStack() })
         }
     }
 }

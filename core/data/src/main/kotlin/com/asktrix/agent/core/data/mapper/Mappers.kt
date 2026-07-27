@@ -25,7 +25,7 @@ import java.time.format.DateTimeParseException
  * crashing a screen the employee is relying on mid-visit.
  */
 
-internal fun String?.toInstantOrNull(): Instant? = this?.let {
+fun String?.toInstantOrNull(): Instant? = this?.let {
     try {
         Instant.parse(it)
     } catch (_: DateTimeParseException) {
