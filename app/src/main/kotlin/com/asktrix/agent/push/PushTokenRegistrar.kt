@@ -36,8 +36,14 @@ class PushTokenRegistrar @Inject constructor(
             .getOrDefault(false)
     }
 
+    /**
+     * Both `FirebaseMessaging.token` and `getToken()` are marked deprecated in this SDK version, with
+     * no non-deprecated replacement exposed. Suppressed deliberately rather than left as noise —
+     * revisit when the Firebase BOM ships the successor API.
+     */
+    @Suppress("DEPRECATION")
     private suspend fun currentToken(): String? = suspendCancellableCoroutine { continuation ->
-        FirebaseMessaging.getInstance().token
+        FirebaseMessaging.getInstance().getToken()
             .addOnSuccessListener { token -> if (continuation.isActive) continuation.resume(token) }
             .addOnFailureListener { if (continuation.isActive) continuation.resume(null) }
     }

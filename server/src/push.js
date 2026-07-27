@@ -1,6 +1,7 @@
 'use strict';
 const crypto = require('crypto');
 const fs = require('fs');
+const nodePath = require('path');
 const { query } = require('./db');
 
 /**
@@ -18,10 +19,22 @@ const { query } = require('./db');
 const SCOPE = 'https://www.googleapis.com/auth/firebase.messaging';
 let cachedToken = null;
 
+/**
+ * Locates the Firebase service-account key.
+ *
+ * Checks the env var first, then a conventional path, so dropping the downloaded file into the
+ * server directory is enough — no configuration step to forget before a demo.
+ */
 function serviceAccount() {
-  const path = process.env.FIREBASE_SERVICE_ACCOUNT;
-  if (!path || !fs.existsSync(path)) return null;
-  return JSON.parse(fs.readFileSync(path, 'utf8'));
+  const candidates = [
+    process.env.FIREBASE_SERVICE_ACCOUNT,
+    nodePath.join(__dirname, '..', 'firebase-service-account.json'),
+  ].filter(Boolean);
+
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate)) return JSON.parse(fs.readFileSync(candidate, 'utf8'));
+  }
+  return null;
 }
 
 /** Mints a Google OAuth access token from the service-account key (JWT bearer grant). */

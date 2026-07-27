@@ -386,12 +386,41 @@ async function calls() {
           <td class="num">${fmtDuration(c.duration_seconds)}</td>
           <td class="num dim">${fmtTime(c.started_at)}</td>
           <td>${c.recording_available
-              ? `<button class="btn btn--ghost btn--tiny" onclick="alert('Recording ${esc(c.call_record_id)}\\n\\nStored server-side by the telephony provider. The handset never receives the audio (§6).')">Play</button>`
+              ? `<button class="btn btn--ghost btn--tiny" data-play="${esc(c.call_record_id)}">Play</button>`
               : '<span class="dim">—</span>'}</td>
           <td class="mono">${esc(String(c.device_id || '—').slice(0, 14))}</td>
         </tr>`).join('')}</tbody></table>` : '<div class="empty">No calls yet.</div>'}
       </div>
-    </div>`;
+    </div>
+    <audio id="player" controls hidden style="width:100%;margin-top:16px"></audio>`;
+
+  document.querySelectorAll('[data-play]').forEach((button) => {
+    button.addEventListener('click', () => playRecording(button.dataset.play));
+  });
+}
+
+/**
+ * Plays a recording through an authenticated fetch.
+ *
+ * The <audio> src cannot carry an Authorization header, so the bytes are fetched into a blob URL.
+ * That also means no unauthenticated URL to the audio ever exists, even briefly.
+ */
+async function playRecording(callRecordId) {
+  const player = $('#player');
+  try {
+    const response = await fetch(`/admin/recordings/${callRecordId}`, {
+      headers: { authorization: `Bearer ${token}` },
+    });
+    if (!response.ok) throw new Error('recording unavailable');
+    if (player.dataset.url) URL.revokeObjectURL(player.dataset.url);
+    const url = URL.createObjectURL(await response.blob());
+    player.dataset.url = url;
+    player.src = url;
+    player.hidden = false;
+    player.play();
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 async function clients() {

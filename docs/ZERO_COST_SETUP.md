@@ -12,14 +12,15 @@ selected by build variant.** Swapping to the paid one later is a config change, 
 
 | Need | Paid option (later) | **Free option (now)** | Cost |
 | --- | --- | --- | --- |
-| CRM backend API | Real Asktrix CRM | **`api/openapi.yaml` + Prism mock server** (MIT) serving realistic seeded data | ₹0 |
-| Click-to-call, recording | Acefone ₹1,599/user/mo, min 6 seats | **Mock telephony provider** — full call lifecycle, states, durations, recording URL | ₹0 |
+| CRM backend API | Real Asktrix CRM | **`server/` — a real Node + Postgres backend** implementing `api/openapi.yaml`, on Neon's free tier | ₹0 |
+| Click-to-call, recording | Acefone ₹1,599/user/mo | **Simulated provider** for the demo; **Exotel Startup India credits** for real calls — see §4a | ₹0 |
 | Device Owner validation | EMM subscription | **TestDPC** (Apache-2.0) via `adb shell dpm set-device-owner` on one factory-reset handset | ₹0 |
-| Fleet management | ManageEngine ~$1.08/device/mo | **Fleet** (MIT, self-hosted, AMAPI-backed) free tier | ₹0 + a VM |
+| Fleet management | ManageEngine ~$1.08/device/mo | **Fleet** free tier — $0/host/month, no host limit, fully-managed Android | ₹0 + a VM |
 | Push notifications (§24) | — | **Firebase Cloud Messaging, Spark plan** | ₹0 |
 | Device integrity (§14–§20) | Play Integrity (needs Play distribution) | **Android Keystore hardware key attestation** — no Play account required | ₹0 |
 | App distribution | Play Console $25 one-time + managed Google Play | **Sideload the APK** for pilot; Fleet hosts private APKs | ₹0 |
 | Crash reporting | — | Firebase Crashlytics free tier | ₹0 |
+| Admin dashboard (§25–§27) | — | **Built** — served by the CRM at `/admin/`, seven views | ₹0 |
 | Device to test on | — | **Android emulator** (SDK, already installed) | ₹0 |
 
 ## 1. CRM — contract-first against a free mock
@@ -27,11 +28,12 @@ selected by build variant.** Swapping to the paid one later is a config change, 
 The CRM has no API, so `api/openapi.yaml` is written as a **proposal** — clearly labelled as such, and
 the artifact the CRM team implements against. It is not a guess dressed up as documentation.
 
-**Prism** (Stoplight, MIT licence) serves that OpenAPI file as a live HTTP mock: real status codes,
-schema-validated responses, and every documented error path. The app is built entirely against it.
+Rather than a static mock, `server/` is a **real backend** — Node, Express and Postgres on Neon's
+free tier — that implements the whole contract. That matters: offline sync, idempotency replay and
+optimistic-concurrency conflicts are only genuinely exercisable against real persistence.
 
 ```bash
-npx --yes @stoplight/prism-cli mock api/openapi.yaml --port 4010 --host 0.0.0.0
+cd server && npm install && npm run seed && npm run seed:demo && npm start
 ```
 
 The debug build already points at it: `CRM_BASE_URL_DEV` defaults to `http://10.0.2.2:4010/`
@@ -64,12 +66,13 @@ Every downstream requirement is genuinely testable this way: call history (§7),
 (§8), the offline recording queue (§23), and status transitions (§13). The only thing the mock cannot
 prove is that Acefone's servers behave as documented.
 
-> **A real call cannot be placed for ₹0.** Some Indian CPaaS vendors offer trials — confirm terms at
-> signup, I have not verified any trial. The one genuinely free way to place a real call is dialling
-> from the device's own SIM, and **I have deliberately not built that**: it puts the customer's real
-> number in the system call log and notification shade, which breaks §4 and §5 outright. If you want
-> it as a stopgap, say so and I will add it behind an explicit flag with the tradeoff documented —
-> but it should not be the default.
+> **A real call is also free, via the Startup India credits in §4a.** Until those are activated the
+> simulator covers the demo.
+>
+> One thing I have deliberately **not** built: dialling from the device's own SIM. It is free, but it
+> puts the customer's real number in the system call log and notification shade, which breaks §4 and
+> §5 outright. Say the word and I will add it behind an explicit flag with the tradeoff documented —
+> but it must not be the default.
 
 ## 3. Device Owner — free, and testable today
 
@@ -104,6 +107,60 @@ Play Integrity goes in later behind a feature flag, as defence-in-depth. Client-
 heuristics stay exactly what the research says they are — bypassable, and never the control on their
 own.
 
+## 4a. Free paths to the two things I previously said needed money
+
+Both were re-checked against primary sources on 2026-07-27. Both have a genuinely free route.
+
+### §14–§21 device management — **already ₹0, no asterisk**
+
+Fleet's pricing page states the Free tier is **"$0 / host / month"**, lists **no host limit**, and
+explicitly includes **"Fully-managed for employee-issued Android"** — which is Device Owner, exactly
+what §14–§21 and §21's FRP require. It is MIT-licensed and self-hostable.
+
+**Total cost: ₹0.** The only physical requirement is one Android handset you can factory reset,
+because Device Owner cannot be applied to a phone that is already set up. If you have any spare
+Android phone, this requirement is unblocked today.
+
+Source: `https://fleetdm.com/pricing`
+
+### §6 real recorded calls — **free via the Startup India programme**
+
+Exotel publishes a startup offer through Startup India at **no cost**:
+
+| Tier | Credits | Validity | Virtual numbers | User logins |
+| --- | --- | --- | --- | --- |
+| **Tier 1 startups** | **12,000 credits** | **9 months** | 3 | 4 |
+| Tier 2 & 3 startups | 6,000 credits | 6 months | 1 | 2 |
+
+The listing states these include **IVR call routing, call recording, click-to-call and CRM
+integration** — which is precisely §5, §6 and §7. Nine months of real recorded calls on real Indian
+virtual numbers, for ₹0.
+
+Apply at `https://www.startupindia.gov.in/content/sih/en/reources/resource-partners/cloud-telephony-services/exotel.html`.
+The page does not state the eligibility criteria in detail; DPIIT recognition is the usual
+prerequisite for Startup India resource-partner offers, so **confirm eligibility when applying**.
+
+**Fallback if the programme does not apply:** Exotel also offers a **15-day free trial with call and
+SMS credits** — enough to prove the full pipeline end to end, just not to run a pilot on.
+
+**This changes the provider recommendation.** ADR-0002 chose Acefone on API quality and price.
+Acefone remains the better-documented API, but at ₹0 for nine months Exotel is the right first move —
+and Exotel is carrier-integrated with its own Android SDK, so the PSTN leg is owned by a licensed
+party, which is what `docs/research/india-telecom-legal.md` requires. Evaluate Acefone at renewal.
+
+### The permanently-free architecture, if you ever want it
+
+There is a third option that costs nothing forever: **app-to-app voice over data (WebRTC)** rather
+than PSTN. The legal research established that *"an in-app SIP softphone doing app-to-app /
+intra-organisation CUG voice over data is fine — no licence issue"*; the prohibition only bites when
+you terminate on the Indian public telephone network.
+
+Because the app would own the media path, **recording becomes both legal and technically possible on
+our own infrastructure** — the thing §6 originally asked for. The cost is that the customer needs a
+link or an app rather than receiving an ordinary phone call, so it suits scheduled callbacks better
+than cold outreach. Worth knowing it exists; not worth building before the free Exotel credits run
+out.
+
 ## 5. What ₹0 genuinely cannot prove
 
 Honest list. These stay `BLOCKED` in `docs/TRACEABILITY.md` until funded, and no amount of code
@@ -111,12 +168,12 @@ changes that:
 
 | # | Requirement | Why money is required | Cost to unblock |
 | --- | --- | --- | --- |
-| 1 | **§6 recording, §5 real masked calls** | Server-side recording and two-way masking need a licensed Indian carrier. Owning the PSTN path ourselves is prohibited — see `docs/research/india-telecom-legal.md`. | Acefone ₹1,599/user/mo, min 6 seats |
-| 2 | **§14–§21, §25–§27 across a fleet** | One device via TestDPC proves the app. Enrolling and policing many devices needs an EMM. | ₹0 on Fleet self-hosted, or ~$1.08/device/mo |
+| 1 | **§6 recording, §5 real masked calls** | Needs a licensed Indian carrier; owning the PSTN path ourselves is prohibited. **But see §4a — the Exotel Startup India offer covers this for ₹0 for 9 months.** | **₹0** via Startup India, else Acefone ₹1,599/user/mo |
+| 2 | **§14–§21 enforcement across a fleet** | Enrolling and policing devices needs an EMM. **Fleet's Free tier is $0/host/month with no host limit and covers fully-managed Android — see §4a.** Needs one factory-resettable handset. | **₹0** |
 | 3 | **§3, §4, §8 against real data** | Requires the Asktrix CRM to actually expose APIs. | ₹0 — CRM team effort, not a purchase |
 | 4 | Managed Google Play distribution | Private-app publishing needs a Play Console account. Sideloading covers the pilot. | $25 one-time, avoidable |
 
-**Item 3 is the real blocker, and it is free.** It needs the CRM team to implement
+**Item 3 is the only real blocker now, and it is free.** It needs the CRM team to implement
 `api/openapi.yaml`, nothing more. I will hand them that file plus an integration guide.
 
 ## 6. Two free things I need from you

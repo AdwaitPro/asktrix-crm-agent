@@ -1,5 +1,7 @@
 'use strict';
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
+const nodePath = require('path');
 const { query } = require('./db');
 const { maskPhone, maskEmail } = require('./mask');
 
@@ -156,6 +158,41 @@ function register(app, asyncRoute, verifyPassword) {
       params,
     );
     res.json({ items: rows });
+  }));
+
+  /**
+   * Streams a call recording to an administrator (§6).
+   *
+   * Audited like the contact reveal: a recording of a customer conversation is personal data, and
+   * "who listened to this call" is a question a DPDP audit will ask. Note the asymmetry with the
+   * mobile app — the handset is only ever told that a recording *exists*; it can never fetch one.
+   *
+   * In production this proxies the telephony provider's short-lived recording URL rather than
+   * serving a local file. Here it serves the generated demo audio.
+   */
+  app.get('/admin/recordings/:callRecordId', requireAdmin, asyncRoute(async (req, res) => {
+    const { rows } = await query(
+      'SELECT recording_available, client_id FROM call_records WHERE call_record_id = $1',
+      [req.params.callRecordId],
+    );
+    if (!rows.length || !rows[0].recording_available) {
+      return res.status(404).json({ code: 'NOT_FOUND', message: 'No recording for that call.' });
+    }
+
+    await query(
+      `INSERT INTO pii_access_log (admin_id, admin_name, client_id, reason, accessed_at)
+       VALUES ($1,$2,$3,$4, now())`,
+      [req.admin.employee_id, req.admin.display_name, rows[0].client_id,
+        `played recording ${req.params.callRecordId}`],
+    );
+
+    const file = nodePath.join(__dirname, '..', 'recordings', 'sample.wav');
+    if (!fs.existsSync(file)) {
+      return res.status(503).json({ code: 'SERVER_ERROR', message: 'Recording store unavailable.' });
+    }
+    res.setHeader('content-type', 'audio/wav');
+    res.setHeader('cache-control', 'no-store');
+    fs.createReadStream(file).pipe(res);
   }));
 
   // ---------------------------------------------------------------- clients --

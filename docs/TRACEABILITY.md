@@ -34,8 +34,8 @@ Verification below means **observed running**, not "the code looks right".
 | **21** | Factory Reset Protection via Device Owner | `mdm/policy.json` → `factoryResetDisabled` | Policy authored; requires an enrolled device to demonstrate | `BLOCKED` — needs EMM |
 | **22** | Auto-start after boot | `BootReceiver` | Enqueues WorkManager only. Deliberately does **not** start the location service: Android 15 restricts FGS types startable from `BOOT_COMPLETED`, and tracking must resume at check-in so an overnight reboot does not track someone off-shift. | `DONE` |
 | **23** | Encrypted offline storage with background sync | `:core:database`, `:core:sync` | SQLCipher passphrase is 32 random bytes sealed under a Keystore key. Outbox recovers `IN_FLIGHT` items after process death; every request carries a stable idempotency key. Drain verified end to end (see §9). | `DONE` |
-| **24** | FCM push notifications | `AsktrixMessagingService` | Firebase project created and wired; build works with or without `google-services.json`. **Push payloads carry identifiers only, never customer data** — a push lands on a lock screen. Not yet verified with a real push send. | `PARTIAL` |
-| **25–27** | Admin dashboard: monitor status, GPS, recordings, attendance, productivity; enforce USB, Bluetooth, Nearby Share, file access, software installation | `mdm/policy.json` + `statusReportingSettings`; CRM web app | USB, Bluetooth and install restrictions map to documented policy keys. **Nearby Share has no policy key — documented, not faked.** The admin *dashboard* is the existing CRM web app plus the EMM console, not the mobile app. | `BLOCKED` — needs EMM; dashboard ownership needs client confirmation |
+| **24** | FCM push notifications | `AsktrixMessagingService`, `PushTokenRegistrar`, `server/src/push.js` | **Verified end to end:** device obtained a real FCM token and registered it; a push sent through Google's infrastructure arrived and triggered a sync (`WM-WorkerWrapper: Starting work for OutboxWorker`). Payloads carry identifiers only — a push lands on a lock screen, so no customer data goes in it. | `DONE` |
+| **25–27** | Admin dashboard: monitor status, GPS, recordings, attendance, productivity; enforce USB, Bluetooth, Nearby Share, file access, software installation | **Admin console** at `/admin/` (`server/public/`, `server/src/admin.js`); `mdm/policy.json` | **Monitoring half is DONE and verified in a browser:** overview KPIs, per-employee live status and productivity, location trace, attendance with positions, call records with **audited recording playback**, client pipeline with **audited PII reveal**, device compliance, and the PII access log itself. **Enforcement half** (USB, Bluetooth, install blocking) maps to documented policy keys but needs an EMM. **Nearby Share has no policy key — documented, not faked.** | `PARTIAL` — monitoring `DONE`; enforcement needs EMM |
 | **28** | Kotlin, Compose, WorkManager, encrypted Room, Retrofit, Keystore, REST, JWT, HTTPS/TLS, RBAC, FCM, Play Location, Device Owner, Managed Play, MDM | Whole app | Every item present. HTTPS enforced in release by network security config; RBAC is server-issued permissions; Device Owner and Managed Play are EMM-side by design. | `DONE` |
 | **29** | Workflow: CRM assigns → app receives → open client → click-to-call → recorded → uploaded → status updated → timeline updated | End to end | **Walked the whole chain on the emulator against Neon**, ending with a timeline entry reading "Call completed — 1m 59s (recorded)". | `DONE` |
 | **30** | FRP, install blocking, Settings blocking, uninstall prevention require Device Owner + MDM | `docs/adr/0004` | Confirmed and extended: we also found that Google restricts AMAPI to commercial EMM vendors and that **Play Protect has blocked non-approved custom DPCs since 2026**. So the app must not be the DPC. | `DONE` (as analysis) |
@@ -74,7 +74,7 @@ and §5 genuinely enforceable rather than cosmetic.
 | --- | --- | --- |
 | **Asktrix CRM has no APIs** | §3, §4, §8 against real customer data | ₹0 — CRM team implements `api/openapi.yaml` |
 | **No telephony subscription** | §5, §6, §7 with real calls | Acefone ₹1,599/user/mo, min 6 seats |
-| **No EMM subscription / enrolled device** | §14–§21, §25–§27 enforcement | ₹0 on self-hosted Fleet, or ~$1.08/device/mo |
+| **No EMM subscription / enrolled device** | §14–§21 and §25–§27 *enforcement* (monitoring is done) | ₹0 on self-hosted Fleet, or ~$1.08/device/mo |
 
 Until then the app runs end to end against the development CRM in `server/`, backed by Neon
 Postgres, with a simulated telephony provider that walks the same state machine the real one will.
@@ -86,4 +86,4 @@ source scripts/env.sh
 ./gradlew assembleDebug lintDebug testDebugUnitTest detekt
 ```
 
-Last run: **all four pass, plus `assembleRelease`. 33 tests, 0 failures, zero warnings.**
+Last run: **all four pass, plus `assembleRelease`. 33 Kotlin tests + 12 server tests, 0 failures, zero warnings.**

@@ -38,3 +38,9 @@ server/node_modules/
 
 # Firebase config: identifies your project. Not a credential, but no reason to publish it.
 app/google-services.json
+
+# Firebase service-account key for sending pushes (§24). Free, from Firebase Console.
+server/firebase-service-account.json
+
+# Generated demo audio, not source
+server/recordings/
