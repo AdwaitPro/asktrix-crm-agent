@@ -73,12 +73,13 @@ class ClientDetailViewModel @Inject constructor(
             listOf(call, msg, err, launch, link)
         },
     ) { client, timeline, isLoading, isOnline, extras ->
-        @Suppress("UNCHECKED_CAST")
-        val call = extras[0] as CallSession?
-        val msg = extras[1] as String?
-        val err = extras[2] as String?
-        val launch = extras[3] as String?
-        val link = extras[4] as String?
+        // combine() caps out at five flows, so the tail is bundled into one list. Named indices
+        // keep the unpacking readable rather than a run of bare integers.
+        val call = extras[EXTRA_CALL] as CallSession?
+        val msg = extras[EXTRA_MESSAGE] as String?
+        val err = extras[EXTRA_ERROR] as String?
+        val launch = extras[EXTRA_LAUNCH] as String?
+        val link = extras[EXTRA_LINK] as String?
         ClientDetailUiState(
             client = client,
             timeline = timeline,
@@ -189,5 +190,11 @@ class ClientDetailViewModel @Inject constructor(
 
     private companion object {
         const val SUBSCRIPTION_TIMEOUT_MILLIS = 5_000L
+
+        const val EXTRA_CALL = 0
+        const val EXTRA_MESSAGE = 1
+        const val EXTRA_ERROR = 2
+        const val EXTRA_LAUNCH = 3
+        const val EXTRA_LINK = 4
     }
 }
