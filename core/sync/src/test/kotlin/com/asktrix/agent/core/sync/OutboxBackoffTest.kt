@@ -1,5 +1,6 @@
 package com.asktrix.agent.core.sync
 
+import android.content.Context
 import com.asktrix.agent.core.common.time.TimeSource
 import com.asktrix.agent.core.database.dao.OutboxDao
 import io.mockk.mockk
@@ -21,7 +22,7 @@ class OutboxBackoffTest {
         override val serverSkewMillis: Long = 0
     }
 
-    private val outbox = Outbox(mockk<OutboxDao>(relaxed = true), time)
+    private val outbox = Outbox(mockk<Context>(relaxed = true), mockk<OutboxDao>(relaxed = true), time)
 
     @Test
     fun `backoff grows with each attempt`() {

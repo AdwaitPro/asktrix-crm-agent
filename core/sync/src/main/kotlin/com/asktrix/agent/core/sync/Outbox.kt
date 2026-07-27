@@ -1,10 +1,12 @@
 package com.asktrix.agent.core.sync
 
+import android.content.Context
 import com.asktrix.agent.core.common.result.AsktrixError
 import com.asktrix.agent.core.common.time.TimeSource
 import com.asktrix.agent.core.database.dao.OutboxDao
 import com.asktrix.agent.core.database.entity.OutboxEntity
 import com.asktrix.agent.core.database.entity.OutboxState
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -21,13 +23,19 @@ import kotlinx.coroutines.flow.Flow
  */
 @Singleton
 class Outbox @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val dao: OutboxDao,
     private val time: TimeSource,
 ) {
 
     /**
-     * Enqueues an action. Returns the idempotency key, which the caller can use to correlate the
-     * pending action with its eventual result.
+     * Enqueues an action and schedules the drain. Returns the idempotency key, which the caller can
+     * use to correlate the pending action with its eventual result.
+     *
+     * **Scheduling happens here, not at the call site.** An earlier version left it to callers, and
+     * the result was an outbox that filled correctly, showed "saved" in the UI, and never sent
+     * anything — the worst kind of failure, because it looks like success. Doing it here makes the
+     * mistake unrepresentable.
      */
     suspend fun enqueue(kind: String, targetId: String?, payload: String): String {
         val key = UUID.randomUUID().toString()
@@ -45,6 +53,9 @@ class Outbox @Inject constructor(
                 lastError = null,
             ),
         )
+        // WorkManager holds the request until the network constraint is satisfied, so this is
+        // equally correct offline: the drain simply runs when connectivity returns.
+        OutboxWorker.enqueue(context)
         return key
     }
 

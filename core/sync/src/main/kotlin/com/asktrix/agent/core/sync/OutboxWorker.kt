@@ -7,7 +7,9 @@ import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
@@ -57,6 +59,32 @@ class OutboxWorker @AssistedInject constructor(
                 .enqueueUniqueWork(WORK_NAME, ExistingWorkPolicy.APPEND_OR_REPLACE, request)
         }
 
+        /**
+         * A periodic safety net.
+         *
+         * The one-off request above is the primary path. This exists because several Indian OEM
+         * battery managers silently drop pending WorkManager requests, and an outbox that stops
+         * draining is invisible to the employee — their work simply never arrives. Fifteen minutes
+         * is WorkManager's documented minimum period.
+         */
+        fun enqueuePeriodic(context: Context) {
+            val request = PeriodicWorkRequestBuilder<OutboxWorker>(PERIODIC_MINUTES, TimeUnit.MINUTES)
+                .setConstraints(
+                    Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build(),
+                )
+                .build()
+
+            WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+                PERIODIC_WORK_NAME,
+                ExistingPeriodicWorkPolicy.KEEP,
+                request,
+            )
+        }
+
+        const val PERIODIC_WORK_NAME = "asktrix.outbox.periodic"
+        private const val PERIODIC_MINUTES = 15L
         private const val BACKOFF_SECONDS = 30L
     }
 }

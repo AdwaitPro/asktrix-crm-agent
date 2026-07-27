@@ -3,6 +3,7 @@ package com.asktrix.agent
 import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import com.asktrix.agent.core.sync.OutboxWorker
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -16,6 +17,13 @@ class AsktrixApplication : Application(), Configuration.Provider {
 
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
+
+    override fun onCreate() {
+        super.onCreate()
+        // Drain anything left over from a previous process, and install the periodic safety net.
+        OutboxWorker.enqueue(this)
+        OutboxWorker.enqueuePeriodic(this)
+    }
 
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder()

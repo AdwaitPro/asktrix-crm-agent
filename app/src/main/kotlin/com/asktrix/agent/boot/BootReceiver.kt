@@ -25,6 +25,7 @@ class BootReceiver : BroadcastReceiver() {
             intent.action == Intent.ACTION_MY_PACKAGE_REPLACED
         ) {
             OutboxWorker.enqueue(context.applicationContext)
+            OutboxWorker.enqueuePeriodic(context.applicationContext)
         }
     }
 }
