@@ -1,0 +1,39 @@
+- generic [ref=f5e2]:
+  - complementary [ref=f5e3]:
+    - generic [ref=f5e4]:
+      - generic [ref=f5e5]: A
+      - generic [ref=f5e6]:
+        - generic [ref=f5e7]: Asktrix
+        - generic [ref=f5e8]: Admin
+    - navigation [ref=f5e9]:
+      - button "Overview" [ref=f5e10] [cursor=pointer]
+      - button "Employees" [ref=f5e11] [cursor=pointer]
+      - button "Location" [active] [ref=f5e12] [cursor=pointer]
+      - button "Calls" [ref=f5e13] [cursor=pointer]
+      - button "Clients" [ref=f5e14] [cursor=pointer]
+      - button "Devices" [ref=f5e15] [cursor=pointer]
+      - button "Audit log" [ref=f5e16] [cursor=pointer]
+    - generic [ref=f5e17]:
+      - generic [ref=f5e18]:
+        - generic [ref=f5e19]: Rohit Desai
+        - generic [ref=f5e20]: TEAM LEADER
+      - button "Sign out" [ref=f5e21] [cursor=pointer]
+  - main [ref=f5e22]:
+    - generic [ref=f5e23]:
+      - heading "Location" [level=1] [ref=f5e30]
+      - generic [ref=f5e25]:
+        - generic [ref=f5e26]: Live
+        - button "Refresh" [ref=f5e28] [cursor=pointer]
+    - generic [ref=f5e31]:
+      - generic [ref=f5e33]:
+        - generic [ref=f5e34]: Employee
+        - combobox "Employee" [ref=f5e35]:
+          - option "Aarav Sharma" [selected]
+          - option "Meera Iyer"
+          - option "Rohit Desai"
+      - generic [ref=f5e38]:
+        - generic [ref=f5e39]: Location trace
+        - generic [ref=f5e40]: Sampled every 10 minutes, working hours only (§10)
+      - generic [ref=f5e47]:
+        - generic [ref=f5e48]: Attendance history
+        - generic [ref=f5e49]: Check-in and check-out with position (§11)

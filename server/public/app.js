@@ -303,60 +303,186 @@ async function tracking() {
 }
 
 /**
- * Plots the location trace as inline SVG.
+ * Renders the location trace on a real map.
  *
- * Deliberately not a tile map: a demo should not fail because a CDN is unreachable or the venue
- * Wi-Fi is captive. A normalised plot with a start and end marker conveys the route shape, which is
- * what a manager is actually reading.
+ * MapLibre GL with OpenFreeMap tiles: no API key, no registration, no request limit, and commercial
+ * use is permitted. That keeps the console genuinely free to run.
+ *
+ * If the map engine or the tile server is unreachable, this falls back to an SVG plot of the same
+ * coordinates rather than showing an empty box. A demo should not depend on a venue's Wi-Fi.
  */
+let mapInstance = null;
+const MAP_LOAD_TIMEOUT_MS = 6000;
+
 function drawTrace(points) {
   const host = $('#trace-plot');
-  if (!points.length) { host.innerHTML = '<div class="empty">No location data.</div>'; return; }
+  if (!points.length) {
+    host.innerHTML = '<div class="empty">No location data.</div>';
+    return;
+  }
 
   const ordered = [...points].reverse();
+  const coords = ordered.map((p) => [Number(p.longitude), Number(p.latitude)]);
+
+  if (!window.maplibregl) {
+    drawTraceFallback(host, ordered);
+    return;
+  }
+
+  host.innerHTML = '<div id="map" style="width:100%;height:420px;border-radius:12px"></div>';
+
+  const bounds = coords.reduce(
+    (acc, c) => [
+      [Math.min(acc[0][0], c[0]), Math.min(acc[0][1], c[1])],
+      [Math.max(acc[1][0], c[0]), Math.max(acc[1][1], c[1])],
+    ],
+    [[...coords[0]], [...coords[0]]],
+  );
+
+  const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  try {
+    if (mapInstance) mapInstance.remove();
+    mapInstance = new window.maplibregl.Map({
+      container: 'map',
+      style: dark
+        ? 'https://tiles.openfreemap.org/styles/dark'
+        : 'https://tiles.openfreemap.org/styles/positron',
+      bounds,
+      fitBoundsOptions: { padding: 56, maxZoom: 15 },
+      attributionControl: { compact: true },
+    });
+
+    mapInstance.addControl(new window.maplibregl.NavigationControl({ showCompass: false }), 'top-right');
+    mapInstance.addControl(new window.maplibregl.ScaleControl({ maxWidth: 110, unit: 'metric' }));
+
+    const addLayers = () => {
+      if (mapInstance.getSource('route')) return;
+      mapInstance.addSource('route', {
+        type: 'geojson',
+        data: { type: 'Feature', geometry: { type: 'LineString', coordinates: coords } },
+      });
+
+      // A wide translucent casing under a solid line keeps the route legible over both light
+      // streets and dark parkland.
+      mapInstance.addLayer({
+        id: 'route-casing',
+        type: 'line',
+        source: 'route',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': '#0284C7', 'line-width': 9, 'line-opacity': 0.22 },
+      });
+      mapInstance.addLayer({
+        id: 'route-line',
+        type: 'line',
+        source: 'route',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': '#38BDF8', 'line-width': 3.2 },
+      });
+
+      mapInstance.addSource('samples', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: ordered.slice(1, -1).map((p) => ({
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [Number(p.longitude), Number(p.latitude)] },
+            properties: { at: fmtTime(p.sampled_at), accuracy: Math.round(Number(p.accuracy_metres) || 0) },
+          })),
+        },
+      });
+      mapInstance.addLayer({
+        id: 'sample-dots',
+        type: 'circle',
+        source: 'samples',
+        paint: {
+          'circle-radius': 4,
+          'circle-color': '#38BDF8',
+          'circle-stroke-width': 1.5,
+          'circle-stroke-color': dark ? '#0B1220' : '#FFFFFF',
+        },
+      });
+
+      mapInstance.on('click', 'sample-dots', (event) => {
+        const f = event.features[0];
+        new window.maplibregl.Popup({ closeButton: false, offset: 10 })
+          .setLngLat(f.geometry.coordinates)
+          .setHTML(`<div style="font:12px system-ui"><strong>${esc(f.properties.at)}</strong><br>
+                    accurate to ${esc(f.properties.accuracy)} m</div>`)
+          .addTo(mapInstance);
+      });
+      mapInstance.on('mouseenter', 'sample-dots', () => {
+        mapInstance.getCanvas().style.cursor = 'pointer';
+      });
+      mapInstance.on('mouseleave', 'sample-dots', () => {
+        mapInstance.getCanvas().style.cursor = '';
+      });
+
+      addTraceMarker(coords[0], '#F59E0B', 'Start of day', fmtTime(ordered[0].sampled_at));
+      addTraceMarker(
+        coords[coords.length - 1], '#10B981', 'Latest position',
+        fmtTime(ordered[ordered.length - 1].sampled_at),
+      );
+    };
+
+    // Keyed on the style being ready rather than the map's 'load' event. Some browsers with
+    // software WebGL render tiles perfectly but never emit 'load', and gating on it there throws
+    // away a working map.
+    if (mapInstance.isStyleLoaded()) addLayers();
+    else mapInstance.once('styledata', addLayers);
+
+    // Fall back only when the style itself cannot be fetched, which is what an unreachable tile
+    // server actually looks like. Benign per-tile errors must not tear down a working map.
+    let styleArrived = false;
+    mapInstance.on('styledata', () => { styleArrived = true; });
+    setTimeout(() => {
+      if (!styleArrived) drawTraceFallback(host, ordered);
+    }, MAP_LOAD_TIMEOUT_MS);
+  } catch (e) {
+    drawTraceFallback(host, ordered);
+  }
+
+  const summary = document.createElement('div');
+  summary.className = 'dim';
+  summary.style.cssText = 'font-size:12px;margin-top:10px;text-align:center';
+  summary.textContent =
+    `${ordered.length} points, ${fmtTime(ordered[0].sampled_at)} to `
+    + `${fmtTime(ordered[ordered.length - 1].sampled_at)}`;
+  host.appendChild(summary);
+}
+
+function addTraceMarker(lngLat, color, title, when) {
+  const pin = document.createElement('div');
+  pin.style.cssText = `width:16px;height:16px;border-radius:50%;background:${color};
+    border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer`;
+  new window.maplibregl.Marker({ element: pin })
+    .setLngLat(lngLat)
+    .setPopup(new window.maplibregl.Popup({ closeButton: false, offset: 14 })
+      .setHTML(`<div style="font:12px system-ui"><strong>${esc(title)}</strong><br>${esc(when)}</div>`))
+    .addTo(mapInstance);
+}
+
+/** Coordinate plot used when the map engine or tile server is unavailable. */
+function drawTraceFallback(host, ordered) {
   const lats = ordered.map((p) => Number(p.latitude));
   const lngs = ordered.map((p) => Number(p.longitude));
   const pad = 0.0015;
   const minLat = Math.min(...lats) - pad, maxLat = Math.max(...lats) + pad;
   const minLng = Math.min(...lngs) - pad, maxLng = Math.max(...lngs) + pad;
-
-  const W = 100, H = 100;
-  const x = (lng) => ((lng - minLng) / (maxLng - minLng || 1)) * W;
-  const y = (lat) => H - ((lat - minLat) / (maxLat - minLat || 1)) * H;
+  const x = (lng) => ((lng - minLng) / (maxLng - minLng || 1)) * 100;
+  const y = (lat) => 100 - ((lat - minLat) / (maxLat - minLat || 1)) * 100;
 
   const path = ordered.map((p, i) =>
     `${i === 0 ? 'M' : 'L'}${x(Number(p.longitude)).toFixed(2)},${y(Number(p.latitude)).toFixed(2)}`).join(' ');
 
-  // vector-effect keeps strokes and markers at a constant pixel size however the SVG is scaled.
-  // Without it a 0.7 stroke on a 100-unit viewBox renders as a ~10px slab.
-  const dots = ordered.map((p, i) => {
-    const first = i === 0;
-    const last = i === ordered.length - 1;
-    const fill = last ? '#10B981' : first ? '#F59E0B' : '#38BDF8';
-    return `<circle cx="${x(Number(p.longitude)).toFixed(2)}" cy="${y(Number(p.latitude)).toFixed(2)}"
-      r="${last || first ? 0.9 : 0.45}" fill="${fill}" opacity="${last || first ? 1 : 0.6}" />`;
-  }).join('');
-
   host.innerHTML = `
     <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet"
          style="width:100%;height:380px;display:block">
-      <defs>
-        <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-          <path d="M10 0 L0 0 0 10" fill="none" stroke="currentColor"
-                stroke-width="0.5" vector-effect="non-scaling-stroke" opacity="0.18"/>
-        </pattern>
-      </defs>
-      <rect width="100" height="100" fill="url(#grid)" color="#64748B"/>
       <path d="${path}" fill="none" stroke="#38BDF8" stroke-width="2"
-            vector-effect="non-scaling-stroke"
-            stroke-linejoin="round" stroke-linecap="round" opacity="0.9"/>
-      ${dots}
+            vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round"/>
     </svg>
-    <div class="dim" style="font-size:12px;margin-top:10px;text-align:center">
-      <span style="color:#F59E0B">●</span> start ·
-      <span style="color:#10B981">●</span> latest ·
-      ${ordered.length} points ·
-      ${fmtTime(ordered[0].sampled_at)} → ${fmtTime(ordered[ordered.length - 1].sampled_at)}
+    <div class="dim" style="font-size:12px;margin-top:8px;text-align:center">
+      Map tiles unavailable, showing the plotted route
     </div>`;
 }
 

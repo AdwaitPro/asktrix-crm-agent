@@ -9,9 +9,15 @@ if (!process.env.DATABASE_URL) {
 // just holds idle connections open.
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  max: 5,
-  idleTimeoutMillis: 30_000,
-  connectionTimeoutMillis: 10_000,
+  max: 10,
+  // Neon's free tier auto-suspends an idle database and cold-starts it on the next connection,
+  // which regularly takes longer than a typical 10s timeout. A short timeout here surfaces as a
+  // 500 that looks like a bug in the query. Generous connect, aggressive idle.
+  connectionTimeoutMillis: 30_000,
+  idleTimeoutMillis: 20_000,
+  keepAlive: true,
+  // A statement that has not returned in 20s is wedged, not slow.
+  statement_timeout: 20_000,
 });
 
 pool.on('error', (err) => {

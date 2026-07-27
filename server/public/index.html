@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Asktrix — Admin Console</title>
+  <link rel="stylesheet" href="vendor/maplibre-gl.css" />
   <link rel="stylesheet" href="app.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230B1220'/><text y='68' x='50' text-anchor='middle' font-size='58' font-family='system-ui' font-weight='700' fill='%2338BDF8'>A</text></svg>" />
 </head>
@@ -112,6 +113,18 @@
   </form>
 </dialog>
 
+<!--
+  MapLibre GL is vendored locally rather than pulled from a CDN, so the console loads even on a
+  restricted network. It ships as ESM, so it is imported in a module script and handed to the
+  classic script below. Map tiles come from OpenFreeMap: no API key, no registration, no request
+  limits, MIT licensed, commercial use permitted.
+-->
+<script type="module">
+  // MapLibre 6 ships named exports only; there is no default export.
+  import * as maplibregl from './vendor/maplibre-gl.mjs';
+  window.maplibregl = maplibregl;
+  window.dispatchEvent(new Event('maplibre-ready'));
+</script>
 <script src="app.js"></script>
 </body>
 </html>

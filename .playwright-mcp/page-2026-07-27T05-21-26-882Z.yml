@@ -1,0 +1,26 @@
+- generic [ref=f3e2]:
+  - complementary [ref=f3e3]:
+    - generic [ref=f3e4]:
+      - generic [ref=f3e5]: A
+      - generic [ref=f3e6]:
+        - generic [ref=f3e7]: Asktrix
+        - generic [ref=f3e8]: Admin
+    - navigation [ref=f3e9]:
+      - button "Overview" [ref=f3e10] [cursor=pointer]
+      - button "Employees" [ref=f3e11] [cursor=pointer]
+      - button "Location" [ref=f3e12] [cursor=pointer]
+      - button "Calls" [ref=f3e13] [cursor=pointer]
+      - button "Clients" [ref=f3e14] [cursor=pointer]
+      - button "Devices" [ref=f3e15] [cursor=pointer]
+      - button "Audit log" [ref=f3e16] [cursor=pointer]
+    - generic [ref=f3e17]:
+      - generic [ref=f3e18]:
+        - generic [ref=f3e19]: Rohit Desai
+        - generic [ref=f3e20]: TEAM LEADER
+      - button "Sign out" [ref=f3e21] [cursor=pointer]
+  - main [ref=f3e22]:
+    - generic [ref=f3e23]:
+      - heading "Overview" [level=1] [ref=f3e24]
+      - generic [ref=f3e25]:
+        - generic [ref=f3e26]: Live
+        - button "Refresh" [ref=f3e28] [cursor=pointer]
