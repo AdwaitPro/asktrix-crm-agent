@@ -127,7 +127,8 @@ function enterConsole() {
  $('#login').hidden = true;
  $('#app').hidden = false;
  $('#who-name').textContent = sessionStorage.getItem('asktrix.admin.name') || '-';
- $('#who-role').textContent = (sessionStorage.getItem('asktrix.admin.role') || '').replace(/_/g, ' ');
+ const role = (sessionStorage.getItem('asktrix.admin.role') || '').replace(/_/g, ' ').toLowerCase();
+  $('#who-role').textContent = role ? role.charAt(0).toUpperCase() + role.slice(1) : '-';
  render();
 }
 

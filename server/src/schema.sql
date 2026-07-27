@@ -61,7 +61,10 @@ CREATE TABLE devices (
     compliant       BOOLEAN NOT NULL DEFAULT TRUE,
     last_verdict    TEXT,
     first_seen_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
-    last_seen_at    TIMESTAMPTZ NOT NULL DEFAULT now()
+    last_seen_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
+    -- Seeded handsets are flagged like every other seeded row so the console's Real view shows
+    -- only devices that genuinely enrolled.
+    is_demo         BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 -- Refresh tokens rotate on every use. Replaying a used token means theft, so the whole family is

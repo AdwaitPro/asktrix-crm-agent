@@ -107,8 +107,8 @@ function register(app, asyncRoute, verifyPassword) {
           AS checked_in_today,
         (SELECT count(*) FROM location_pings
           WHERE (sampled_at AT TIME ZONE 'Asia/Kolkata')::date = (now() AT TIME ZONE 'Asia/Kolkata')::date ${F}) AS pings_today,
-        (SELECT count(*) FROM devices) AS devices,
-        (SELECT count(*) FROM devices WHERE NOT compliant) AS devices_noncompliant
+        (SELECT count(*) FROM devices WHERE TRUE ${F}) AS devices,
+        (SELECT count(*) FROM devices WHERE NOT compliant ${F}) AS devices_noncompliant
     `);
     res.json({ ...rows[0], dataMode: req.query.data || 'all' });
   }));
@@ -298,12 +298,14 @@ function register(app, asyncRoute, verifyPassword) {
   }));
 
   // ---------------------------------------------------------------- devices --
-  app.get('/admin/devices', requireAdmin, asyncRoute(async (_req, res) => {
+  app.get('/admin/devices', requireAdmin, asyncRoute(async (req, res) => {
+    const F = demoFilter(req, 'd');
     const { rows } = await query(`
       SELECT d.device_id, d.manufacturer, d.model, d.os_version, d.app_version,
              d.compliant, d.last_verdict, d.last_seen_at, d.push_token IS NOT NULL AS push_registered,
              e.display_name AS employee_name
       FROM devices d LEFT JOIN employees e ON e.employee_id = d.employee_id
+      WHERE TRUE ${F}
       ORDER BY d.last_seen_at DESC
     `);
     res.json({ items: rows });
