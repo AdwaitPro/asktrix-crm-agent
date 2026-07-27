@@ -8,7 +8,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.common)
+    api(projects.core.common)
     implementation(projects.core.security)
     api(libs.androidx.datastore.preferences)
 }

@@ -1,43 +1,49 @@
 package com.asktrix.agent
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.asktrix.agent.feature.auth.LoginRoute
+import com.asktrix.agent.feature.dashboard.DashboardRoute
 
 /**
- * The application root.
+ * The navigation graph.
  *
- * At launch the app has to resolve three things before it can route anywhere: the device integrity
- * verdict, the stored session, and the EMM managed configuration. Until those resolve, this is the
- * only correct state to show. The navigation graph is attached in the next wave, once
- * `:feature:auth` and `:feature:dashboard` expose their destinations.
+ * Destinations are added as each feature module lands.
  */
 @Composable
 fun AsktrixApp(onReady: () -> Unit) {
+    val navController = rememberNavController()
+
     LaunchedEffect(Unit) { onReady() }
 
-    val startingUp = stringResource(R.string.a11y_starting_up)
-
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background,
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .semantics { contentDescription = startingUp },
-            contentAlignment = Alignment.Center,
-        ) {
-            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+    NavHost(navController = navController, startDestination = Route.LOGIN) {
+        composable(Route.LOGIN) {
+            LoginRoute(onSignedIn = {
+                navController.navigate(Route.DASHBOARD) {
+                    // Signing in must not leave the login screen on the back stack.
+                    popUpTo(Route.LOGIN) { inclusive = true }
+                }
+            })
+        }
+        composable(Route.DASHBOARD) {
+            DashboardRoute(
+                onClientClick = { clientId ->
+                    navController.navigate("${Route.CLIENT}/$clientId")
+                },
+            )
         }
     }
+}
+
+object Route {
+    const val LOGIN = "login"
+    const val DASHBOARD = "dashboard"
+    const val CLIENT = "client"
 }

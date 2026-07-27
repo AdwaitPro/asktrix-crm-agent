@@ -19,6 +19,9 @@ import dagger.hilt.android.AndroidEntryPoint
  * fails the moment someone adds a screen and forgets. Note the documented limit — this cannot stop a
  * second phone photographing the display, which is exactly why customer contact data is masked at the
  * server and never sent to the device (docs/adr/0003-server-side-pii-masking.md).
+ *
+ * `BuildConfig.ALLOW_SCREENSHOTS` exists only so QA and screenshot tests can capture debug builds.
+ * It is hardcoded false in the release build type, so a shipped APK cannot have it enabled.
  */
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -27,7 +30,12 @@ class MainActivity : ComponentActivity() {
         val splash = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+        if (!BuildConfig.ALLOW_SCREENSHOTS) {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE,
+            )
+        }
         enableEdgeToEdge()
 
         var keepSplash = true

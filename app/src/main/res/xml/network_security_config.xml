@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Production network policy.
+
+  Cleartext is refused outright: every byte between this app and the CRM carries customer data, so
+  there is no host and no circumstance where plain HTTP is acceptable. This is the manifest-level
+  backstop; OkHttp additionally pins the CRM certificate.
+
+  The debug variant overrides this file to permit cleartext to the loopback development host only.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

@@ -7,7 +7,8 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.common)
+    api(projects.core.common)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.compose.material.icons.extended)
+    // api, not implementation: feature modules build their UI from these icons.
+    api(libs.androidx.compose.material.icons.extended)
 }

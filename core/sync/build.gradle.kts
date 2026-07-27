@@ -8,9 +8,9 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.common)
-    implementation(projects.core.database)
-    implementation(projects.core.network)
+    api(projects.core.common)
+    api(projects.core.database)
+    api(projects.core.network)
 
     api(libs.androidx.work.runtime.ktx)
     implementation(libs.hilt.work)

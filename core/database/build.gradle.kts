@@ -7,8 +7,13 @@ android {
     namespace = "com.asktrix.agent.core.database"
 }
 
+// Export the Room schema so migrations can be diffed and migration tests can run against it.
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 dependencies {
-    implementation(projects.core.common)
+    api(projects.core.common)
     implementation(projects.core.security)
 
     api(libs.androidx.room.runtime)

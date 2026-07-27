@@ -44,6 +44,16 @@ android {
                 "\"${secret("CRM_BASE_URL_DEV", "http://10.0.2.2:4010/")}\"",
             )
             buildConfigField("boolean", "USE_MOCK_TELEPHONY", "true")
+            // FLAG_SECURE blocks screenshots (§14-§20), which also blocks QA capture and
+            // Compose screenshot tests. Debug builds may opt out by setting
+            // `asktrix.allowScreenshots=true` in local.properties. It defaults to FALSE, so a
+            // debug build is locked down unless a developer deliberately unlocks it, and the
+            // release branch below has no such switch at all.
+            buildConfigField(
+                "boolean",
+                "ALLOW_SCREENSHOTS",
+                secret("asktrix.allowScreenshots", "false"),
+            )
         }
         release {
             isMinifyEnabled = true
@@ -58,6 +68,8 @@ android {
                 "\"${secret("CRM_BASE_URL_PROD", "https://crm.asktrix.invalid/")}\"",
             )
             buildConfigField("boolean", "USE_MOCK_TELEPHONY", "false")
+            // Never configurable in release. Screenshot blocking is a requirement, not a preference.
+            buildConfigField("boolean", "ALLOW_SCREENSHOTS", "false")
         }
     }
 }

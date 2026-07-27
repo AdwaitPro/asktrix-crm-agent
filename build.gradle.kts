@@ -16,6 +16,7 @@ detekt {
         files(
             "app/src",
             "core/common/src",
+            "core/data/src",
             "core/designsystem/src",
             "core/network/src",
             "core/database/src",
