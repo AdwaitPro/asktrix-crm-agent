@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+      Declared by the module that actually uses it, rather than relying on the app manifest.
+      ConnectivityObserver calls registerNetworkCallback and getActiveNetwork, both of which require
+      this permission. Declaring it here means the module is self-contained: anything that depends
+      on :core:sync gets the permission automatically through manifest merging, and lint can verify
+      the module in isolation.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+</manifest>

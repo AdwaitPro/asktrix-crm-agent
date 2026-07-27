@@ -3,7 +3,9 @@ package com.asktrix.agent.core.location
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.BatteryManager
+import android.os.Build
 import androidx.core.content.ContextCompat
 import com.asktrix.agent.core.common.result.AsktrixError
 import com.asktrix.agent.core.common.result.AsktrixResult
@@ -97,7 +99,7 @@ class LocationSampler @Inject constructor(
                                     longitudeE7 = location.longitude,
                                     accuracyMetres = location.accuracy,
                                     sampledAtMillis = time.now().toEpochMilli(),
-                                    isMocked = location.isMock,
+                                    isMocked = location.isMockedCompat(),
                                     batteryPercent = batteryPercent(),
                                 ),
                             ),
@@ -128,6 +130,18 @@ class LocationSampler @Inject constructor(
         context.getSystemService(BatteryManager::class.java)
             ?.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
     }.getOrNull()?.takeIf { it in 0..MAX_PERCENT }
+
+    /**
+     * `Location.isMock` was added in API 31; `isFromMockProvider` covers 29 and 30.
+     *
+     * The older call is deprecated but is the only option below 31, and minSdk is 29 — so the
+     * deprecation is suppressed deliberately rather than the check being dropped. Silently skipping
+     * mock detection on older handsets would be worse: those are exactly the cheaper devices most
+     * likely to be running a location spoofer.
+     */
+    @Suppress("DEPRECATION")
+    private fun Location.isMockedCompat(): Boolean =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) isMock else isFromMockProvider
 
     private companion object {
         const val FIX_TIMEOUT_MILLIS = 20_000L
