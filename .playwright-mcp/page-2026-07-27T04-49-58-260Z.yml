@@ -1,0 +1,43 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: A
+      - generic [ref=e6]:
+        - generic [ref=e7]: Asktrix
+        - generic [ref=e8]: Admin Console
+    - heading "Sign in" [level=1] [ref=e9]
+    - paragraph [ref=e10]: Team leader access only.
+    - generic [ref=e11]:
+      - generic [ref=e12]: Employee code
+      - textbox "Employee code" [ref=e13]: EMP003
+    - generic [ref=e14]:
+      - generic [ref=e15]: Password
+      - textbox "Password" [ref=e16]: asktrix123
+    - button "Sign in" [ref=e17] [cursor=pointer]
+    - paragraph [ref=e18]: Customer contact details are masked here by default, exactly as they are on the handsets. Revealing them is possible but always recorded.
+  - generic [ref=e19]:
+    - complementary [ref=e20]:
+      - generic [ref=e21]:
+        - generic [ref=e22]: A
+        - generic [ref=e23]:
+          - generic [ref=e24]: Asktrix
+          - generic [ref=e25]: Admin
+      - navigation [ref=e26]:
+        - button "Overview" [ref=e27] [cursor=pointer]
+        - button "Employees" [ref=e28] [cursor=pointer]
+        - button "Location" [ref=e29] [cursor=pointer]
+        - button "Calls" [ref=e30] [cursor=pointer]
+        - button "Clients" [ref=e31] [cursor=pointer]
+        - button "Devices" [ref=e32] [cursor=pointer]
+        - button "Audit log" [ref=e33] [cursor=pointer]
+      - generic [ref=e34]:
+        - generic [ref=e35]:
+          - generic [ref=e36]: —
+          - generic [ref=e37]: —
+        - button "Sign out" [ref=e38] [cursor=pointer]
+    - main [ref=e39]:
+      - generic [ref=e40]:
+        - heading "Overview" [level=1] [ref=e41]
+        - generic [ref=e42]:
+          - generic [ref=e43]: Live
+          - button "Refresh" [ref=e45] [cursor=pointer]

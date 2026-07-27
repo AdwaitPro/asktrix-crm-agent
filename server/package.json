@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "seed": "node src/seed.js"
+    "seed": "node src/seed.js",
+    "test": "node --test \"test/**/*.test.js\"",
+    "seed:demo": "node src/seed_demo.js"
   },
   "keywords": [],
   "author": "",

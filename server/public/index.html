@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Asktrix — Admin Console</title>
+  <link rel="stylesheet" href="app.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230B1220'/><text y='68' x='50' text-anchor='middle' font-size='58' font-family='system-ui' font-weight='700' fill='%2338BDF8'>A</text></svg>" />
+</head>
+<body>
+
+<!-- ─────────────────────────────  Sign in  ───────────────────────────── -->
+<div id="login" class="login">
+  <form class="login__card" id="login-form">
+    <div class="brand">
+      <div class="brand__mark">A</div>
+      <div>
+        <div class="brand__name">Asktrix</div>
+        <div class="brand__sub">Admin Console</div>
+      </div>
+    </div>
+
+    <h1 class="login__title">Sign in</h1>
+    <p class="login__hint">Team leader access only.</p>
+
+    <label class="field">
+      <span class="field__label">Employee code</span>
+      <input id="login-code" autocomplete="username" value="EMP003" required />
+    </label>
+
+    <label class="field">
+      <span class="field__label">Password</span>
+      <input id="login-password" type="password" autocomplete="current-password" value="asktrix123" required />
+    </label>
+
+    <div id="login-error" class="banner banner--error" hidden></div>
+
+    <button class="btn btn--primary btn--full" type="submit">Sign in</button>
+
+    <p class="login__note">
+      Customer contact details are masked here by default, exactly as they are on the handsets.
+      Revealing them is possible but always recorded.
+    </p>
+  </form>
+</div>
+
+<!-- ─────────────────────────────  Console  ───────────────────────────── -->
+<div id="app" hidden>
+  <aside class="sidebar">
+    <div class="brand brand--compact">
+      <div class="brand__mark">A</div>
+      <div>
+        <div class="brand__name">Asktrix</div>
+        <div class="brand__sub">Admin</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button class="nav__item is-active" data-view="overview">Overview</button>
+      <button class="nav__item" data-view="employees">Employees</button>
+      <button class="nav__item" data-view="tracking">Location</button>
+      <button class="nav__item" data-view="calls">Calls</button>
+      <button class="nav__item" data-view="clients">Clients</button>
+      <button class="nav__item" data-view="devices">Devices</button>
+      <button class="nav__item" data-view="audit">Audit log</button>
+    </nav>
+
+    <div class="sidebar__foot">
+      <div class="who">
+        <div class="who__name" id="who-name">—</div>
+        <div class="who__role" id="who-role">—</div>
+      </div>
+      <button class="btn btn--ghost btn--full" id="signout">Sign out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <h1 class="topbar__title" id="view-title">Overview</h1>
+      <div class="topbar__actions">
+        <span class="pill" id="live-dot"><i></i>Live</span>
+        <button class="btn btn--ghost" id="refresh">Refresh</button>
+      </div>
+    </header>
+
+    <section class="view" id="view-overview"></section>
+    <section class="view" id="view-employees" hidden></section>
+    <section class="view" id="view-tracking" hidden></section>
+    <section class="view" id="view-calls" hidden></section>
+    <section class="view" id="view-clients" hidden></section>
+    <section class="view" id="view-devices" hidden></section>
+    <section class="view" id="view-audit" hidden></section>
+  </main>
+</div>
+
+<!-- Reveal dialog: the only place unmasked contact details are ever shown. -->
+<dialog id="reveal-dialog" class="dialog">
+  <form method="dialog" class="dialog__body">
+    <h2 class="dialog__title">Reveal contact details</h2>
+    <p class="dialog__text">
+      This will be recorded in the audit log with your name, the client, and the reason.
+      Only do this when you have a genuine need.
+    </p>
+    <label class="field">
+      <span class="field__label">Reason</span>
+      <input id="reveal-reason" placeholder="e.g. escalation from customer" />
+    </label>
+    <div class="dialog__actions">
+      <button class="btn btn--ghost" value="cancel">Cancel</button>
+      <button class="btn btn--primary" id="reveal-confirm" value="confirm">Reveal &amp; record</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>

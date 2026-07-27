@@ -28,6 +28,7 @@ class AuthRepository @Inject constructor(
     private val deviceIdentity: DeviceIdentity,
     private val json: Json,
     private val appVersion: AppVersion,
+    private val pushRegistration: PushRegistration,
 ) {
 
     suspend fun login(employeeCode: String, password: String): AsktrixResult<EmployeeDto> {
@@ -54,6 +55,9 @@ class AuthRepository @Inject constructor(
                             deviceId = deviceId,
                         ),
                     )
+                    // Best-effort and deliberately after the token is stored, since the call itself
+                    // needs authentication. A failure here never fails sign-in.
+                    pushRegistration.register()
                 }
             }
             .map { it.employee }
@@ -73,6 +77,16 @@ class AuthRepository @Inject constructor(
 
 /** Supplied by the app module so feature code never reaches into `BuildConfig` directly. */
 data class AppVersion(val name: String)
+
+/**
+ * Registers this device for push after sign-in.
+ *
+ * An interface so `:feature:auth` never depends on Firebase — the app module supplies the real
+ * implementation, and tests supply a no-op.
+ */
+fun interface PushRegistration {
+    suspend fun register(): Boolean
+}
 
 /**
  * Maps an error onto copy a field agent can act on. Never surfaces technical detail.

@@ -8,6 +8,7 @@
 -- what makes §4 real — the device is not trusted to mask anything, because it never receives the
 -- unmasked value.
 
+DROP TABLE IF EXISTS pii_access_log    CASCADE;
 DROP TABLE IF EXISTS location_pings    CASCADE;
 DROP TABLE IF EXISTS attendance        CASCADE;
 DROP TABLE IF EXISTS call_records      CASCADE;
@@ -213,3 +214,18 @@ CREATE TABLE idempotency_keys (
     created_at      TIMESTAMPTZ NOT NULL DEFAULT now(),
     PRIMARY KEY (key, employee_id)
 );
+
+-- Every time an admin unmasks a customer's real contact details, it is recorded here.
+--
+-- §4 keeps full details away from employees. A manager may still need them for an escalation, so the
+-- admin API exposes one explicit reveal — and this table is what makes that defensible under DPDP:
+-- it answers "who looked at this customer's data, when, and why".
+CREATE TABLE pii_access_log (
+    log_id      BIGSERIAL PRIMARY KEY,
+    admin_id    TEXT NOT NULL,
+    admin_name  TEXT NOT NULL,
+    client_id   TEXT NOT NULL,
+    reason      TEXT,
+    accessed_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX idx_pii_log_client ON pii_access_log(client_id, accessed_at DESC);

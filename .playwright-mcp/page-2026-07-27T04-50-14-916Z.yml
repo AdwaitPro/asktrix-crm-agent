@@ -1,0 +1,81 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: A
+      - generic [ref=e6]:
+        - generic [ref=e7]: Asktrix
+        - generic [ref=e8]: Admin Console
+    - heading "Sign in" [level=1] [ref=e9]
+    - paragraph [ref=e10]: Team leader access only.
+    - generic [ref=e11]:
+      - generic [ref=e12]: Employee code
+      - textbox "Employee code" [ref=e13]: EMP003
+    - generic [ref=e14]:
+      - generic [ref=e15]: Password
+      - textbox "Password" [ref=e16]: asktrix123
+    - button "Sign in" [active] [ref=e17] [cursor=pointer]
+    - paragraph [ref=e18]: Customer contact details are masked here by default, exactly as they are on the handsets. Revealing them is possible but always recorded.
+  - generic [ref=e19]:
+    - complementary [ref=e20]:
+      - generic [ref=e21]:
+        - generic [ref=e22]: A
+        - generic [ref=e23]:
+          - generic [ref=e24]: Asktrix
+          - generic [ref=e25]: Admin
+      - navigation [ref=e26]:
+        - button "Overview" [ref=e27] [cursor=pointer]
+        - button "Employees" [ref=e28] [cursor=pointer]
+        - button "Location" [ref=e29] [cursor=pointer]
+        - button "Calls" [ref=e30] [cursor=pointer]
+        - button "Clients" [ref=e31] [cursor=pointer]
+        - button "Devices" [ref=e32] [cursor=pointer]
+        - button "Audit log" [ref=e33] [cursor=pointer]
+      - generic [ref=e34]:
+        - generic [ref=e35]:
+          - generic [ref=e36]: Rohit Desai
+          - generic [ref=e37]: TEAM LEADER
+        - button "Sign out" [ref=e38] [cursor=pointer]
+    - main [ref=e39]:
+      - generic [ref=e40]:
+        - heading "Overview" [level=1] [ref=e41]
+        - generic [ref=e42]:
+          - generic [ref=e43]: Live
+          - button "Refresh" [ref=e45] [cursor=pointer]
+      - generic [ref=e46]:
+        - generic [ref=e47]:
+          - generic [ref=e48]:
+            - generic [ref=e49]: Checked in today
+            - generic [ref=e50]: "2"
+            - generic [ref=e51]: of 3 employees
+          - generic [ref=e52]:
+            - generic [ref=e53]: Calls today
+            - generic [ref=e54]: "6"
+            - generic [ref=e55]: 50% connected
+          - generic [ref=e56]:
+            - generic [ref=e57]: Talk time today
+            - generic [ref=e58]: 7m 47s
+            - generic [ref=e59]: across all agents
+          - generic [ref=e60]:
+            - generic [ref=e61]: Follow-ups due
+            - generic [ref=e62]: "4"
+            - generic [ref=e63]: across all clients
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - generic [ref=e66]: Active clients
+            - generic [ref=e67]: "12"
+            - generic [ref=e68]: 1 completed
+          - generic [ref=e69]:
+            - generic [ref=e70]: Recordings held
+            - generic [ref=e71]: "27"
+            - generic [ref=e72]: stored in the CRM
+          - generic [ref=e73]:
+            - generic [ref=e74]: GPS points today
+            - generic [ref=e75]: "24"
+            - generic [ref=e76]: working hours only
+          - generic [ref=e77]:
+            - generic [ref=e78]: Devices
+            - generic [ref=e79]: "0"
+            - generic [ref=e80]: all compliant
+        - generic [ref=e83]:
+          - generic [ref=e84]: Team today
+          - generic [ref=e85]: Attendance, activity and last known position

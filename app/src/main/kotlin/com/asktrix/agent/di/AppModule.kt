@@ -5,6 +5,8 @@ import com.asktrix.agent.core.common.session.SessionTokenStore
 import com.asktrix.agent.core.datastore.EncryptedSessionStore
 import com.asktrix.agent.core.network.di.NetworkModule
 import com.asktrix.agent.feature.auth.AppVersion
+import com.asktrix.agent.feature.auth.PushRegistration
+import com.asktrix.agent.push.PushTokenRegistrar
 import com.asktrix.agent.feature.settings.AppVersionName
 import dagger.Binds
 import dagger.Module
@@ -39,6 +41,10 @@ object AppModule {
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class AppBindings {
+
+    @Binds
+    @Singleton
+    abstract fun pushRegistration(impl: PushTokenRegistrar): PushRegistration
 
     @Binds
     @Singleton

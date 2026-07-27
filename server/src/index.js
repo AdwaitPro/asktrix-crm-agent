@@ -3,6 +3,8 @@ require('dotenv').config();
 
 const express = require('express');
 const crypto = require('crypto');
+const path = require('path');
+const admin = require('./admin');
 const { query, tx } = require('./db');
 const { findLeaks } = require('./mask');
 const S = require('./serialize');
@@ -13,6 +15,9 @@ const {
 const app = express();
 app.use(express.json({ limit: '1mb' }));
 app.use(express.raw({ type: 'image/jpeg', limit: '4mb' }));
+
+// The admin dashboard (§25-§27) is a plain static app served from the same origin as the API.
+app.use('/admin', express.static(path.join(__dirname, '..', 'public')));
 
 // ---------------------------------------------------------------------------------------------
 // Privacy tripwire.
@@ -71,6 +76,17 @@ async function idempotent(req, res, handler) {
 const asyncRoute = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 
 // ============================================================================== Health / meta ===
+/**
+ * Test endpoint for §24. Sends a data-only push to the caller's own devices so the FCM loop can be
+ * verified without waiting for a real CRM event.
+ */
+app.post('/device/test-push', requireAuth, asyncRoute(async (req, res) => {
+  const result = await notifyEmployee(req.employee.employee_id, 'client_assigned', {
+    clientId: req.body?.clientId || 'CLI-10240',
+  });
+  res.json(result);
+}));
+
 app.get('/health', asyncRoute(async (_req, res) => {
   const { rows } = await query('SELECT now() AS now');
   res.json({ status: 'ok', serverTime: rows[0].now.toISOString() });
@@ -320,6 +336,7 @@ app.get('/clients/:clientId/timeline', requireAuth, asyncRoute(async (req, res) 
 
 // ====================================================================================== Calls ===
 const { simulateCall } = require('./telephony');
+const { notifyEmployee } = require('./push');
 
 app.post('/calls', requireAuth, asyncRoute(async (req, res) => {
   const { clientId, reason } = req.body || {};
@@ -388,7 +405,7 @@ app.post('/attendance', requireAuth, asyncRoute(async (req, res) => {
 
   const last = await query(
     `SELECT kind FROM attendance WHERE employee_id = $1
-       AND occurred_at::date = (now() AT TIME ZONE 'Asia/Kolkata')::date
+       AND (occurred_at AT TIME ZONE 'Asia/Kolkata')::date = (now() AT TIME ZONE 'Asia/Kolkata')::date
      ORDER BY occurred_at DESC LIMIT 1`,
     [req.employee.employee_id],
   );
@@ -412,7 +429,7 @@ app.post('/attendance', requireAuth, asyncRoute(async (req, res) => {
 app.get('/attendance/today', requireAuth, asyncRoute(async (req, res) => {
   const { rows } = await query(
     `SELECT kind, occurred_at FROM attendance WHERE employee_id = $1
-       AND occurred_at::date = (now() AT TIME ZONE 'Asia/Kolkata')::date
+       AND (occurred_at AT TIME ZONE 'Asia/Kolkata')::date = (now() AT TIME ZONE 'Asia/Kolkata')::date
      ORDER BY occurred_at ASC`,
     [req.employee.employee_id],
   );
@@ -521,6 +538,9 @@ app.post('/device/compliance', requireAuth, asyncRoute(async (req, res) => {
   );
   res.json(verdict);
 }));
+
+// ====================================================================== Admin (§25-§27) ===
+admin.register(app, asyncRoute, verifyPassword);
 
 // ================================================================================ Error handler ==
 app.use((err, req, res, _next) => {

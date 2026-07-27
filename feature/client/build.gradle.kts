@@ -10,3 +10,8 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.telephony)
 }
+
+dependencies {
+    androidTestImplementation(libs.androidx.test.junit)
+    androidTestImplementation(libs.junit4)
+}

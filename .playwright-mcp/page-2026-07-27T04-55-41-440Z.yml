@@ -1,0 +1,173 @@
+- generic [ref=f2e2]:
+  - complementary [ref=f2e3]:
+    - generic [ref=f2e4]:
+      - generic [ref=f2e5]: A
+      - generic [ref=f2e6]:
+        - generic [ref=f2e7]: Asktrix
+        - generic [ref=f2e8]: Admin
+    - navigation [ref=f2e9]:
+      - button "Overview" [ref=f2e10] [cursor=pointer]
+      - button "Employees" [ref=f2e11] [cursor=pointer]
+      - button "Location" [ref=f2e12] [cursor=pointer]
+      - button "Calls" [ref=f2e13] [cursor=pointer]
+      - button "Clients" [active] [ref=f2e14] [cursor=pointer]
+      - button "Devices" [ref=f2e15] [cursor=pointer]
+      - button "Audit log" [ref=f2e16] [cursor=pointer]
+    - generic [ref=f2e17]:
+      - generic [ref=f2e18]:
+        - generic [ref=f2e19]: Rohit Desai
+        - generic [ref=f2e20]: TEAM LEADER
+      - button "Sign out" [ref=f2e21] [cursor=pointer]
+  - main [ref=f2e22]:
+    - generic [ref=f2e23]:
+      - heading "Clients" [level=1] [ref=f2e30]
+      - generic [ref=f2e25]:
+        - generic [ref=f2e26]: Live
+        - button "Refresh" [ref=f2e28] [cursor=pointer]
+    - generic [ref=f2e32]:
+      - generic [ref=f2e34]:
+        - generic [ref=f2e35]: Client pipeline
+        - generic [ref=f2e36]: Contact details are masked here exactly as they are on the handsets (§4). Revealing them is recorded in the audit log.
+      - table [ref=f2e38]:
+        - rowgroup [ref=f2e39]:
+          - row [ref=f2e40]:
+            - columnheader "Client" [ref=f2e41]
+            - columnheader "Assigned to" [ref=f2e42]
+            - columnheader "Status" [ref=f2e43]
+            - columnheader "Payment" [ref=f2e44]
+            - columnheader "Docs" [ref=f2e45]
+            - columnheader "Contact" [ref=f2e46]
+            - columnheader [ref=f2e47]
+        - rowgroup [ref=f2e48]:
+          - row [ref=f2e49]:
+            - cell "Sivakumar Ramanathan CLI-10240 · SVC-GST-2291" [ref=f2e50]:
+              - generic [ref=f2e51]: Sivakumar Ramanathan
+              - generic [ref=f2e52]: CLI-10240 · SVC-GST-2291
+            - cell "Aarav Sharma" [ref=f2e53]
+            - cell "documents pending" [ref=f2e54]
+            - cell "pending" [ref=f2e56]
+            - cell "3" [ref=f2e57]
+            - cell "98XXXXXX12 siv****@gmail.com" [ref=f2e59]
+            - cell [ref=f2e60]:
+              - button "Reveal" [ref=f2e61] [cursor=pointer]
+          - row [ref=f2e62]:
+            - cell "Priya Nair CLI-10241 · SVC-ITR-1180" [ref=f2e63]:
+              - generic [ref=f2e64]: Priya Nair
+              - generic [ref=f2e65]: CLI-10241 · SVC-ITR-1180
+            - cell "Meera Iyer" [ref=f2e66]
+            - cell "payment pending" [ref=f2e67]
+            - cell "partial" [ref=f2e69]
+            - cell "1" [ref=f2e70]
+            - cell "98XXXXXX45 pri****@outlook.com" [ref=f2e72]
+            - cell [ref=f2e73]:
+              - button "Reveal" [ref=f2e74] [cursor=pointer]
+          - row [ref=f2e75]:
+            - cell "Rajesh Kumar Gupta CLI-10242 · SVC-GST-2310" [ref=f2e76]:
+              - generic [ref=f2e77]: Rajesh Kumar Gupta
+              - generic [ref=f2e78]: CLI-10242 · SVC-GST-2310
+            - cell "Aarav Sharma" [ref=f2e79]
+            - cell "waiting government approval" [ref=f2e80]
+            - cell "received" [ref=f2e82]
+            - cell "0" [ref=f2e83]
+            - cell "98XXXXXX78 raj****@yahoo.in" [ref=f2e84]
+            - cell [ref=f2e85]:
+              - button "Reveal" [ref=f2e86] [cursor=pointer]
+          - row [ref=f2e87]:
+            - cell "Anitha Krishnan CLI-10243 · SVC-FSSAI-887" [ref=f2e88]:
+              - generic [ref=f2e89]: Anitha Krishnan
+              - generic [ref=f2e90]: CLI-10243 · SVC-FSSAI-887
+            - cell "Meera Iyer" [ref=f2e91]
+            - cell "client not responding" [ref=f2e92]
+            - cell "pending" [ref=f2e94]
+            - cell "2" [ref=f2e95]
+            - cell "99XXXXXX33 ani****@gmail.com" [ref=f2e97]
+            - cell [ref=f2e98]:
+              - button "Reveal" [ref=f2e99] [cursor=pointer]
+          - row [ref=f2e100]:
+            - cell "Mohammed Irfan CLI-10244 · SVC-MSME-441" [ref=f2e101]:
+              - generic [ref=f2e102]: Mohammed Irfan
+              - generic [ref=f2e103]: CLI-10244 · SVC-MSME-441
+            - cell "Aarav Sharma" [ref=f2e104]
+            - cell "documents received" [ref=f2e105]
+            - cell "pending" [ref=f2e107]
+            - cell "0" [ref=f2e108]
+            - cell "96XXXXXX47 irf****@gmail.com" [ref=f2e109]
+            - cell [ref=f2e110]:
+              - button "Reveal" [ref=f2e111] [cursor=pointer]
+          - row [ref=f2e112]:
+            - cell "Deepa Venkatesh CLI-10245 · SVC-TM-9021" [ref=f2e113]:
+              - generic [ref=f2e114]: Deepa Venkatesh
+              - generic [ref=f2e115]: CLI-10245 · SVC-TM-9021
+            - cell "Meera Iyer" [ref=f2e116]
+            - cell "callback scheduled" [ref=f2e117]
+            - cell "not due" [ref=f2e119]
+            - cell "1" [ref=f2e120]
+            - cell "97XXXXXX34 dee****@gmail.com" [ref=f2e122]
+            - cell [ref=f2e123]:
+              - button "Reveal" [ref=f2e124] [cursor=pointer]
+          - row [ref=f2e125]:
+            - cell "Suresh Babu CLI-10246 · SVC-GST-2377" [ref=f2e126]:
+              - generic [ref=f2e127]: Suresh Babu
+              - generic [ref=f2e128]: CLI-10246 · SVC-GST-2377
+            - cell "Aarav Sharma" [ref=f2e129]
+            - cell "completed" [ref=f2e130]
+            - cell "received" [ref=f2e132]
+            - cell "0" [ref=f2e133]
+            - cell "94XXXXXX01 sur****@rediffmail.com" [ref=f2e134]
+            - cell [ref=f2e135]:
+              - button "Reveal" [ref=f2e136] [cursor=pointer]
+          - row [ref=f2e137]:
+            - cell "Kavitha Sundaram CLI-10247 · SVC-ITR-1204" [ref=f2e138]:
+              - generic [ref=f2e139]: Kavitha Sundaram
+              - generic [ref=f2e140]: CLI-10247 · SVC-ITR-1204
+            - cell "Meera Iyer" [ref=f2e141]
+            - cell "new" [ref=f2e142]
+            - cell "not due" [ref=f2e144]
+            - cell "4" [ref=f2e145]
+            - cell "95XXXXXX78 kav****@gmail.com" [ref=f2e147]
+            - cell [ref=f2e148]:
+              - button "Reveal" [ref=f2e149] [cursor=pointer]
+          - row [ref=f2e150]:
+            - cell "Arun Prakash CLI-10248 · SVC-MSME-459" [ref=f2e151]:
+              - generic [ref=f2e152]: Arun Prakash
+              - generic [ref=f2e153]: CLI-10248 · SVC-MSME-459
+            - cell "Aarav Sharma" [ref=f2e154]
+            - cell "documents pending" [ref=f2e155]
+            - cell "pending" [ref=f2e157]
+            - cell "2" [ref=f2e158]
+            - cell "98XXXXXX89 aru****@gmail.com" [ref=f2e160]
+            - cell [ref=f2e161]:
+              - button "Reveal" [ref=f2e162] [cursor=pointer]
+          - row [ref=f2e163]:
+            - cell "Lakshmi Narayanan CLI-10249 · SVC-FSSAI-903" [ref=f2e164]:
+              - generic [ref=f2e165]: Lakshmi Narayanan
+              - generic [ref=f2e166]: CLI-10249 · SVC-FSSAI-903
+            - cell "Meera Iyer" [ref=f2e167]
+            - cell "payment received" [ref=f2e168]
+            - cell "received" [ref=f2e170]
+            - cell "0" [ref=f2e171]
+            - cell "99XXXXXX67 lak****@gmail.com" [ref=f2e172]
+            - cell [ref=f2e173]:
+              - button "Reveal" [ref=f2e174] [cursor=pointer]
+          - row [ref=f2e175]:
+            - cell "Vikram Shetty CLI-10250 · SVC-TM-9044" [ref=f2e176]:
+              - generic [ref=f2e177]: Vikram Shetty
+              - generic [ref=f2e178]: CLI-10250 · SVC-TM-9044
+            - cell "Aarav Sharma" [ref=f2e179]
+            - cell "client not responding" [ref=f2e180]
+            - cell "pending" [ref=f2e182]
+            - cell "1" [ref=f2e183]
+            - cell "98XXXXXX23 vik****@gmail.com" [ref=f2e185]
+            - cell [ref=f2e186]:
+              - button "Reveal" [ref=f2e187] [cursor=pointer]
+          - row [ref=f2e188]:
+            - cell "Fatima Begum CLI-10251 · SVC-GST-2402" [ref=f2e189]:
+              - generic [ref=f2e190]: Fatima Begum
+              - generic [ref=f2e191]: CLI-10251 · SVC-GST-2402
+            - cell "Meera Iyer" [ref=f2e192]
+            - cell "documents received" [ref=f2e193]
+            - cell "partial" [ref=f2e195]
+            - cell "0" [ref=f2e196]
+            - cell "97XXXXXX76 fat****@gmail.com" [ref=f2e197]
+            - cell [ref=f2e198]:
+              - button "Reveal" [ref=f2e199] [cursor=pointer]
