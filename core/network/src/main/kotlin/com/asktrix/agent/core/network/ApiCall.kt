@@ -72,6 +72,9 @@ private fun fromServerCode(parsed: ApiErrorDto): AsktrixError? =
         "NOT_FOUND" -> AsktrixError.NotFound(parsed.message)
         "VALIDATION_FAILED" -> AsktrixError.Validation(parsed.fieldErrors, parsed.message)
         "CALL_NOT_PLACED" -> AsktrixError.CallNotPlaced(parsed.message)
+        // A conflict carries a real explanation from the server; surface it verbatim
+        // rather than flattening it into a validation message.
+        "CONFLICT" -> AsktrixError.Conflict(parsed.message)
         "INTEGRITY_FAILURE" -> AsktrixError.IntegrityFailure(
             com.asktrix.agent.core.common.result.IntegrityFailureReason.ATTESTATION_REJECTED,
             parsed.message,
@@ -85,7 +88,7 @@ private fun fromHttpStatus(code: Int, parsed: ApiErrorDto?): AsktrixError =
         HTTP_UNAUTHORIZED -> AsktrixError.Unauthenticated(parsed?.message)
         HTTP_FORBIDDEN -> AsktrixError.Forbidden(parsed?.message)
         HTTP_NOT_FOUND -> AsktrixError.NotFound(parsed?.message)
-        HTTP_CONFLICT -> AsktrixError.Validation(emptyMap(), parsed?.message ?: "conflict")
+        HTTP_CONFLICT -> AsktrixError.Conflict(parsed?.message)
         HTTP_UNPROCESSABLE -> AsktrixError.Validation(parsed?.fieldErrors.orEmpty(), parsed?.message)
         // Rate limiting and 5xx are transient: the outbox should back off and retry.
         HTTP_TOO_MANY_REQUESTS -> AsktrixError.ServerUnavailable(code, parsed?.message)

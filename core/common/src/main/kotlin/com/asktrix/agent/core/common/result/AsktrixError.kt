@@ -60,6 +60,14 @@ sealed interface AsktrixError {
     /** The requested resource does not exist, or is not assigned to this employee. */
     data class NotFound(override val debugContext: String? = null) : Permanent
 
+    /**
+     * The request clashed with current server state, e.g. a call is already in progress.
+     *
+     * Distinct from [Validation]: nothing the user typed is wrong, so telling them to "check the
+     * details" is actively misleading. The server's message explains what to do instead.
+     */
+    data class Conflict(override val debugContext: String? = null) : Permanent
+
     // --- Local storage and integrity ---------------------------------------------------------
 
     /** The encrypted cache could not be opened or written. */

@@ -37,6 +37,7 @@ fun ProcessStatus.tone(): StatusTone = when (this) {
  */
 fun AsktrixError.toDashboardMessage(): String? = when (this) {
     is AsktrixError.Offline -> null
+    is AsktrixError.Conflict -> debugContext
     is AsktrixError.Timeout -> "Could not reach the CRM. Showing saved data."
     is AsktrixError.ServerUnavailable -> "The CRM is unavailable. Showing saved data."
     is AsktrixError.Unauthenticated -> "Your session expired. Sign in again."

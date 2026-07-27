@@ -14,6 +14,13 @@ const {
 } = require('./auth');
 
 const app = express();
+
+/*
+ * Behind a platform proxy, req.protocol reports http even when the client arrived over TLS, so any
+ * URL built from it comes out as http. That is not cosmetic here: getUserMedia only works in a
+ * secure context, so an http call link means no microphone and no call at all.
+ */
+app.set('trust proxy', 1);
 app.use(express.json({ limit: '1mb' }));
 app.use(express.raw({ type: 'image/jpeg', limit: '4mb' }));
 
@@ -103,6 +110,9 @@ async function idempotent(req, res, handler) {
  *   acefone    the licensed-carrier PSTN bridge, once a subscription exists.
  */
 const CALL_MODE = process.env.CALL_MODE || 'webrtc';
+
+/** A call still in a live state after this long was abandoned, not answered. */
+const STALE_CALL_MINUTES = 5;
 
 const asyncRoute = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 
@@ -383,13 +393,30 @@ app.post('/calls', requireAuth, asyncRoute(async (req, res) => {
     return fail(res, 403, 'FORBIDDEN', 'This client is not assigned to you.');
   }
 
+  /*
+   * Expire abandoned sessions before checking for an active one.
+   *
+   * A call that is never hung up cleanly - the app is killed, the page is closed, the network drops
+   * mid-setup - would otherwise leave a row in a live state and lock the agent out of calling
+   * entirely, with a message that gives them no way to recover. Anything older than the timeout is
+   * treated as abandoned.
+   */
+  await query(
+    `UPDATE call_sessions SET state = 'CANCELLED', ended_at = now()
+     WHERE employee_id = $1
+       AND state IN ('REQUESTED','RINGING_AGENT','RINGING_CUSTOMER','BRIDGED')
+       AND requested_at < now() - interval '${STALE_CALL_MINUTES} minutes'`,
+    [req.employee.employee_id],
+  );
+
   const active = await query(
-    `SELECT 1 FROM call_sessions WHERE employee_id = $1
+    `SELECT call_session_id FROM call_sessions WHERE employee_id = $1
        AND state IN ('REQUESTED','RINGING_AGENT','RINGING_CUSTOMER','BRIDGED') LIMIT 1`,
     [req.employee.employee_id],
   );
   if (active.rows.length > 0) {
-    return fail(res, 409, 'CONFLICT', 'You already have a call in progress.');
+    return fail(res, 409, 'CONFLICT',
+      'A call is already in progress. End it, or wait a moment and try again.');
   }
 
   return idempotent(req, res, async () => {

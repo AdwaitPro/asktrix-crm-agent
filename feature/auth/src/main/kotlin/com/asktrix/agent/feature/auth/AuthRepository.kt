@@ -94,7 +94,11 @@ fun interface PushRegistration {
  * Split by category so neither half becomes an unreadable wall of branches.
  */
 fun AsktrixError.toUserMessage(): String =
-    connectivityMessage() ?: accessMessage() ?: "Something went wrong. Try again."
+    connectivityMessage()
+        ?: accessMessage()
+        ?: requestMessage()
+        ?: deviceMessage()
+        ?: "Something went wrong. Try again."
 
 private fun AsktrixError.connectivityMessage(): String? = when (this) {
     is AsktrixError.Offline -> "No internet connection. Check your network and try again."
@@ -107,14 +111,23 @@ private fun AsktrixError.accessMessage(): String? = when (this) {
     is AsktrixError.Unauthenticated -> "Incorrect employee code or password."
     is AsktrixError.Forbidden -> "Your account does not have access to this."
     is AsktrixError.DeviceNotBound -> "This device is not registered. Contact your administrator."
+    else -> null
+}
+
+private fun AsktrixError.requestMessage(): String? = when (this) {
     is AsktrixError.Validation ->
         fieldErrors.values.firstOrNull() ?: "Please check the details you entered."
     is AsktrixError.NotFound -> "That record is no longer available."
+    is AsktrixError.Conflict -> debugContext ?: "That clashed with a change on the server."
+    is AsktrixError.CallNotPlaced -> providerReason ?: "The call could not be placed."
+    is AsktrixError.MalformedResponse -> "The server sent an unexpected response."
+    else -> null
+}
+
+private fun AsktrixError.deviceMessage(): String? = when (this) {
     is AsktrixError.IntegrityFailure ->
         "This device failed a security check. Contact your administrator."
     is AsktrixError.PermissionDenied -> "A required permission is not granted."
     is AsktrixError.StorageFailure -> "Secure storage is unavailable on this device."
-    is AsktrixError.CallNotPlaced -> providerReason ?: "The call could not be placed."
-    is AsktrixError.MalformedResponse -> "The server sent an unexpected response."
     else -> null
 }

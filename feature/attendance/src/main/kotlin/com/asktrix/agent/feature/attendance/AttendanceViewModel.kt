@@ -157,6 +157,7 @@ fun AsktrixError.toAttendanceMessage(): String = when (this) {
         "Saved. It will sync when you are back online."
     is AsktrixError.Validation ->
         fieldErrors.values.firstOrNull() ?: "Check the details and try again."
+    is AsktrixError.Conflict -> debugContext ?: "That clashed with today's record."
     is AsktrixError.Unexpected ->
         debugContext ?: "Could not get a location fix. Move to an open area and try again."
     else -> "Could not record attendance. Try again."
