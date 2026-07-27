@@ -24,6 +24,7 @@ import androidx.compose.material.icons.outlined.MyLocation
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -59,9 +60,17 @@ fun AttendanceRoute(viewModel: AttendanceViewModel = hiltViewModel()) {
         viewModel.onPermissionResult(grants.values.any { it })
     }
 
+    if (state.awaitingCapture) {
+        AttendanceCameraSheet(
+            onCaptured = viewModel::onPhotoCaptured,
+            onDismiss = viewModel::cancelCapture,
+        )
+    }
+
     AttendanceScreen(
         state = state,
-        onToggle = viewModel::toggle,
+        onToggle = { if (state.photoEnabled) viewModel.requestCapture() else viewModel.toggle() },
+        onPhotoEnabledChange = viewModel::setPhotoEnabled,
         onRequestPermission = {
             // Foreground location only. ACCESS_BACKGROUND_LOCATION must be requested separately,
             // after this is granted — Android refuses to show both in one dialog.
@@ -80,6 +89,7 @@ fun AttendanceRoute(viewModel: AttendanceViewModel = hiltViewModel()) {
 fun AttendanceScreen(
     state: AttendanceUiState,
     onToggle: () -> Unit,
+    onPhotoEnabledChange: (Boolean) -> Unit,
     onRequestPermission: () -> Unit,
     onConsumeMessage: () -> Unit,
 ) {
@@ -141,6 +151,20 @@ fun AttendanceScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = AsktrixTheme.spacing.md),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Checkbox(checked = state.photoEnabled, onCheckedChange = onPhotoEnabledChange)
+                Text(
+                    text = "Include a photo (optional)",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
 
             Button(
@@ -306,6 +330,7 @@ private fun AttendancePreview() {
                 lastFixAccuracy = 14f,
             ),
             onToggle = {},
+            onPhotoEnabledChange = {},
             onRequestPermission = {},
             onConsumeMessage = {},
         )

@@ -116,6 +116,13 @@ interface AsktrixApi {
         @Body body: AttendanceRequestDto,
     ): Response<AttendanceRecordDto>
 
+    @PUT("attendance/{attendanceId}/photo")
+    suspend fun attendancePhoto(
+        @Path("attendanceId") attendanceId: String,
+        @Header("Idempotency-Key") idempotencyKey: String,
+        @Body body: okhttp3.RequestBody,
+    ): Response<Unit>
+
     @GET("attendance/today")
     suspend fun attendanceToday(): Response<AttendanceTodayDto>
 

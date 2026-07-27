@@ -23,6 +23,8 @@ data class AttendanceUiState(
     val isBusy: Boolean = false,
     val needsLocationPermission: Boolean = false,
     val lastFixAccuracy: Float? = null,
+    val photoEnabled: Boolean = false,
+    val awaitingCapture: Boolean = false,
     val message: String? = null,
     val errorMessage: String? = null,
 )
@@ -48,6 +50,48 @@ class AttendanceViewModel @Inject constructor(
                 is AsktrixResult.Success -> _state.update { it.copy(today = result.data) }
                 is AsktrixResult.Failure -> _state.update {
                     it.copy(errorMessage = result.error.toAttendanceMessage())
+                }
+            }
+        }
+    }
+
+    fun setPhotoEnabled(enabled: Boolean) = _state.update { it.copy(photoEnabled = enabled) }
+
+    /** Opens the in-app camera; [onPhotoCaptured] completes the check-in. */
+    fun requestCapture() = _state.update { it.copy(awaitingCapture = true) }
+
+    fun cancelCapture() = _state.update { it.copy(awaitingCapture = false) }
+
+    /** Called with the captured JPEG, or null when capture failed or was skipped. */
+    fun onPhotoCaptured(jpeg: ByteArray?) {
+        _state.update { it.copy(awaitingCapture = false) }
+        if (jpeg == null) {
+            toggle()
+            return
+        }
+        val checkingIn = !_state.value.today.checkedIn
+        _state.update { it.copy(isBusy = true) }
+        viewModelScope.launch {
+            when (val result = repository.recordWithPhoto(checkingIn, jpeg)) {
+                is AsktrixResult.Success -> {
+                    if (checkingIn) LocationTrackingService.start(context)
+                    else LocationTrackingService.stop(context)
+                    _state.update {
+                        it.copy(
+                            isBusy = false,
+                            lastFixAccuracy = result.data.accuracyMetres,
+                            message = if (checkingIn) {
+                                "Checked in with photo. Location tracking is on."
+                            } else {
+                                "Checked out with photo."
+                            },
+                            today = it.today.copy(checkedIn = checkingIn),
+                        )
+                    }
+                    refresh()
+                }
+                is AsktrixResult.Failure -> _state.update {
+                    it.copy(isBusy = false, errorMessage = result.error.toAttendanceMessage())
                 }
             }
         }

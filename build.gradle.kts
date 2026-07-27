@@ -37,6 +37,10 @@ detekt {
     )
 }
 
+// Deletes every module's build directory, not just the root's. The single-directory version is a
+// common and misleading bug: `clean assembleDebug` appears to pass in seconds while actually
+// reusing stale module outputs.
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
+    subprojects.forEach { delete(it.layout.buildDirectory) }
 }
