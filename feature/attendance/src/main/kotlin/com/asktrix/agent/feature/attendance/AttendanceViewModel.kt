@@ -164,7 +164,7 @@ class AttendanceViewModel @Inject constructor(
 fun AsktrixError.toAttendanceMessage(): String = when (this) {
     is AsktrixError.PermissionDenied ->
         "Location permission is required to record attendance."
-    is AsktrixError.Offline ->
+    is AsktrixError.Offline, is AsktrixError.ServerUnreachable ->
         "Saved. It will sync when you are back online."
     is AsktrixError.Validation ->
         fieldErrors.values.firstOrNull() ?: "Check the details and try again."

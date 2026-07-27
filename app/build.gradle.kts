@@ -58,8 +58,8 @@ android {
 
     defaultConfig {
         applicationId = "com.asktrix.agent"
-        versionCode = 3
-        versionName = "0.1.3"
+        versionCode = 4
+        versionName = "0.1.4"
     }
 
     buildFeatures {
@@ -104,11 +104,20 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            buildConfigField(
-                "String",
-                "CRM_BASE_URL",
-                "\"${secret("CRM_BASE_URL_PROD", "https://crm.asktrix.invalid/")}\"",
-            )
+            /*
+             * The release server address.
+             *
+             * This defaulted to an unreachable placeholder, which produced a release APK that
+             * installed cleanly, opened cleanly, and then failed every request with "no internet
+             * connection". Nothing in the build said anything was wrong. The default is now the
+             * real deployment, and the check below refuses to build a release that points at a
+             * host which cannot be reached, because that failure is invisible until a user hits it.
+             */
+            val prodBaseUrl = secret("CRM_BASE_URL_PROD", "https://asktrix-crm.vercel.app/")
+            check(prodBaseUrl.startsWith("https://") && !prodBaseUrl.contains(".invalid")) {
+                "CRM_BASE_URL_PROD must be a reachable https address, was: $prodBaseUrl"
+            }
+            buildConfigField("String", "CRM_BASE_URL", "\"$prodBaseUrl\"")
             buildConfigField("boolean", "USE_MOCK_TELEPHONY", "false")
             // Never configurable in release. Screenshot blocking is a requirement, not a preference.
             buildConfigField("boolean", "ALLOW_SCREENSHOTS", "false")

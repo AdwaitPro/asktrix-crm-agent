@@ -29,6 +29,15 @@ sealed interface AsktrixError {
     /** The request reached the network but did not complete in time. */
     data class Timeout(override val debugContext: String? = null) : Retryable
 
+    /**
+     * The CRM address did not resolve.
+     *
+     * Distinct from [Offline]: this is what a wrong or unreachable server address looks like, and
+     * telling someone with working internet to check their network sends them nowhere. Still
+     * retryable, because it is also what a device with no DNS yet looks like.
+     */
+    data class ServerUnreachable(override val debugContext: String? = null) : Retryable
+
     /** 5xx from the CRM, or an unreachable host that resolved. */
     data class ServerUnavailable(
         val statusCode: Int?,

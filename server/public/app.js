@@ -52,7 +52,13 @@ async function api(path, options = {}) {
  signOut();
  throw new Error('unauthorised');
  }
- if (!response.ok) throw new Error(`${path} ${response.status}`);
+ if (!response.ok) {
+ const body = await response.json().catch(() => ({}));
+ const error = new Error(body.message || `${path} ${response.status}`);
+ error.fieldErrors = body.fieldErrors;
+ error.code = body.code;
+ throw error;
+ }
  return response.status === 204 ? null : response.json();
 }
 
@@ -584,7 +590,12 @@ async function playRecording(callRecordId) {
 }
 
 async function clients() {
- const data = await api(withMode('/admin/clients'));
+ // Both are needed to draw a row: the pipeline, and who a row could be handed to.
+ const [data, team] = await Promise.all([
+ api(withMode('/admin/clients')),
+ api('/admin/employees'),
+ ]);
+ const staff = team.items;
  $('#view-clients').innerHTML = `
  <div class="card">
  <div class="card__head">
@@ -595,6 +606,7 @@ async function clients() {
  is recorded in the audit log.
  </div>
  </div>
+ <button class="btn btn--primary btn--tiny" id="add-client">Add client</button>
  </div>
  <div class="table-wrap"><table>
  <thead><tr><th>Client</th><th>Assigned to</th><th>Status</th><th>Payment</th>
@@ -602,7 +614,7 @@ async function clients() {
  <tbody>${data.items.map((c) => `<tr id="row-${esc(c.clientId)}">
  <td><div class="strong">${esc(c.name)}${c.isDemo ? '<span class="demo-tag">demo</span>' : ''}</div>
  <div class="dim mono">${esc(c.clientId)} · ${esc(c.serviceId || '')}</div></td>
- <td class="dim">${esc(c.assignedTo || 'Unassigned')}</td>
+ <td>${assignSelect(c, staff)}</td>
  <td>${statusTag(c.processStatus)}</td>
  <td class="dim">${esc(String(c.paymentStatus).replace(/_/g, ' ').toLowerCase())}</td>
  <td class="num">${c.documentsPending > 0
@@ -618,6 +630,89 @@ async function clients() {
  document.querySelectorAll('[data-reveal]').forEach((button) => {
  button.addEventListener('click', () => promptReveal(button.dataset.reveal));
  });
+
+ // Reassigning is a one-step action: change the name, it moves. No save button to forget.
+ document.querySelectorAll('[data-assign]').forEach((select) => {
+ select.addEventListener('change', async () => {
+ const previous = select.dataset.current;
+ select.disabled = true;
+ try {
+ await api(`/admin/clients/${select.dataset.assign}/assign`, {
+ method: 'POST',
+ body: JSON.stringify({ assignedEmployeeId: select.value || null }),
+ });
+ select.dataset.current = select.value;
+ flash(select, 'good');
+ } catch (e) {
+ select.value = previous;
+ flash(select, 'bad');
+ alert(e.message || 'Could not reassign this client.');
+ } finally {
+ select.disabled = false;
+ }
+ });
+ });
+
+ $('#add-client').addEventListener('click', () => promptAddClient(staff));
+}
+
+/** The dropdown that owns a client. Empty value means nobody. */
+function assignSelect(client, staff) {
+ const options = ['<option value="">Unassigned</option>']
+ .concat(staff.map((e) => `<option value="${esc(e.employee_id)}"${
+ e.display_name === client.assignedTo ? ' selected' : ''
+ }>${esc(e.display_name)}</option>`));
+ const current = (staff.find((e) => e.display_name === client.assignedTo) || {}).employee_id || '';
+ return `<select class="mini-select" data-assign="${esc(client.clientId)}"
+ data-current="${esc(current)}">${options.join('')}</select>`;
+}
+
+/** A brief colour change is enough feedback for a change that either worked or did not. */
+function flash(element, kind) {
+ element.classList.add(`is-${kind}`);
+ setTimeout(() => element.classList.remove(`is-${kind}`), 1200);
+}
+
+/**
+ * Add a real client.
+ *
+ * This is the only screen in the product where a full phone number is typed in. It is stored and
+ * then never returned unmasked, so the row behaves like every other client from the moment it
+ * exists. Created clients are real rather than demo, so they appear under the Real view.
+ */
+function promptAddClient(staff) {
+ const dialog = $('#add-dialog');
+ $('#add-assignee').innerHTML = ['<option value="">Unassigned</option>']
+ .concat(staff.map((e) =>
+ `<option value="${esc(e.employee_id)}">${esc(e.display_name)} (${esc(e.role.replace(/_/g, ' ').toLowerCase())})</option>`))
+ .join('');
+ ['name', 'phone', 'email', 'service', 'docs'].forEach((f) => { $(`#add-${f}`).value = ''; });
+ $('#add-error').textContent = '';
+ dialog.showModal();
+
+ $('#add-form').onsubmit = async (event) => {
+ event.preventDefault();
+ $('#add-error').textContent = '';
+ try {
+ const created = await api('/admin/clients', {
+ method: 'POST',
+ body: JSON.stringify({
+ name: $('#add-name').value,
+ phone: $('#add-phone').value,
+ email: $('#add-email').value,
+ serviceId: $('#add-service').value,
+ documentsPending: Number($('#add-docs').value) || 0,
+ assignedEmployeeId: $('#add-assignee').value || null,
+ }),
+ });
+ dialog.close();
+ alert(`${created.name} added as ${created.clientId}. It appears under the Real view.`);
+ clients();
+ } catch (e) {
+ const fields = e.fieldErrors || {};
+ $('#add-error').textContent = Object.values(fields)[0] || e.message || 'Could not add this client.';
+ }
+ };
 }
 
 /** The only path to an unmasked value, and it always writes an audit entry. */

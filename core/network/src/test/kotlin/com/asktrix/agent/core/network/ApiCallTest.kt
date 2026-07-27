@@ -43,8 +43,19 @@ class ApiCallTest {
     }
 
     @Test
-    fun `no network maps to a retryable Offline`() = runTest {
+    fun `an unresolvable host is reported as unreachable, not as the user being offline`() = runTest {
+        // A release build once shipped pointing at a host that did not exist. Every request failed
+        // with "no internet connection", which sent people to check a network that was fine.
         val result = apiCall<String>(json) { throw java.net.UnknownHostException("no dns") }
+
+        val error = (result as AsktrixResult.Failure).error
+        assertTrue("expected ServerUnreachable, got $error", error is AsktrixError.ServerUnreachable)
+        assertTrue("must stay retryable so the outbox holds the work", error is AsktrixError.Retryable)
+    }
+
+    @Test
+    fun `a dropped connection still maps to Offline`() = runTest {
+        val result = apiCall<String>(json) { throw java.io.IOException("socket closed") }
 
         val error = (result as AsktrixResult.Failure).error
         assertTrue("expected Offline, got $error", error is AsktrixError.Offline)

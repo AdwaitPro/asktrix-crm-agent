@@ -1,0 +1,32 @@
+- generic [ref=f4e2]:
+  - complementary [ref=f4e3]:
+    - generic [ref=f4e4]:
+      - generic [ref=f4e5]: A
+      - generic [ref=f4e6]:
+        - generic [ref=f4e7]: Asktrix
+        - generic [ref=f4e8]: Admin
+    - navigation [ref=f4e9]:
+      - button "Overview" [ref=f4e10] [cursor=pointer]
+      - button "Employees" [ref=f4e11] [cursor=pointer]
+      - button "Location" [ref=f4e12] [cursor=pointer]
+      - button "Calls" [ref=f4e13] [cursor=pointer]
+      - button "Clients" [ref=f4e14] [cursor=pointer]
+      - button "Devices" [ref=f4e15] [cursor=pointer]
+      - button "Audit log" [ref=f4e16] [cursor=pointer]
+    - generic [ref=f4e17]:
+      - generic [ref=f4e18]:
+        - generic [ref=f4e19]: Rohit Desai
+        - generic [ref=f4e20]: Team leader
+      - button "Sign out" [ref=f4e21] [cursor=pointer]
+  - main [ref=f4e22]:
+    - generic [ref=f4e23]:
+      - heading "Overview" [level=1] [ref=f4e24]
+      - generic [ref=f4e25]:
+        - generic [ref=f4e26]:
+          - button "All" [ref=f4e27] [cursor=pointer]
+          - button "Demo" [ref=f4e28] [cursor=pointer]
+          - button "Real" [ref=f4e29] [cursor=pointer]
+        - generic [ref=f4e30]: Live
+        - link "Guide" [ref=f4e32] [cursor=pointer]:
+          - /url: /demo
+        - button "Refresh" [ref=f4e33] [cursor=pointer]

@@ -1,0 +1,21 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]: A
+    - generic [ref=e6]:
+      - generic [ref=e7]: Asktrix
+      - generic [ref=e8]: Admin Console
+  - heading "Sign in" [level=1] [ref=e9]
+  - paragraph [ref=e10]: Team leader access only.
+  - generic [ref=e11]:
+    - generic [ref=e12]: Employee code
+    - textbox "Employee code" [ref=e13]: EMP003
+  - generic [ref=e14]:
+    - generic [ref=e15]: Password
+    - textbox "Password" [ref=e16]: asktrix123
+  - button "Sign in" [ref=e17] [cursor=pointer]
+  - paragraph [ref=e18]: Customer contact details are masked here by default, exactly as they are on the handsets. Revealing them is possible but always recorded.
+  - paragraph [ref=e19]:
+    - text: New to this?
+    - link "Read how it works" [ref=e20] [cursor=pointer]:
+      - /url: /demo
+    - text: for a plain-English walkthrough of the console, the app and the sign-in codes.

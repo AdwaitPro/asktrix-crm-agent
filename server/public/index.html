@@ -109,6 +109,46 @@
 </div>
 
 <!-- Reveal dialog: the only place unmasked contact details are ever shown. -->
+<dialog id="add-dialog" class="dialog">
+  <form method="dialog" class="dialog__body" id="add-form">
+    <h2 class="dialog__title">Add a client</h2>
+    <p class="dialog__text">
+      The phone number is stored by the CRM and masked everywhere after this, including on the
+      handsets. This client counts as real activity, so it appears under the Real view.
+    </p>
+    <label class="field">
+      <span class="field__label">Name</span>
+      <input id="add-name" required placeholder="Anand Krishnan" />
+    </label>
+    <label class="field">
+      <span class="field__label">Mobile number</span>
+      <input id="add-phone" required inputmode="numeric" placeholder="9845012345" />
+    </label>
+    <label class="field">
+      <span class="field__label">Email (optional)</span>
+      <input id="add-email" type="email" placeholder="anand@example.com" />
+    </label>
+    <label class="field">
+      <span class="field__label">Service reference (optional)</span>
+      <input id="add-service" placeholder="SVC-GST-9001" />
+    </label>
+    <label class="field">
+      <span class="field__label">Documents pending</span>
+      <input id="add-docs" inputmode="numeric" placeholder="0" />
+    </label>
+    <label class="field">
+      <span class="field__label">Assign to</span>
+      <select id="add-assignee"></select>
+    </label>
+    <p class="dialog__error" id="add-error"></p>
+    <div class="dialog__actions">
+      <button class="btn btn--ghost" value="cancel" type="button"
+              onclick="this.closest('dialog').close()">Cancel</button>
+      <button class="btn btn--primary" type="submit">Add client</button>
+    </div>
+  </form>
+</dialog>
+
 <dialog id="reveal-dialog" class="dialog">
   <form method="dialog" class="dialog__body">
     <h2 class="dialog__title">Reveal contact details</h2>

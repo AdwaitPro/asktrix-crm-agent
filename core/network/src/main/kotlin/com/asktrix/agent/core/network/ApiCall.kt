@@ -38,8 +38,13 @@ suspend fun <T : Any> apiCall(
 } catch (e: SocketTimeoutException) {
     AsktrixResult.Failure(AsktrixError.Timeout(e.message))
 } catch (e: UnknownHostException) {
-    // DNS failure is indistinguishable from "no network" from the app's point of view.
-    AsktrixResult.Failure(AsktrixError.Offline(e.message))
+    /*
+     * The host did not resolve. That happens both when the device is genuinely offline and when the
+     * app is pointed at an address that does not exist, and the two are not distinguishable here.
+     * Reporting it as plain "offline" sent people to check a network that was working fine, so the
+     * message names both possibilities instead.
+     */
+    AsktrixResult.Failure(AsktrixError.ServerUnreachable(e.message))
 } catch (e: IOException) {
     AsktrixResult.Failure(AsktrixError.Offline(e.message))
 }

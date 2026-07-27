@@ -366,9 +366,19 @@ private fun MaskedContactCard(
 
             Spacer(Modifier.height(AsktrixTheme.spacing.lg))
 
+            if (!canCall) {
+                Text(
+                    text = "Calling is handled by the support and sales teams. Your role does not " +
+                        "place calls.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                return@Column
+            }
+
             Button(
                 onClick = onCall,
-                enabled = canCall && contact.callable && activeCallLabel == null,
+                enabled = contact.callable && activeCallLabel == null,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(AsktrixTheme.spacing.minTouchTarget),
@@ -461,7 +471,7 @@ private fun QuickStatusSection(
         // §2: an accounts clerk has no business moving a government filing, so each role sees only
         // the actions it may actually take. The server enforces the same list.
         Text(
-            text = if (roleLabel.isBlank()) "" else "Actions available to a $roleLabel",
+            text = if (roleLabel.isBlank()) "" else "Actions your role allows: $roleLabel",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )

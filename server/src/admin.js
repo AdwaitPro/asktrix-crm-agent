@@ -4,6 +4,8 @@ const fs = require('fs');
 const nodePath = require('path');
 const { query } = require('./db');
 const { maskPhone, maskEmail } = require('./mask');
+const { newId } = require('./auth');
+const S = require('./serialize');
 
 /**
  * Demo data filter.
@@ -287,6 +289,126 @@ function register(app, asyncRoute, verifyPassword) {
     );
 
     res.json({ phone: rows[0].phone_full, email: rows[0].email_full, audited: true });
+  }));
+
+  // ------------------------------------------------- create and assign --
+
+  /** Indian mobile numbers, with or without the country code. */
+  const PHONE = /^(?:\+?91)?[6-9]\d{9}$/;
+  const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+  /**
+   * Create a real client and hand it to an employee.
+   *
+   * This is the one place a full phone number legitimately enters the system, so it is also the one
+   * place that has to be careful: the number is stored, never echoed. The response is the same
+   * masked projection everything else returns, which the privacy tripwire then re-checks.
+   *
+   * Created rows are is_demo = FALSE by design. They are real work, so they belong in the Real view
+   * alongside genuine activity rather than mixed into the seeded sample.
+   */
+  app.post('/admin/clients', requireAdmin, asyncRoute(async (req, res) => {
+    const { name, phone, email, serviceId, assignedEmployeeId, followUpAt, documentsPending } =
+      req.body || {};
+
+    const fieldErrors = {};
+    const cleanName = String(name || '').trim();
+    const cleanPhone = String(phone || '').replace(/[\s-]/g, '');
+    const cleanEmail = String(email || '').trim();
+
+    if (cleanName.length < 2) fieldErrors.name = 'Enter the client name.';
+    if (!PHONE.test(cleanPhone)) fieldErrors.phone = 'Enter a 10 digit Indian mobile number.';
+    if (cleanEmail && !EMAIL.test(cleanEmail)) fieldErrors.email = 'That email address is not valid.';
+
+    let employeeId = null;
+    if (assignedEmployeeId) {
+      const owner = await query(
+        'SELECT employee_id FROM employees WHERE employee_id = $1 AND active = TRUE',
+        [assignedEmployeeId],
+      );
+      if (owner.rows.length === 0) fieldErrors.assignedEmployeeId = 'No such employee.';
+      else employeeId = owner.rows[0].employee_id;
+    }
+
+    if (Object.keys(fieldErrors).length > 0) {
+      return res.status(422).json({
+        code: 'VALIDATION_FAILED',
+        message: 'Check the highlighted fields.',
+        fieldErrors,
+      });
+    }
+
+    const clientId = `CLI-${Math.floor(100000 + Math.random() * 899999)}`;
+    const { rows } = await query(
+      `INSERT INTO clients (client_id, name, service_id, phone_full, email_full,
+                            assigned_employee, process_status, documents_pending, follow_up_at,
+                            is_demo)
+       VALUES ($1,$2,$3,$4,$5,$6,'NEW',$7,$8, FALSE)
+       RETURNING *`,
+      [
+        clientId,
+        cleanName,
+        String(serviceId || '').trim() || null,
+        cleanPhone.replace(/^\+?91/, ''),
+        cleanEmail || null,
+        employeeId,
+        Number.isFinite(Number(documentsPending)) ? Math.max(0, Number(documentsPending)) : 0,
+        followUpAt || null,
+      ],
+    );
+
+    await query(
+      `INSERT INTO timeline_entries (entry_id, client_id, kind, summary, actor_name)
+       VALUES ($1,$2,'STATUS_CHANGE',$3,$4)`,
+      [newId('tl'), clientId, 'Client added to the CRM', req.admin.display_name],
+    );
+
+    // Masked on the way out, exactly like every other read.
+    res.status(201).json(S.clientDetail(rows[0]));
+  }));
+
+  /** Move a client to a different employee, or unassign by sending null. */
+  app.post('/admin/clients/:clientId/assign', requireAdmin, asyncRoute(async (req, res) => {
+    const { assignedEmployeeId } = req.body || {};
+
+    let employee = null;
+    if (assignedEmployeeId) {
+      const owner = await query(
+        'SELECT employee_id, display_name FROM employees WHERE employee_id = $1 AND active = TRUE',
+        [assignedEmployeeId],
+      );
+      if (owner.rows.length === 0) {
+        return res.status(422).json({
+          code: 'VALIDATION_FAILED',
+          message: 'No such employee.',
+          fieldErrors: { assignedEmployeeId: 'unknown' },
+        });
+      }
+      employee = owner.rows[0];
+    }
+
+    const { rows } = await query(
+      `UPDATE clients SET assigned_employee = $1, version = version + 1
+       WHERE client_id = $2 RETURNING *`,
+      [employee ? employee.employee_id : null, req.params.clientId],
+    );
+    if (rows.length === 0) {
+      return res.status(404).json({ code: 'NOT_FOUND', message: 'No such client.' });
+    }
+
+    // A reassignment is a fact about the client's history, not just a column change.
+    await query(
+      `INSERT INTO timeline_entries (entry_id, client_id, kind, summary, actor_name)
+       VALUES ($1,$2,'STATUS_CHANGE',$3,$4)`,
+      [
+        newId('tl'),
+        req.params.clientId,
+        employee ? `Assigned to ${employee.display_name}` : 'Unassigned',
+        req.admin.display_name,
+      ],
+    );
+
+    res.json(S.clientDetail(rows[0]));
   }));
 
   app.get('/admin/audit', requireAdmin, asyncRoute(async (_req, res) => {

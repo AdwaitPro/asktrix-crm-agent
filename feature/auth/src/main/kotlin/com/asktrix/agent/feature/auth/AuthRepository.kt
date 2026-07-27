@@ -117,6 +117,9 @@ fun AsktrixError.toUserMessage(): String =
 
 private fun AsktrixError.connectivityMessage(): String? = when (this) {
     is AsktrixError.Offline -> "No internet connection. Check your network and try again."
+    is AsktrixError.ServerUnreachable ->
+        "Could not reach the Asktrix server. Check your internet connection. If it is working, " +
+            "this copy of the app is pointed at the wrong address."
     is AsktrixError.Timeout -> "The server took too long to respond. Try again."
     is AsktrixError.ServerUnavailable -> "The CRM is unavailable right now. Try again shortly."
     else -> null
