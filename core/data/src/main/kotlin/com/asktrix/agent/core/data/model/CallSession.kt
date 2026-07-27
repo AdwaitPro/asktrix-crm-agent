@@ -18,6 +18,14 @@ data class CallSession(
     val endedAt: Instant? = null,
     val durationSeconds: Int? = null,
     val failureReason: String? = null,
+    val rtc: RtcSession? = null,
+)
+
+/** Everything needed to join a data call (ADR-0006). No phone number appears anywhere here. */
+data class RtcSession(
+    val roomId: String,
+    val agentUrl: String,
+    val customerUrl: String,
 )
 
 enum class CallState(val label: String) {

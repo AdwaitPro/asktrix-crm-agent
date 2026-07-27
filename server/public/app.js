@@ -407,7 +407,7 @@ function drawTrace(points) {
         const f = event.features[0];
         new window.maplibregl.Popup({ closeButton: false, offset: 10 })
           .setLngLat(f.geometry.coordinates)
-          .setHTML(`<div style="font:12px system-ui"><strong>${esc(f.properties.at)}</strong><br>
+          .setHTML(`<div class="map-pop"><strong>${esc(f.properties.at)}</strong><br>
                     accurate to ${esc(f.properties.accuracy)} m</div>`)
           .addTo(mapInstance);
       });
@@ -466,7 +466,7 @@ function addTraceMarker(lngLat, color, title, when) {
   new window.maplibregl.Marker({ element: pin })
     .setLngLat(lngLat)
     .setPopup(new window.maplibregl.Popup({ closeButton: false, offset: 14 })
-      .setHTML(`<div style="font:12px system-ui"><strong>${esc(title)}</strong><br>${esc(when)}</div>`))
+      .setHTML(`<div class="map-pop"><strong>${esc(title)}</strong><br>${esc(when)}</div>`))
     .addTo(mapInstance);
 }
 

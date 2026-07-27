@@ -100,6 +100,9 @@ class CallRepository @Inject constructor(
             endedAt = endedAt.toInstantOrNull(),
             durationSeconds = durationSeconds,
             failureReason = failureReason,
+            rtc = rtc?.let {
+                com.asktrix.agent.core.data.model.RtcSession(it.roomId, it.agentUrl, it.customerUrl)
+            },
         )
 
     private companion object {

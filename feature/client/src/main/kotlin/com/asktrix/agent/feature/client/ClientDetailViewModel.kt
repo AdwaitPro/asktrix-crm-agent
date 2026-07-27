@@ -29,6 +29,10 @@ data class ClientDetailUiState(
     val activeCall: CallSession? = null,
     val message: String? = null,
     val errorMessage: String? = null,
+    /** Set when a data call is ready to join; the screen opens the in-call view. */
+    val launchCallUrl: String? = null,
+    /** The one-time link to send the customer so they can join. */
+    val customerCallLink: String? = null,
 )
 
 /** The six §13 quick actions, in the order the requirements list them. */
@@ -57,14 +61,24 @@ class ClientDetailViewModel @Inject constructor(
     private val activeCall = MutableStateFlow<CallSession?>(null)
     private val message = MutableStateFlow<String?>(null)
     private val error = MutableStateFlow<String?>(null)
+    private val launchCall = MutableStateFlow<String?>(null)
+    private val customerLink = MutableStateFlow<String?>(null)
 
     val state: StateFlow<ClientDetailUiState> = combine(
         clients.observeClient(clientId),
         clients.observeTimeline(clientId),
         loading,
         connectivity.isOnline,
-        combine(activeCall, message, error) { call, msg, err -> Triple(call, msg, err) },
-    ) { client, timeline, isLoading, isOnline, (call, msg, err) ->
+        combine(activeCall, message, error, launchCall, customerLink) { call, msg, err, launch, link ->
+            listOf(call, msg, err, launch, link)
+        },
+    ) { client, timeline, isLoading, isOnline, extras ->
+        @Suppress("UNCHECKED_CAST")
+        val call = extras[0] as CallSession?
+        val msg = extras[1] as String?
+        val err = extras[2] as String?
+        val launch = extras[3] as String?
+        val link = extras[4] as String?
         ClientDetailUiState(
             client = client,
             timeline = timeline,
@@ -73,6 +87,8 @@ class ClientDetailViewModel @Inject constructor(
             activeCall = call,
             message = msg,
             errorMessage = err,
+            launchCallUrl = launch,
+            customerCallLink = link,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -136,6 +152,14 @@ class ClientDetailViewModel @Inject constructor(
             when (val result = calls.placeCall(clientId)) {
                 is AsktrixResult.Success -> {
                     activeCall.value = result.data
+
+                    // A data call: open the in-call screen and surface the customer's link so the
+                    // agent can send it. No number is dialled and none is shown (ADR-0006).
+                    result.data.rtc?.let { rtc ->
+                        launchCall.value = rtc.agentUrl
+                        customerLink.value = rtc.customerUrl
+                    }
+
                     calls.observeCall(result.data.callSessionId).collect { session ->
                         activeCall.value = session
                         if (session.state.isTerminal) {
@@ -148,7 +172,13 @@ class ClientDetailViewModel @Inject constructor(
         }
     }
 
+    /** Called once the in-call screen has been opened, so it is not opened twice. */
+    fun consumeLaunch() {
+        launchCall.value = null
+    }
+
     fun dismissCall() {
+        customerLink.value = null
         if (activeCall.value?.state?.isTerminal != false) activeCall.value = null
     }
 

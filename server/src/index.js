@@ -18,7 +18,28 @@ app.use(express.json({ limit: '1mb' }));
 app.use(express.raw({ type: 'image/jpeg', limit: '4mb' }));
 
 // The admin dashboard (§25-§27) is a plain static app served from the same origin as the API.
-app.use('/admin', express.static(path.join(__dirname, '..', 'public')));
+/*
+ * The console and call pages.
+ *
+ * The HTML, CSS and app JS are served no-store: they change with every deploy, and a browser
+ * holding a stale app.js against a new API is a confusing failure that looks like a broken feature.
+ * The vendored MapLibre bundle is immutable per version, so it is cached hard.
+ */
+const staticOptions = {
+  etag: true,
+  setHeaders(res, filePath) {
+    if (filePath.includes(`${path.sep}vendor${path.sep}`)) {
+      res.setHeader('cache-control', 'public, max-age=31536000, immutable');
+    } else {
+      res.setHeader('cache-control', 'no-store, must-revalidate');
+    }
+  },
+};
+
+app.use('/admin', express.static(path.join(__dirname, '..', 'public'), staticOptions));
+// Call pages are opened directly by customers, so they live at the root rather than under /admin.
+app.use('/call', express.static(path.join(__dirname, '..', 'public', 'call'), staticOptions));
+app.use('/vendor', express.static(path.join(__dirname, '..', 'public', 'vendor'), staticOptions));
 
 // ---------------------------------------------------------------------------------------------
 // Privacy tripwire.
@@ -96,6 +117,9 @@ app.post('/device/test-push', requireAuth, asyncRoute(async (req, res) => {
   });
   res.json(result);
 }));
+
+// The console is the only human-facing surface, so send the bare domain there.
+app.get('/', (_req, res) => res.redirect('/admin/'));
 
 app.get('/health', asyncRoute(async (_req, res) => {
   const { rows } = await query('SELECT now() AS now');

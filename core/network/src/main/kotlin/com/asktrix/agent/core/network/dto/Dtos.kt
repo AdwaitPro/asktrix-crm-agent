@@ -170,6 +170,17 @@ data class CallSessionDto(
     val endedAt: String? = null,
     val durationSeconds: Int? = null,
     val failureReason: String? = null,
+    /** Present when the CRM places the call over data rather than through a carrier (ADR-0006). */
+    val rtc: RtcSessionDto? = null,
+)
+
+@Serializable
+data class RtcSessionDto(
+    val roomId: String,
+    /** The page this device opens to take part in the call. */
+    val agentUrl: String,
+    /** The one-time link sent to the customer. They install nothing. */
+    val customerUrl: String,
 )
 
 @Serializable

@@ -361,3 +361,57 @@ tbody tr:hover { background: rgba(30, 41, 59, 0.5); }
   .nav__item.is-active { color: #FFFFFF; }
   .topbar { background: rgba(248, 250, 252, 0.86); }
 }
+
+/* ─────────────────────────────  Map  ───────────────────────────── */
+
+/*
+ * MapLibre's popup ships a white background from its own stylesheet, and its content inherits the
+ * console's light body colour, so the text disappeared. Theme the popup explicitly instead of
+ * relying on inheritance.
+ */
+.maplibregl-popup-content {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 13px !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+  font-family: var(--font);
+}
+.maplibregl-popup-content strong { color: var(--text); }
+
+/* The little arrow is a separate element and must be tinted to match. */
+.maplibregl-popup-anchor-top .maplibregl-popup-tip,
+.maplibregl-popup-anchor-top-left .maplibregl-popup-tip,
+.maplibregl-popup-anchor-top-right .maplibregl-popup-tip { border-bottom-color: var(--surface) !important; }
+.maplibregl-popup-anchor-bottom .maplibregl-popup-tip,
+.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip,
+.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip { border-top-color: var(--surface) !important; }
+.maplibregl-popup-anchor-left .maplibregl-popup-tip { border-right-color: var(--surface) !important; }
+.maplibregl-popup-anchor-right .maplibregl-popup-tip { border-left-color: var(--surface) !important; }
+
+/* Controls and attribution also default to a light theme. */
+.maplibregl-ctrl-group {
+  background: var(--surface) !important;
+  border: 1px solid var(--border);
+}
+.maplibregl-ctrl-group button + button { border-top-color: var(--border) !important; }
+.maplibregl-ctrl-group button span { filter: invert(1) opacity(0.75); }
+.maplibregl-ctrl-attrib {
+  background: rgba(15, 23, 42, 0.82) !important;
+  color: var(--text-dim) !important;
+}
+.maplibregl-ctrl-attrib a { color: var(--text-dim) !important; }
+.maplibregl-ctrl-scale {
+  background: rgba(15, 23, 42, 0.82) !important;
+  color: var(--text-dim) !important;
+  border-color: var(--border) !important;
+}
+
+@media (prefers-color-scheme: light) {
+  .maplibregl-ctrl-group button span { filter: none; }
+  .maplibregl-ctrl-attrib, .maplibregl-ctrl-scale { background: rgba(255, 255, 255, 0.86) !important; }
+}
+
+.map-pop { font-size: 12.5px; line-height: 1.5; }
+.map-pop strong { font-weight: 650; }

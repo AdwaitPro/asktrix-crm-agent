@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+      Microphone, for voice-over-data calls only.
+
+      This is NOT for recording a telephone call: Android blocks that, and routing voice onto India's
+      public telephone network requires a carrier licence we do not hold. These calls run peer to
+      peer over the internet between two endpoints we control, so the microphone is used exactly as
+      any voice app uses it. See docs/adr/0006-webrtc-calling.md.
+
+      Still deliberately absent: CALL_PHONE, READ_CALL_LOG, READ_PHONE_STATE. The device never dials
+      and never reads the system call log.
+    -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+    <uses-feature android:name="android.hardware.microphone" android:required="false" />
+
+    <application>
+        <activity
+            android:name=".CallActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Material.NoActionBar" />
+    </application>
+</manifest>

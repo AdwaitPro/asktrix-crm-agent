@@ -78,6 +78,18 @@ fun ClientDetailRoute(
     viewModel: ClientDetailViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = androidx.compose.ui.platform.LocalContext.current
+
+    // When the CRM returns a data call, open the in-call screen (ADR-0006).
+    LaunchedEffect(state.launchCallUrl) {
+        state.launchCallUrl?.let { url ->
+            context.startActivity(
+                com.asktrix.agent.core.telephony.CallActivity.intent(context, url),
+            )
+            viewModel.consumeLaunch()
+        }
+    }
+
     ClientDetailScreen(
         state = state,
         onBack = onBack,
@@ -85,6 +97,20 @@ fun ClientDetailRoute(
         onStatus = { viewModel.applyStatus(it) },
         onDismissCall = viewModel::dismissCall,
         onConsumeMessage = viewModel::consumeMessage,
+        onShareLink = { link ->
+            context.startActivity(
+                android.content.Intent.createChooser(
+                    android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(
+                            android.content.Intent.EXTRA_TEXT,
+                            "Join the call with Asktrix: $link",
+                        )
+                    },
+                    "Send the call link",
+                ),
+            )
+        },
     )
 }
 
@@ -97,6 +123,7 @@ fun ClientDetailScreen(
     onStatus: (ProcessStatus) -> Unit,
     onDismissCall: () -> Unit,
     onConsumeMessage: () -> Unit,
+    onShareLink: (String) -> Unit = {},
 ) {
     val snackbarHost = remember { SnackbarHostState() }
 
@@ -167,6 +194,38 @@ fun ClientDetailScreen(
                         ?.label,
                     onCall = onCall,
                 )
+            }
+
+            // The customer joins by opening a one-time link, so the agent needs a way to send it.
+            state.customerCallLink?.let { link ->
+                item {
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Row(
+                            Modifier.padding(AsktrixTheme.spacing.lg),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Column(Modifier.weight(1f)) {
+                                Text(
+                                    text = "Send the client their call link",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                )
+                                Text(
+                                    text = "One-time link. They do not install anything.",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                )
+                            }
+                            Button(onClick = { onShareLink(link) }, shape = RoundedCornerShape(10.dp)) {
+                                Text("Share")
+                            }
+                        }
+                    }
+                }
             }
 
             if (state.activeCall != null && state.activeCall.state.isTerminal) {
