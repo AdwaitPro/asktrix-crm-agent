@@ -79,8 +79,18 @@ const ROLE_STATUSES = {
   ],
 };
 
-const permissionsFor = (role) => ROLE_PERMISSIONS[role] || ROLE_PERMISSIONS.CUSTOMER_SUPPORT;
-const statusesFor = (role) => ROLE_STATUSES[role] || [];
+const ROLES = Object.keys(ROLE_PERMISSIONS);
+
+/**
+ * Fail closed. An unrecognised role grants nothing.
+ *
+ * Falling back to a real role's permission set would mean a typo in a role column, or a role added
+ * to the CRM before it is added here, silently hands out the ability to change statuses and place
+ * calls. An employee with no permissions is a visible, harmless failure; an employee with the wrong
+ * ones is not. Copies are returned so a caller cannot widen a role by mutating the array.
+ */
+const permissionsFor = (role) => [...(ROLE_PERMISSIONS[role] || [])];
+const statusesFor = (role) => [...(ROLE_STATUSES[role] || [])];
 const can = (employee, permission) => (employee.permissions || []).includes(permission);
 
 /** Express guard. Returns 403 with the permission named, so a denial is debuggable. */
@@ -97,4 +107,4 @@ function require_(permission) {
   };
 }
 
-module.exports = { P, ROLE_PERMISSIONS, ROLE_STATUSES, permissionsFor, statusesFor, can, require: require_ };
+module.exports = { P, ROLES, ROLE_PERMISSIONS, ROLE_STATUSES, permissionsFor, statusesFor, can, require: require_ };

@@ -14,6 +14,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.asktrix.agent.core.common.log.AsktrixLog
+import java.net.HttpURLConnection
+import java.net.URI
+import java.net.URL
+import kotlin.concurrent.thread
 
 /**
  * The in-call screen (§5, §6).
@@ -128,6 +132,8 @@ class CallActivity : ComponentActivity() {
     }
 
     override fun onDestroy() {
+        releaseRoom()
+
         // Hand the audio path back, or every other app on the device stays in call mode.
         audioManager?.let { manager ->
             @Suppress("DEPRECATION")
@@ -137,6 +143,43 @@ class CallActivity : ComponentActivity() {
         webView.loadUrl("about:blank")
         webView.destroy()
         super.onDestroy()
+    }
+
+    /**
+     * Tell the server the room is finished when this screen goes away.
+     *
+     * The page sends a beacon on `pagehide`, but a WebView being destroyed is not guaranteed to get
+     * that request out. Without a second signal, backing out of a call leaves the session live and
+     * the next call is refused. Ending an already-finished room is a no-op, so sending both is safe.
+     */
+    private fun releaseRoom() {
+        val callUrl = intent.getStringExtra(EXTRA_CALL_URL) ?: return
+        val room = runCatching {
+            URI(callUrl).query
+                ?.split('&')
+                ?.firstOrNull { it.startsWith("room=") }
+                ?.removePrefix("room=")
+        }.getOrNull()
+        if (room.isNullOrBlank()) return
+
+        val endpoint = runCatching { URL(URL(callUrl), "/rtc/$room/end") }.getOrNull() ?: return
+        thread(name = "call-release") {
+            runCatching {
+                (endpoint.openConnection() as HttpURLConnection).apply {
+                    requestMethod = "POST"
+                    doOutput = true
+                    connectTimeout = RELEASE_TIMEOUT_MS
+                    readTimeout = RELEASE_TIMEOUT_MS
+                    setRequestProperty("content-type", "application/json")
+                    outputStream.use { it.write("{}".toByteArray()) }
+                    responseCode
+                    disconnect()
+                }
+            }.onFailure {
+                // The server's stale-session sweep is the backstop; nothing to surface to the user.
+                AsktrixLog.w(TAG, "Could not release the call room on exit")
+            }
+        }
     }
 
     /** Bridge the page uses to close the call screen when the call ends. */
@@ -150,6 +193,9 @@ class CallActivity : ComponentActivity() {
     companion object {
         private const val TAG = "CallActivity"
         private const val EXTRA_CALL_URL = "call_url"
+
+        /** Short: this runs while the screen is being torn down, so it must not linger. */
+        private const val RELEASE_TIMEOUT_MS = 4_000
 
         fun intent(context: Context, callUrl: String): Intent =
             Intent(context, CallActivity::class.java).putExtra(EXTRA_CALL_URL, callUrl)

@@ -117,7 +117,7 @@
     setState('ended');
   });
 
-  window.addEventListener('pagehide', () => { call.stop(); });
+  window.addEventListener('pagehide', () => { call.endBeacon(call.elapsedSeconds()); call.stop(); });
 
   // A blocked autoplay is recoverable with any user gesture.
   document.body.addEventListener('click', () => {

@@ -121,7 +121,8 @@ async function idempotent(req, res, handler) {
 const CALL_MODE = process.env.CALL_MODE || 'webrtc';
 
 /** A call still in a live state after this long was abandoned, not answered. */
-const STALE_CALL_MINUTES = 5;
+const STALE_UNANSWERED_MINUTES = 2;
+const STALE_BRIDGED_MINUTES = 30;
 
 const asyncRoute = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 
@@ -426,9 +427,12 @@ app.post('/calls', requireAuth, asyncRoute(async (req, res) => {
   await query(
     `UPDATE call_sessions SET state = 'CANCELLED', ended_at = now()
      WHERE employee_id = $1
-       AND state IN ('REQUESTED','RINGING_AGENT','RINGING_CUSTOMER','BRIDGED')
-       AND requested_at < now() - interval '${STALE_CALL_MINUTES} minutes'`,
-    [req.employee.employee_id],
+       AND (
+         (state IN ('REQUESTED','RINGING_AGENT','RINGING_CUSTOMER')
+            AND requested_at < now() - make_interval(mins => $2::int))
+         OR (state = 'BRIDGED' AND requested_at < now() - make_interval(mins => $3::int))
+       )`,
+    [req.employee.employee_id, STALE_UNANSWERED_MINUTES, STALE_BRIDGED_MINUTES],
   );
 
   const active = await query(
@@ -475,6 +479,34 @@ app.post('/calls', requireAuth, asyncRoute(async (req, res) => {
 
     return { status: 202, body };
   });
+}));
+
+/**
+ * End the caller's own call session (§5).
+ *
+ * Without this the 409 above told an agent to "end it" with nothing to end it with, so a call
+ * screen closed the wrong way locked them out until the stale window elapsed. Scoped to the
+ * caller's own sessions and safe to call twice: ending an already-ended call is not an error.
+ */
+app.post('/calls/:callSessionId/end', requireAuth, asyncRoute(async (req, res) => {
+  const { rows } = await query(
+    `UPDATE call_sessions SET state = 'CANCELLED', ended_at = coalesce(ended_at, now())
+     WHERE call_session_id = $1 AND employee_id = $2
+       AND state IN ('REQUESTED','RINGING_AGENT','RINGING_CUSTOMER','BRIDGED')
+     RETURNING *`,
+    [req.params.callSessionId, req.employee.employee_id],
+  );
+  if (rows.length === 0) {
+    const existing = await query(
+      'SELECT * FROM call_sessions WHERE call_session_id = $1 AND employee_id = $2',
+      [req.params.callSessionId, req.employee.employee_id],
+    );
+    if (existing.rows.length === 0) {
+      return fail(res, 404, 'NOT_FOUND', 'No such call session.');
+    }
+    return res.json(S.callSession(existing.rows[0]));
+  }
+  res.json(S.callSession(rows[0]));
 }));
 
 app.get('/calls/history', requireAuth, asyncRoute(async (req, res) => {

@@ -1,5 +1,6 @@
 'use strict';
 const crypto = require('crypto');
+const express = require('express');
 const { query } = require('./db');
 
 /**
@@ -112,6 +113,24 @@ function register(app, asyncRoute) {
   }));
 
   /** Receives the recording captured on the agent side (§6). */
+  /**
+   * End a room from a page that is going away.
+   *
+   * The hangup signal travels over a normal fetch, which the browser cancels during unload, so
+   * closing the tab or the call screen used to leave the session live and lock the agent out.
+   * This route is the sendBeacon target: beacons are guaranteed delivery on unload.
+   */
+  app.post('/rtc/:roomId/end', express.text({ type: '*/*' }), asyncRoute(async (req, res) => {
+    let duration = 0;
+    try {
+      duration = Number(JSON.parse(req.body || '{}').durationSeconds) || 0;
+    } catch {
+      // A beacon with an unreadable body still means the call is over; duration is best effort.
+    }
+    await finish(req.params.roomId, duration);
+    res.status(204).end();
+  }));
+
   app.post('/rtc/:roomId/recording', express_raw(), asyncRoute(async (req, res) => {
     const room = await loadRoom(req.params.roomId);
     if (!room) return res.status(404).json({ code: 'NOT_FOUND', message: 'No such call.' });

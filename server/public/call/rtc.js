@@ -269,7 +269,7 @@ class AsktrixCall {
   }
 
   async stop(notifyPeer = true) {
-    const duration = this.startedAt ? (Date.now() - this.startedAt) / 1000 : 0;
+    const duration = this.elapsedSeconds();
 
     if (this.recorder && this.recorder.state !== 'inactive') {
       await new Promise((resolve) => {
@@ -285,6 +285,21 @@ class AsktrixCall {
     this.localStream?.getTracks().forEach((t) => t.stop());
     this.pc?.close();
     return duration;
+  }
+
+  /**
+   * Tell the server the call is over in a way that survives the page being closed.
+   *
+   * A fetch issued during unload is cancelled; a beacon is not. Without this, closing the call
+   * screen left a live session behind and the next call was refused with a 409.
+   */
+  elapsedSeconds() {
+    return this.startedAt ? (Date.now() - this.startedAt) / 1000 : 0;
+  }
+
+  endBeacon(durationSeconds = this.elapsedSeconds()) {
+    const body = new Blob([JSON.stringify({ durationSeconds })], { type: 'application/json' });
+    navigator.sendBeacon(`/rtc/${encodeURIComponent(this.room)}/end`, body);
   }
 
   async uploadRecording() {

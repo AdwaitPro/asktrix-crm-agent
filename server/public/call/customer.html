@@ -37,7 +37,8 @@
   </button>
 </div>
 
-<script src="rtc.js"></script>
+<script src="rtc.js">  window.addEventListener('pagehide', () => { call.endBeacon(call.elapsedSeconds()); call.stop(); });
+</script>
 <script>
   const params = new URLSearchParams(location.search);
   const room = params.get('room');
