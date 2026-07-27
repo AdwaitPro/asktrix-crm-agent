@@ -58,8 +58,8 @@ android {
 
     defaultConfig {
         applicationId = "com.asktrix.agent"
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 3
+        versionName = "0.1.3"
     }
 
     buildFeatures {
