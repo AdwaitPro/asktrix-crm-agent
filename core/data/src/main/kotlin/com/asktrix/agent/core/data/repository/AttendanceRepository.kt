@@ -31,7 +31,7 @@ data class AttendanceToday(
  *
  * A location fix is required, because attendance without a place is not attendance. The action then
  * goes through the outbox so an agent checking in from a basement or a village with no coverage is
- * still recorded — the timestamp travels with the request, and the server keeps both the reported
+ * still recorded - the timestamp travels with the request, and the server keeps both the reported
  * time and its own receipt time.
  */
 @Singleton
@@ -106,7 +106,7 @@ class AttendanceRepository @Inject constructor(
      *
      * Used only when a photo is attached, because the photo upload needs that id and the outbox
      * cannot hand a result back to its caller. Falls back to [record] when offline, in which case the
-     * check-in is still preserved and the photo is dropped — an attendance record without a photo is
+     * check-in is still preserved and the photo is dropped - an attendance record without a photo is
      * far better than a lost check-in, since the record is the compliance artifact and the photo is
      * explicitly optional in §11.
      */

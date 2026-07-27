@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 /**
  * Wire types for the Asktrix CRM API (`api/openapi.yaml`).
  *
- * ARCHITECTURAL INVARIANT — read before adding a field.
+ * ARCHITECTURAL INVARIANT - read before adding a field.
  *
  * There is no `phone` or `email` property anywhere in this file, and none may be added. Customer
  * contact details exist only as the pre-masked strings in [MaskedContactDto]. The server never emits
@@ -54,6 +54,8 @@ data class EmployeeDto(
     val displayName: String,
     val role: String,
     val permissions: List<String> = emptyList(),
+    /** The §13 quick actions this role is allowed to apply. Server-issued (§2). */
+    val allowedStatuses: List<String> = emptyList(),
 )
 
 @Serializable
@@ -280,7 +282,7 @@ data class ComplianceChecksDto(
     val developerOptionsEnabled: Boolean = false,
     val screenLockSet: Boolean = true,
     val isDeviceOwnerManaged: Boolean = false,
-    /** `ActivityManager.isBackgroundRestricted()` — reveals OEM battery restriction in the field. */
+    /** `ActivityManager.isBackgroundRestricted()` - reveals OEM battery restriction in the field. */
     val backgroundRestricted: Boolean = false,
     val appStandbyBucket: Int? = null,
 )

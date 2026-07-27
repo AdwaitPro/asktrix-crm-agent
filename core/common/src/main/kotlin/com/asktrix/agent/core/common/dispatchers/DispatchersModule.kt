@@ -39,7 +39,7 @@ object DispatchersModule {
     }
 
     /**
-     * A SupervisorJob so one failed background task cannot cancel the whole application scope —
+     * A SupervisorJob so one failed background task cannot cancel the whole application scope -
      * a failed recording upload must not stop location sampling.
      */
     @Provides

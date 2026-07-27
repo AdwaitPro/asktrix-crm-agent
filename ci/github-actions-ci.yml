@@ -28,7 +28,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       # The build must not require google-services.json. It is gitignored, so CI proves the
-      # FCM-optional path works — the same path a fresh clone takes.
+      # FCM-optional path works - the same path a fresh clone takes.
       - name: Verify
         run: ./gradlew assembleDebug lintDebug testDebugUnitTest detekt --stacktrace
 

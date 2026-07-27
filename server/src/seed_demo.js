@@ -41,8 +41,8 @@ async function main() {
       const checkIn = `now() - interval '${dayAgo} days' - interval '${9 + Math.random()} hours'`;
       await query(
         `INSERT INTO attendance (attendance_id, employee_id, kind, occurred_at, recorded_at,
-                                 latitude, longitude, accuracy_metres, photo_uploaded)
-         VALUES ($1,$2,'CHECK_IN', ${checkIn}, ${checkIn}, $3,$4,$5, $6)`,
+                                 latitude, longitude, accuracy_metres, photo_uploaded, is_demo)
+         VALUES ($1,$2,'CHECK_IN', ${checkIn}, ${checkIn}, $3,$4,$5, $6, TRUE)`,
         [id('att'), emp.employee_id, ROUTE[0][0], ROUTE[0][1], 8 + Math.random() * 20,
           Math.random() > 0.5],
       );
@@ -52,8 +52,8 @@ async function main() {
         const checkOut = `now() - interval '${dayAgo} days' - interval '${0.5 + Math.random()} hours'`;
         await query(
           `INSERT INTO attendance (attendance_id, employee_id, kind, occurred_at, recorded_at,
-                                   latitude, longitude, accuracy_metres, photo_uploaded)
-           VALUES ($1,$2,'CHECK_OUT', ${checkOut}, ${checkOut}, $3,$4,$5, FALSE)`,
+                                   latitude, longitude, accuracy_metres, photo_uploaded, is_demo)
+           VALUES ($1,$2,'CHECK_OUT', ${checkOut}, ${checkOut}, $3,$4,$5, FALSE, TRUE)`,
           [id('att'), emp.employee_id, ROUTE[ROUTE.length - 1][0], ROUTE[ROUTE.length - 1][1],
             10 + Math.random() * 25],
         );
@@ -67,10 +67,11 @@ async function main() {
         if (hoursBack < 0.5) continue;
         await query(
           `INSERT INTO location_pings (employee_id, device_id, sampled_at, received_at,
-                                       latitude, longitude, accuracy_metres, is_mocked, battery_percent)
+                                       latitude, longitude, accuracy_metres, is_mocked, battery_percent,
+                                       is_demo)
            VALUES ($1,'demo-device', now() - interval '${dayAgo} days' - interval '${hoursBack} hours',
                    now() - interval '${dayAgo} days' - interval '${hoursBack} hours',
-                   $2,$3,$4, FALSE, $5)`,
+                   $2,$3,$4, FALSE, $5, TRUE)`,
           [emp.employee_id,
             lat + (Math.random() - 0.5) * 0.002,
             lng + (Math.random() - 0.5) * 0.002,
@@ -92,21 +93,21 @@ async function main() {
 
         await query(
           `INSERT INTO call_records (call_record_id, client_id, employee_id, device_id, direction,
-                                     state, started_at, duration_seconds, recording_available, recording_uri)
+                                     state, started_at, duration_seconds, recording_available, recording_uri, is_demo)
            VALUES ($1,$2,$3,'demo-device','OUTBOUND',$4,
                    now() - interval '${dayAgo} days' - interval '${hoursBack} hours',
-                   $5,$6,$7)`,
+                   $5,$6,$7, TRUE)`,
           [recordId, client.client_id, emp.employee_id, state, duration,
             state === 'COMPLETED', state === 'COMPLETED' ? `crm://recordings/${recordId}` : null],
         );
         await query(
           `INSERT INTO timeline_entries (entry_id, client_id, kind, summary, actor_name, call_record_id,
-                                         occurred_at)
+                                         occurred_at, is_demo)
            VALUES ($1,$2,'CALL',$3,$4,$5,
-                   now() - interval '${dayAgo} days' - interval '${hoursBack} hours')`,
+                   now() - interval '${dayAgo} days' - interval '${hoursBack} hours', TRUE)`,
           [id('tl'), client.client_id,
             state === 'COMPLETED'
-              ? `Call completed — ${Math.floor(duration / 60)}m ${duration % 60}s (recorded)`
+              ? `Call completed - ${Math.floor(duration / 60)}m ${duration % 60}s (recorded)`
               : `Call ${state.toLowerCase().replace('_', ' ')}`,
             emp.display_name, recordId],
         );

@@ -34,7 +34,7 @@ class Outbox @Inject constructor(
      *
      * **Scheduling happens here, not at the call site.** An earlier version left it to callers, and
      * the result was an outbox that filled correctly, showed "saved" in the UI, and never sent
-     * anything — the worst kind of failure, because it looks like success. Doing it here makes the
+     * anything - the worst kind of failure, because it looks like success. Doing it here makes the
      * mistake unrepresentable.
      */
     suspend fun enqueue(kind: String, targetId: String?, payload: String): String {
@@ -78,7 +78,7 @@ class Outbox @Inject constructor(
      * backs off and tries again, [AsktrixError.Permanent] stops and surfaces to the user. Retrying a
      * permanently-rejected request forever would burn battery and hide a real problem.
      *
-     * Retries are also capped, because "retryable" does not mean "retry indefinitely" — a server
+     * Retries are also capped, because "retryable" does not mean "retry indefinitely" - a server
      * that has been down for a day should surface, not spin.
      */
     suspend fun markFailed(item: OutboxEntity, error: AsktrixError) {

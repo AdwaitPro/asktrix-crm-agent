@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 /**
  * Firebase Cloud Messaging (§24).
  *
- * **Push payloads carry identifiers only — never customer data.** A push travels through Google's
+ * **Push payloads carry identifiers only - never customer data.** A push travels through Google's
  * infrastructure and lands on a lock screen, so a client name or a masked number would leak exactly
  * where §4 is trying to prevent leaks. The message says "something changed, and here is its id"; the
  * app then fetches the detail over the authenticated API.

@@ -300,7 +300,7 @@ private fun BrandMark() {
 /**
  * Sets expectations before the employee signs in: this is a monitored, company-owned device.
  *
- * Not decoration — DPDP notice-and-consent means the employee must be told what is collected, and
+ * Not decoration - DPDP notice-and-consent means the employee must be told what is collected, and
  * telling them at the point of sign-in is where it is actually read.
  */
 @Composable
@@ -330,7 +330,7 @@ private fun SecurityNotice() {
     }
 }
 
-@Preview(name = "Login — light", showBackground = true)
+@Preview(name = "Login - light", showBackground = true)
 @Composable
 private fun LoginPreview() {
     AsktrixTheme(darkTheme = false) {
@@ -343,7 +343,7 @@ private fun LoginPreview() {
     }
 }
 
-@Preview(name = "Login — error, dark", showBackground = true)
+@Preview(name = "Login - error, dark", showBackground = true)
 @Composable
 private fun LoginErrorPreview() {
     AsktrixTheme(darkTheme = true) {

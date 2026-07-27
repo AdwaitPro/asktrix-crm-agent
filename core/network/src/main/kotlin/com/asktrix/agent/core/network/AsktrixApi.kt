@@ -38,7 +38,7 @@ import retrofit2.http.Query
  * status to [com.asktrix.agent.core.common.result.AsktrixError] explicitly. Exceptions are reserved
  * for genuinely exceptional conditions; a 403 is an ordinary outcome this app must handle.
  *
- * `Idempotency-Key` is a required parameter on every mutating call — not optional, so it cannot be
+ * `Idempotency-Key` is a required parameter on every mutating call - not optional, so it cannot be
  * forgotten at a call site (§9, §23).
  */
 interface AsktrixApi {
@@ -136,7 +136,7 @@ interface AsktrixApi {
     @GET("location/policy")
     suspend fun locationPolicy(): Response<LocationPolicyDto>
 
-    // --- Device (§24, §14–§20) ---
+    // --- Device (§24, §14-§20) ---
     @PUT("device/push-token")
     suspend fun pushToken(@Body body: PushTokenRequestDto): Response<Unit>
 

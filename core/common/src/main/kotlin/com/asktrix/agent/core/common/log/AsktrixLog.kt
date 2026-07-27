@@ -8,7 +8,7 @@ import android.util.Log
  * The only sanctioned logging entry point.
  *
  * Invariant 4 (CLAUDE.md): nothing sensitive is ever written to logcat. Two mechanisms enforce it:
- *  1. Detekt's `ForbiddenImport` rule fails the build on any other `android.util.Log` import — this
+ *  1. Detekt's `ForbiddenImport` rule fails the build on any other `android.util.Log` import - this
  *     file is the single suppressed exception.
  *  2. R8 strips every `android.util.Log` call in release via `-assumenosideeffects`, so release
  *     builds cannot emit logs at all, whatever a caller passes.

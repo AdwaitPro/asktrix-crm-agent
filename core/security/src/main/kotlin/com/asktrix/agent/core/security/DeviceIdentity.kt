@@ -14,7 +14,7 @@ import javax.inject.Singleton
  * the OSP conditions require.
  *
  * Deliberately **not** a hardware identifier. `ANDROID_ID`, IMEI and the serial number are either
- * restricted, privacy-sensitive, or both — Google Play policy treats hardware IDs as personal data.
+ * restricted, privacy-sensitive, or both - Google Play policy treats hardware IDs as personal data.
  * A random UUID generated once per install, stored encrypted, identifies the installation for
  * binding purposes without collecting anything about the user or the handset.
  *

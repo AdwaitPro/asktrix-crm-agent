@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const path = require('path');
 const admin = require('./admin');
 const rtc = require('./rtc');
+const roles = require('./roles');
 const { query, tx } = require('./db');
 const { findLeaks } = require('./mask');
 const S = require('./serialize');
@@ -56,7 +57,15 @@ app.use('/vendor', express.static(path.join(__dirname, '..', 'public', 'vendor')
 // catches the case where a future change adds a field and forgets ADR-0003. In development it fails
 // loudly rather than silently shipping PII to a handset.
 // ---------------------------------------------------------------------------------------------
+/**
+ * The single deliberate exception: an admin with a recorded reason may reveal one client's real
+ * contact details. It is a named route, it writes an audit row first, and it is never reachable
+ * from the handset. Everything else stays behind the tripwire.
+ */
+const REVEAL_ROUTE = /^\/admin\/clients\/[^/]+\/reveal$/;
+
 app.use((req, res, next) => {
+  if (REVEAL_ROUTE.test(req.path)) return next();
   const originalJson = res.json.bind(res);
   res.json = (body) => {
     const leaks = findLeaks(body);
@@ -148,7 +157,7 @@ app.post('/auth/login', asyncRoute(async (req, res) => {
     [employeeCode],
   );
   const emp = rows[0];
-  // Same response for unknown user and wrong password — do not confirm which employee codes exist.
+  // Same response for unknown user and wrong password - do not confirm which employee codes exist.
   if (!emp || !verifyPassword(password, emp.password_hash, emp.password_salt)) {
     return fail(res, 401, 'UNAUTHENTICATED', 'Incorrect employee code or password.');
   }
@@ -238,7 +247,7 @@ app.get('/clients', requireAuth, asyncRoute(async (req, res) => {
   if (req.query.needsFollowUp === 'true') filters.push('follow_up_at IS NOT NULL AND follow_up_at <= now()');
   if (req.query.query) {
     params.push(`%${req.query.query}%`);
-    // Search covers name and id only — never contact details, which the server holds but never exposes.
+    // Search covers name and id only - never contact details, which the server holds but never exposes.
     filters.push(`(name ILIKE $${params.length} OR client_id ILIKE $${params.length})`);
   }
   params.push(limit);
@@ -297,6 +306,15 @@ app.post('/clients/:clientId/status', requireAuth, asyncRoute(async (req, res) =
   if (!status || !STATUS_SUMMARY[status]) {
     return fail(res, 422, 'VALIDATION_FAILED', 'Unknown status value.', { fieldErrors: { status: 'unknown value' } });
   }
+
+  // §2: roles are not interchangeable. Accounts may record a payment; they may not move a
+  // government filing. Enforced here, not just hidden in the UI.
+  const allowed = roles.statusesFor(req.employee.role);
+  if (!allowed.includes(status)) {
+    return fail(res, 403, 'FORBIDDEN',
+      `A ${req.employee.role.toLowerCase().replace(/_/g, ' ')} cannot set that status.`,
+      { fieldErrors: { status: 'not permitted for this role' } });
+  }
   if (status === 'CALLBACK_SCHEDULED' && !followUpAt) {
     return fail(res, 422, 'VALIDATION_FAILED', 'A callback needs a follow-up time.', {
       fieldErrors: { followUpAt: 'required when status is CALLBACK_SCHEDULED' },
@@ -325,7 +343,7 @@ app.post('/clients/:clientId/status', requireAuth, asyncRoute(async (req, res) =
         [status, payment, government, followUpAt || null, client.client_id],
       );
       const entryId = newId('tl');
-      const summary = note ? `${STATUS_SUMMARY[status]} — ${note}` : STATUS_SUMMARY[status];
+      const summary = note ? `${STATUS_SUMMARY[status]} - ${note}` : STATUS_SUMMARY[status];
       const { rows } = await c.query(
         `INSERT INTO timeline_entries (entry_id, client_id, kind, summary, actor_name, occurred_at)
          VALUES ($1,$2,'STATUS_CHANGE',$3,$4,COALESCE($5::timestamptz, now())) RETURNING *`,
@@ -385,6 +403,10 @@ const { notifyEmployee } = require('./push');
 app.post('/calls', requireAuth, asyncRoute(async (req, res) => {
   const { clientId, reason } = req.body || {};
   if (!clientId) return fail(res, 422, 'VALIDATION_FAILED', 'clientId is required.');
+
+  if (!roles.permissionsFor(req.employee.role).includes(roles.P.CALLS_PLACE)) {
+    return fail(res, 403, 'FORBIDDEN', 'Your role does not include placing calls.');
+  }
 
   const { rows } = await query('SELECT * FROM clients WHERE client_id = $1', [clientId]);
   const client = rows[0];
@@ -547,7 +569,7 @@ const DAY_KEYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
 /**
  * §10 working-hours gating, decided here rather than on the device.
- * The device clock and timezone are user-settable, and this is a compliance boundary — an
+ * The device clock and timezone are user-settable, and this is a compliance boundary - an
  * out-of-hours location sample is a DPDP problem, not a UX problem.
  */
 function withinWorkingHours(emp, whenIso) {
@@ -610,7 +632,7 @@ app.put('/device/push-token', requireAuth, asyncRoute(async (req, res) => {
 app.post('/device/compliance', requireAuth, asyncRoute(async (req, res) => {
   const checks = req.body?.checks || {};
   // The server decides. Client heuristics are advisory; they are trivially bypassable and are never
-  // the control (ADR-0004, §14–§20).
+  // the control (ADR-0004, §14-§20).
   const hardFail = checks.rootIndicators || checks.emulatorIndicators || checks.debuggerAttached;
   const verdict = hardFail
     ? { compliant: false, action: 'PURGE_CACHE', reason: 'Device integrity checks failed.' }

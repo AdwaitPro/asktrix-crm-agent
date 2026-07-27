@@ -62,6 +62,17 @@ class AttendanceViewModel @Inject constructor(
 
     fun cancelCapture() = _state.update { it.copy(awaitingCapture = false) }
 
+    /** Camera refused. The photo is optional, so fall through to a normal check-in. */
+    fun onCameraDenied() {
+        _state.update {
+            it.copy(
+                photoEnabled = false,
+                message = "Camera not allowed, checking in without a photo.",
+            )
+        }
+        toggle()
+    }
+
     /** Called with the captured JPEG, or null when capture failed or was skipped. */
     fun onPhotoCaptured(jpeg: ByteArray?) {
         _state.update { it.copy(awaitingCapture = false) }

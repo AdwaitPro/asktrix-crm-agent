@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   §3: no customer data persists off-device via backup. Cloud backup and device-to-device transfer are
-  both fully excluded — the local cache is ephemeral and encrypted, and must never leave the device.
+  both fully excluded - the local cache is ephemeral and encrypted, and must never leave the device.
 -->
 <data-extraction-rules>
     <cloud-backup>

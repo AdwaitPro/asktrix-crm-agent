@@ -187,6 +187,7 @@ fun ClientDetailScreen(
 
             item {
                 MaskedContactCard(
+                    canCall = state.canPlaceCalls,
                     contact = client.contact,
                     activeCallLabel = state.activeCall
                         ?.takeIf { it.state.isActive }
@@ -232,7 +233,14 @@ fun ClientDetailScreen(
                 item { CallOutcomeCard(state.activeCall.state, state.activeCall.durationSeconds, onDismissCall) }
             }
 
-            item { QuickStatusSection(current = client.processStatus, onStatus = onStatus) }
+            item {
+                QuickStatusSection(
+                    current = client.processStatus,
+                    available = state.availableStatuses,
+                    roleLabel = state.roleLabel,
+                    onStatus = onStatus,
+                )
+            }
 
             if (client.documents.isNotEmpty()) {
                 item { DocumentsSection(client.documents) }
@@ -322,6 +330,7 @@ private fun DetailRow(label: String, value: String) {
  */
 @Composable
 private fun MaskedContactCard(
+    canCall: Boolean,
     contact: MaskedContact,
     activeCallLabel: String?,
     onCall: () -> Unit,
@@ -359,7 +368,7 @@ private fun MaskedContactCard(
 
             Button(
                 onClick = onCall,
-                enabled = contact.callable && activeCallLabel == null,
+                enabled = canCall && contact.callable && activeCallLabel == null,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(AsktrixTheme.spacing.minTouchTarget),
@@ -437,16 +446,37 @@ private fun CallOutcomeCard(state: CallState, durationSeconds: Int?, onDismiss: 
 
 /** The six §13 quick actions. */
 @Composable
-private fun QuickStatusSection(current: ProcessStatus, onStatus: (ProcessStatus) -> Unit) {
+private fun QuickStatusSection(
+    current: ProcessStatus,
+    available: List<ProcessStatus>,
+    roleLabel: String,
+    onStatus: (ProcessStatus) -> Unit,
+) {
     Column {
         Text(
             text = "Update status",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onBackground,
         )
+        // §2: an accounts clerk has no business moving a government filing, so each role sees only
+        // the actions it may actually take. The server enforces the same list.
+        Text(
+            text = if (roleLabel.isBlank()) "" else "Actions available to a $roleLabel",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
         Spacer(Modifier.height(AsktrixTheme.spacing.md))
 
-        QUICK_STATUSES.chunked(STATUS_COLUMNS).forEach { row ->
+        if (available.isEmpty()) {
+            Text(
+                text = "Your role does not include status changes.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            return@Column
+        }
+
+        available.chunked(STATUS_COLUMNS).forEach { row ->
             Row(
                 Modifier.fillMaxWidth().padding(bottom = AsktrixTheme.spacing.sm),
                 horizontalArrangement = Arrangement.spacedBy(AsktrixTheme.spacing.sm),
@@ -587,11 +617,11 @@ private fun ClientDetailPreview() {
                 ),
                 timeline = listOf(
                     TimelineEntry(
-                        "t1", TimelineKind.CALL, "Call completed — 1m 59s (recorded)",
+                        "t1", TimelineKind.CALL, "Call completed - 1m 59s (recorded)",
                         "Aarav Sharma", "c1", Instant.now(),
                     ),
                     TimelineEntry(
-                        "t2", TimelineKind.STATUS_CHANGE, "Case opened — SVC-GST-2291",
+                        "t2", TimelineKind.STATUS_CHANGE, "Case opened - SVC-GST-2291",
                         "Aarav Sharma", null, Instant.now(),
                     ),
                 ),

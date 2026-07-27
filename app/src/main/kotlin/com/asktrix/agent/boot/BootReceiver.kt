@@ -8,7 +8,7 @@ import com.asktrix.agent.core.sync.OutboxWorker
 /**
  * Resumes background sync after a reboot (§22).
  *
- * Deliberately modest in what it does. It enqueues WorkManager work and nothing else — it does not
+ * Deliberately modest in what it does. It enqueues WorkManager work and nothing else - it does not
  * start a foreground service, because Android 15 restricts which foreground service types may be
  * started from BOOT_COMPLETED, and location tracking should resume from check-in rather than
  * silently at boot. That is also the correct compliance behaviour: a device that reboots overnight

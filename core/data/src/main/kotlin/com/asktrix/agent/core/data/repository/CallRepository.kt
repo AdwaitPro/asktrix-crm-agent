@@ -23,7 +23,7 @@ import kotlinx.serialization.json.Json
  * Click-to-call (§5) and call history (§7).
  *
  * The device sends a `clientId` and nothing else. It never dials, never holds a number, and never
- * reads the system call log — which is why the manifest declares no telephony permissions at all
+ * reads the system call log - which is why the manifest declares no telephony permissions at all
  * (ADR-0002).
  *
  * When the real CPaaS integration lands it replaces the CRM's provider adapter, not this class: the

@@ -62,7 +62,7 @@ private val DarkScheme = darkColorScheme(
  * The app theme.
  *
  * Dynamic colour is deliberately **not** used. This is an enterprise tool where a status colour has a
- * fixed meaning — "payment received" must look identical on every handset in the fleet, so a
+ * fixed meaning - "payment received" must look identical on every handset in the fleet, so a
  * wallpaper-derived palette would actively harm comprehension.
  */
 @Composable

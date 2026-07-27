@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit
  * WorkManager is the right tool here rather than a foreground service: the work is deferrable, must
  * survive process death and reboot, and must not hold a wakelock. Android 15 caps `dataSync`
  * foreground services at 6 hours per 24, and several Indian OEM battery managers freeze foreground
- * services outright — so a persistent service would be the *less* reliable choice.
+ * services outright - so a persistent service would be the *less* reliable choice.
  *
  * WorkManager's own retry is the outer loop; the outbox's per-item backoff is the inner one. The
  * worker returns `retry()` only when items remain, so a fully-drained queue does not reschedule.
@@ -64,7 +64,7 @@ class OutboxWorker @AssistedInject constructor(
          *
          * The one-off request above is the primary path. This exists because several Indian OEM
          * battery managers silently drop pending WorkManager requests, and an outbox that stops
-         * draining is invisible to the employee — their work simply never arrives. Fifteen minutes
+         * draining is invisible to the employee - their work simply never arrives. Fifteen minutes
          * is WorkManager's documented minimum period.
          */
         fun enqueuePeriodic(context: Context) {

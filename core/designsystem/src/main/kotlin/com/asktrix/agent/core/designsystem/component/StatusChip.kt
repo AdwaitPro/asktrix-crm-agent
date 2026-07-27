@@ -47,7 +47,7 @@ fun StatusChip(
 /**
  * Solid fill for tones that must be noticed, softened fill for the rest.
  *
- * A screen where every chip shouts is a screen where nothing stands out — the point is that an
+ * A screen where every chip shouts is a screen where nothing stands out - the point is that an
  * overdue or failed state is visually louder than a routine one.
  */
 private fun Color.withChipAlpha(tone: StatusTone): Color = when (tone) {

@@ -24,7 +24,7 @@ data class CallHistoryUiState(
  *
  * Sourced entirely from the CRM. The device never reads the system call log, so the app needs no
  * `READ_CALL_LOG` permission and therefore never enters Google Play's sensitive-permission review
- * (ADR-0002). Because §5 removes the dial pad, the CRM's record is also complete — there are no
+ * (ADR-0002). Because §5 removes the dial pad, the CRM's record is also complete - there are no
  * off-system calls to miss.
  */
 @HiltViewModel

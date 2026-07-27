@@ -5,12 +5,13 @@ const path = require('path');
 const crypto = require('crypto');
 const { query, pool } = require('./db');
 const { hashPassword } = require('./auth');
+const { permissionsFor } = require('./roles');
 
 const id = (p) => `${p}_${crypto.randomBytes(8).toString('hex')}`;
 const daysFromNow = (n) => new Date(Date.now() + n * 86_400_000).toISOString();
 
 // Full contact details live ONLY in the database. The API masks them on the way out, which is the
-// whole point of ADR-0003 — seeding realistic values is what proves the masking actually works.
+// whole point of ADR-0003 - seeding realistic values is what proves the masking actually works.
 const CLIENTS = [
   ['Sivakumar Ramanathan', 'SVC-GST-2291', '9876543212', 'sivakumar@gmail.com', 'DOCUMENTS_PENDING', 'PENDING', 'NOT_SUBMITTED', 3, 0],
   ['Priya Nair',           'SVC-ITR-1180', '9845012345', 'priya.nair@outlook.com', 'PAYMENT_PENDING', 'PARTIAL', 'NOT_APPLICABLE', 1, 1],
@@ -33,10 +34,14 @@ async function main() {
   await query(fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8'));
 
   console.log('Seeding employees…');
+  // All six groups from §2, so role-based behaviour can actually be demonstrated.
   const employees = [
     ['EMP001', 'Aarav Sharma', 'RELATIONSHIP_MANAGER'],
     ['EMP002', 'Meera Iyer', 'CUSTOMER_SUPPORT'],
     ['EMP003', 'Rohit Desai', 'TEAM_LEADER'],
+    ['EMP004', 'Priya Menon', 'SALES'],
+    ['EMP005', 'Karthik Rao', 'DOCUMENTATION'],
+    ['EMP006', 'Sneha Pillai', 'ACCOUNTS'],
   ];
   const ids = [];
   for (const [code, name, role] of employees) {
@@ -45,10 +50,9 @@ async function main() {
     ids.push(empId);
     await query(
       `INSERT INTO employees (employee_id, employee_code, display_name, password_hash, password_salt,
-                              role, permissions)
-       VALUES ($1,$2,$3,$4,$5,$6,$7)`,
-      [empId, code, name, hash, salt, role,
-        JSON.stringify(['clients:read', 'clients:status', 'calls:place', 'attendance:write'])],
+                              role, permissions, is_demo)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,TRUE)`,
+      [empId, code, name, hash, salt, role, JSON.stringify(permissionsFor(role))],
     );
   }
 
@@ -57,12 +61,12 @@ async function main() {
   for (const [name, svc, phone, email, status, pay, gov, docsPending, followUpDays] of CLIENTS) {
     const clientId = `CLI-${10240 + n}`;
     // Spread across the first two employees so the assignment filter is genuinely exercised.
-    const owner = ids[n % 2];
+    const owner = ids[n % ids.length];
     await query(
       `INSERT INTO clients (client_id, name, service_id, phone_full, email_full, assigned_employee,
                             process_status, payment_status, government_status, documents_pending,
-                            follow_up_at, last_interaction_at)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11, now() - ($12 || ' hours')::interval)`,
+                            follow_up_at, last_interaction_at, is_demo)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11, now() - ($12 || ' hours')::interval, TRUE)`,
       [clientId, name, svc, phone, email, owner, status, pay, gov, docsPending,
         followUpDays === null ? null : daysFromNow(followUpDays), String(n * 7 + 2)],
     );
@@ -88,9 +92,9 @@ async function main() {
     );
 
     await query(
-      `INSERT INTO timeline_entries (entry_id, client_id, kind, summary, actor_name, occurred_at)
-       VALUES ($1,$2,'STATUS_CHANGE',$3,'Aarav Sharma', now() - interval '2 days')`,
-      [id('tl'), clientId, `Case opened — ${svc}`],
+      `INSERT INTO timeline_entries (entry_id, client_id, kind, summary, actor_name, occurred_at, is_demo)
+       VALUES ($1,$2,'STATUS_CHANGE',$3,'Aarav Sharma', now() - interval '2 days', TRUE)`,
+      [id('tl'), clientId, `Case opened - ${svc}`],
     );
     n += 1;
   }

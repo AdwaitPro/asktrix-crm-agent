@@ -14,7 +14,7 @@ import javax.inject.Singleton
  * The production [TimeSource].
  *
  * [elapsedRealtimeMillis] uses `SystemClock.elapsedRealtime()` rather than `System.currentTimeMillis()`
- * because it is monotonic and includes deep sleep — it cannot jump backwards when the user changes
+ * because it is monotonic and includes deep sleep - it cannot jump backwards when the user changes
  * the clock or when NTP corrects it. Every duration and backoff calculation depends on that.
  *
  * [serverSkewMillis] is updated whenever the CRM reports its clock, giving the app a measure of how

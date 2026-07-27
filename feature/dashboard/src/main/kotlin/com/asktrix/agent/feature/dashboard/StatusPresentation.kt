@@ -32,7 +32,7 @@ fun ProcessStatus.tone(): StatusTone = when (this) {
 /**
  * Failure copy for the dashboard.
  *
- * Being offline is deliberately not surfaced as an error here — the offline banner already says so,
+ * Being offline is deliberately not surfaced as an error here - the offline banner already says so,
  * and the cached list is still perfectly usable.
  */
 fun AsktrixError.toDashboardMessage(): String? = when (this) {

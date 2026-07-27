@@ -68,6 +68,9 @@ fun SettingsScreen(state: SettingsUiState, onSignOut: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Column(Modifier.padding(AsktrixTheme.spacing.lg)) {
+                    InfoRow("Signed in as", state.employeeName)
+                    InfoRow("Employee code", state.employeeCode)
+                    InfoRow("Role", state.roleLabel)
                     InfoRow("Device", state.deviceModel)
                     InfoRow("Android", state.androidVersion)
                     InfoRow("App version", state.appVersion)
@@ -76,13 +79,41 @@ fun SettingsScreen(state: SettingsUiState, onSignOut: () -> Unit) {
 
             Spacer(Modifier.height(AsktrixTheme.spacing.lg))
 
+            // Showing the permission list turns "why can't I do that" into something the employee
+            // can answer themselves, rather than a support call.
+            if (state.permissions.isNotEmpty()) {
+                Surface(
+                    shape = RoundedCornerShape(16.dp),
+                    color = MaterialTheme.colorScheme.surface,
+                    tonalElevation = 1.dp,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Column(Modifier.padding(AsktrixTheme.spacing.lg)) {
+                        Text(
+                            text = "What your role allows",
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                        Spacer(Modifier.height(AsktrixTheme.spacing.sm))
+                        state.permissions.forEach { permission ->
+                            Text(
+                                text = permission.replace(':', ' ').replaceFirstChar { it.uppercase() },
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
+                }
+                Spacer(Modifier.height(AsktrixTheme.spacing.lg))
+            }
+
             StatusBanner(
                 icon = if (state.managedDevice) Icons.Outlined.GppGood else Icons.Outlined.GppMaybe,
                 title = if (state.managedDevice) "Managed device" else "Not enrolled in management",
                 body = if (state.managedDevice) {
                     "Policies are applied by your organisation."
                 } else {
-                    "Contact your administrator — this device is not under management."
+                    "Contact your administrator - this device is not under management."
                 },
                 warning = !state.managedDevice,
             )
@@ -187,6 +218,10 @@ private fun SettingsPreview() {
     AsktrixTheme {
         SettingsScreen(
             state = SettingsUiState(
+                employeeName = "Aarav Sharma",
+                employeeCode = "EMP001",
+                roleLabel = "Relationship manager",
+                permissions = listOf("clients:read", "calls:place"),
                 deviceModel = "Xiaomi Redmi Note 13",
                 androidVersion = "Android 14 (API 34)",
                 appVersion = "0.1.0",

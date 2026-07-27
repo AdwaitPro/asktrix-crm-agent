@@ -1,7 +1,7 @@
 openapi: 3.1.0
 
 info:
-  title: Asktrix CRM — Mobile Agent API
+  title: Asktrix CRM - Mobile Agent API
   version: 0.1.0
   description: |
     Contract between the Asktrix CRM backend and the Android agent app.
@@ -35,14 +35,14 @@ servers:
   - url: http://localhost:4010
     description: Local mock / development server
   - url: https://crm.asktrix.example/api/mobile/v1
-    description: Production (placeholder — real host to be supplied by the CRM team)
+    description: Production (placeholder - real host to be supplied by the CRM team)
 
 security:
   - bearerAuth: []
 
 tags:
   - name: Auth
-    description: Login, token refresh, device binding (§14–§20)
+    description: Login, token refresh, device binding (§14-§20)
   - name: Clients
     description: Assigned clients and client detail (§3, §4, §12)
   - name: Timeline
@@ -54,7 +54,7 @@ tags:
   - name: Location
     description: GPS sampling during working hours (§10)
   - name: Device
-    description: Push registration, compliance reporting (§24, §25–§27)
+    description: Push registration, compliance reporting (§24, §25-§27)
 
 paths:
   # ---------------------------------------------------------------- Auth ----
@@ -80,7 +80,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           description: |
-            Credentials are valid but this device is not permitted — unenrolled device, integrity
+            Credentials are valid but this device is not permitted - unenrolled device, integrity
             failure, or the employee is already bound to a different device.
           content:
             application/json:
@@ -151,7 +151,7 @@ paths:
       summary: Clients assigned to the authenticated employee (§12)
       description: |
         Returns **only** clients assigned to the caller. Server-side authorisation, never a client
-        filter — the device must never receive a record it is not entitled to see.
+        filter - the device must never receive a record it is not entitled to see.
       parameters:
         - name: status
           in: query
@@ -165,7 +165,7 @@ paths:
             type: boolean
         - name: query
           in: query
-          description: Free-text search over client name and client ID only — never contact details
+          description: Free-text search over client name and client ID only - never contact details
           schema:
             type: string
             maxLength: 64
@@ -276,7 +276,7 @@ paths:
   /clients/{clientId}/timeline:
     get:
       tags: [Timeline]
-      summary: Interaction timeline — calls, remarks, status changes, payments, follow-ups (§8)
+      summary: Interaction timeline - calls, remarks, status changes, payments, follow-ups (§8)
       parameters:
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/Cursor'
@@ -417,7 +417,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AttendanceRecord'
         '409':
-          description: Inconsistent with the current state — e.g. checking in while already checked in
+          description: Inconsistent with the current state - e.g. checking in while already checked in
           content:
             application/json:
               schema:
@@ -474,7 +474,7 @@ paths:
       tags: [Location]
       summary: Upload a batch of GPS samples (§10)
       description: |
-        Samples are batched rather than sent individually — the device is frequently offline and
+        Samples are batched rather than sent individually - the device is frequently offline and
         per-sample requests would drain battery.
 
         **Working hours are enforced server-side.** The device clock and timezone are user-influenced
@@ -549,10 +549,10 @@ paths:
   /device/compliance:
     post:
       tags: [Device]
-      summary: Report device integrity and managed-configuration compliance (§14–§20, §25–§27)
+      summary: Report device integrity and managed-configuration compliance (§14-§20, §25-§27)
       description: |
         The device reports; the server decides. A client-side integrity check is defence-in-depth
-        only — the authoritative verdict is the server's verification of the attestation statement.
+        only - the authoritative verdict is the server's verification of the attestation statement.
       requestBody:
         required: true
         content:
@@ -768,7 +768,7 @@ components:
           items:
             type: string
           description: |
-            Server-issued capability list. The UI hides what is absent, but the server enforces —
+            Server-issued capability list. The UI hides what is absent, but the server enforces -
             hiding a button is not authorisation.
 
     # ------------------------------------------------------------ Clients --
@@ -889,7 +889,7 @@ components:
       type: object
       required: [documentId, kind, status]
       description: |
-        Metadata only. KYC file content is never delivered to the device — the requirement is that
+        Metadata only. KYC file content is never delivered to the device - the requirement is that
         the employee sees *which* documents are outstanding, not their contents.
       properties:
         documentId:
@@ -1039,7 +1039,7 @@ components:
         recordingAvailable:
           type: boolean
           description: |
-            Whether a recording exists in the CRM. The device never downloads or plays recordings —
+            Whether a recording exists in the CRM. The device never downloads or plays recordings -
             it only reports that one was captured (§6).
 
     CallRecordPage:
@@ -1087,7 +1087,7 @@ components:
         recordedAt:
           type: string
           format: date-time
-          description: Server receipt time — authoritative for payroll
+          description: Server receipt time - authoritative for payroll
         location:
           $ref: '#/components/schemas/GeoPoint'
         photoUploaded:
@@ -1196,7 +1196,7 @@ components:
         checks:
           type: object
           description: |
-            Client-side heuristics. Advisory only and trivially bypassable — never the control.
+            Client-side heuristics. Advisory only and trivially bypassable - never the control.
           properties:
             rootIndicators:
               type: boolean
@@ -1212,7 +1212,7 @@ components:
               type: boolean
             backgroundRestricted:
               type: boolean
-              description: ActivityManager.isBackgroundRestricted() — detects OEM battery restriction
+              description: ActivityManager.isBackgroundRestricted() - detects OEM battery restriction
             appStandbyBucket:
               type: integer
 

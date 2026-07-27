@@ -22,7 +22,7 @@ import org.junit.Test
  *
  * Server-side masking and the DTO test cover the data path. This covers the rendered UI: it walks the
  * whole semantics tree of the composed screen and asserts nothing that looks like a full phone number
- * or email address appears anywhere on it — including in a content description, which is where a leak
+ * or email address appears anywhere on it - including in a content description, which is where a leak
  * would otherwise be invisible to a human reviewer but perfectly audible to a screen reader.
  */
 class MaskedContactUiTest {

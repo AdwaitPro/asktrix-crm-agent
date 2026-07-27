@@ -36,7 +36,7 @@ data class LocationSample(
  * minutes, not a continuous stream. A one-shot fix lets the GPS radio sleep between samples, which
  * is the difference between a phone that lasts a shift and one that does not.
  *
- * `PRIORITY_BALANCED_POWER_ACCURACY` is deliberate — the requirement is to know which area an agent
+ * `PRIORITY_BALANCED_POWER_ACCURACY` is deliberate - the requirement is to know which area an agent
  * is in, not to survey a building. High accuracy would cost far more battery for precision nobody
  * uses.
  *
@@ -87,23 +87,34 @@ class LocationSampler @Inject constructor(
                 val task = client.getCurrentLocation(request, null)
                 task.addOnSuccessListener { location ->
                     if (location == null) {
-                        // Indoors with no fix is normal, not an error worth alarming anyone about.
-                        continuation.resume(
-                            AsktrixResult.Failure(AsktrixError.Unexpected("no fix available")),
-                        )
+                        // A fresh fix is often impossible indoors. Rather than failing outright,
+                        // fall back to the last known position: for attendance, "where the phone
+                        // last was" is far more useful than nothing, and the accuracy travels with
+                        // it so the server can judge.
+                        @Suppress("MissingPermission")
+                        client.lastLocation
+                            .addOnSuccessListener { last ->
+                                continuation.resume(
+                                    if (last == null) {
+                                        AsktrixResult.Failure(
+                                            AsktrixError.Unexpected(
+                                                "No location yet. Step outside or near a window and try again.",
+                                            ),
+                                        )
+                                    } else {
+                                        AsktrixResult.Success(last.toSample())
+                                    },
+                                )
+                            }
+                            .addOnFailureListener {
+                                continuation.resume(
+                                    AsktrixResult.Failure(
+                                        AsktrixError.Unexpected("No location available on this device."),
+                                    ),
+                                )
+                            }
                     } else {
-                        continuation.resume(
-                            AsktrixResult.Success(
-                                LocationSample(
-                                    latitudeE7 = location.latitude,
-                                    longitudeE7 = location.longitude,
-                                    accuracyMetres = location.accuracy,
-                                    sampledAtMillis = time.now().toEpochMilli(),
-                                    isMocked = location.isMockedCompat(),
-                                    batteryPercent = batteryPercent(),
-                                ),
-                            ),
-                        )
+                        continuation.resume(AsktrixResult.Success(location.toSample()))
                     }
                 }
                 task.addOnFailureListener { error ->
@@ -132,9 +143,23 @@ class LocationSampler @Inject constructor(
     }.getOrNull()?.takeIf { it in 0..MAX_PERCENT }
 
     /**
+     * `this@LocationSampler.time` is qualified deliberately: android.location.Location has its own
+     * `time` property (the UTC time of the fix), which shadows the injected TimeSource inside this
+     * extension and silently resolves to a Long.
+     */
+    private fun Location.toSample() = LocationSample(
+        latitudeE7 = latitude,
+        longitudeE7 = longitude,
+        accuracyMetres = accuracy,
+        sampledAtMillis = this@LocationSampler.time.now().toEpochMilli(),
+        isMocked = isMockedCompat(),
+        batteryPercent = batteryPercent(),
+    )
+
+    /**
      * `Location.isMock` was added in API 31; `isFromMockProvider` covers 29 and 30.
      *
-     * The older call is deprecated but is the only option below 31, and minSdk is 29 — so the
+     * The older call is deprecated but is the only option below 31, and minSdk is 29 - so the
      * deprecation is suppressed deliberately rather than the check being dropped. Silently skipping
      * mock detection on older handsets would be worse: those are exactly the cheaper devices most
      * likely to be running a location spoofer.

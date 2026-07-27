@@ -27,7 +27,7 @@ object DatabaseModule {
      *
      * The passphrase is 32 random bytes generated once, then stored encrypted under a hardware-backed
      * Keystore key. So the database file is encrypted with a key that is itself protected by the
-     * secure element — copying the file off a rooted device yields nothing usable.
+     * secure element - copying the file off a rooted device yields nothing usable.
      *
      * `net.zetetic:sqlcipher-android` is the current artifact; the older
      * `android-database-sqlcipher` coordinate is superseded.
@@ -54,7 +54,7 @@ object DatabaseModule {
         val file = File(context.filesDir, PASSPHRASE_FILE)
         if (file.exists()) {
             crypto.decrypt(file.readText())?.let { return it.hexToBytes() }
-            // Undecryptable means the Keystore key was destroyed — by a purge, a factory reset, or
+            // Undecryptable means the Keystore key was destroyed - by a purge, a factory reset, or
             // tampering. The old database is unreadable regardless, so start clean.
             file.delete()
             context.getDatabasePath(AsktrixDatabase.NAME).delete()

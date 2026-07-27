@@ -3,7 +3,9 @@ package com.asktrix.agent.feature.auth
 import com.asktrix.agent.core.common.result.AsktrixError
 import com.asktrix.agent.core.common.result.AsktrixResult
 import com.asktrix.agent.core.common.result.map
+import com.asktrix.agent.core.common.session.EmployeeStore
 import com.asktrix.agent.core.common.session.SessionTokenStore
+import com.asktrix.agent.core.common.session.SignedInEmployee
 import com.asktrix.agent.core.common.session.SessionTokens
 import com.asktrix.agent.core.network.AsktrixApi
 import com.asktrix.agent.core.network.apiCall
@@ -25,6 +27,7 @@ import kotlinx.serialization.json.Json
 class AuthRepository @Inject constructor(
     private val api: AsktrixApi,
     private val tokens: SessionTokenStore,
+    private val employees: EmployeeStore,
     private val deviceIdentity: DeviceIdentity,
     private val json: Json,
     private val appVersion: AppVersion,
@@ -55,6 +58,18 @@ class AuthRepository @Inject constructor(
                             deviceId = deviceId,
                         ),
                     )
+                    // What this role may do, kept so every screen renders for the actual role (§2).
+                    employees.saveEmployee(
+                        SignedInEmployee(
+                            employeeId = result.data.employee.employeeId,
+                            employeeCode = result.data.employee.employeeCode,
+                            displayName = result.data.employee.displayName,
+                            role = result.data.employee.role,
+                            permissions = result.data.employee.permissions,
+                            allowedStatuses = result.data.employee.allowedStatuses,
+                        ),
+                    )
+
                     // Best-effort and deliberately after the token is stored, since the call itself
                     // needs authentication. A failure here never fails sign-in.
                     pushRegistration.register()
@@ -81,7 +96,7 @@ data class AppVersion(val name: String)
 /**
  * Registers this device for push after sign-in.
  *
- * An interface so `:feature:auth` never depends on Firebase — the app module supplies the real
+ * An interface so `:feature:auth` never depends on Firebase - the app module supplies the real
  * implementation, and tests supply a no-op.
  */
 fun interface PushRegistration {

@@ -5,7 +5,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.asktrix.agent.core.common.session.EmployeeStore
 import com.asktrix.agent.core.common.session.SessionTokenStore
+import com.asktrix.agent.core.common.session.SignedInEmployee
 import com.asktrix.agent.core.common.session.SessionTokens
 import com.asktrix.agent.core.security.crypto.KeystoreCrypto
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -36,7 +38,7 @@ private val Context.sessionDataStore by preferencesDataStore(name = "asktrix_ses
 class EncryptedSessionStore @Inject constructor(
     @ApplicationContext private val context: Context,
     private val crypto: KeystoreCrypto,
-) : SessionTokenStore {
+) : SessionTokenStore, EmployeeStore {
 
     /** Emits whether a session currently exists, so the UI can route without polling. */
     val isSignedIn: Flow<Boolean> =
@@ -62,9 +64,48 @@ class EncryptedSessionStore @Inject constructor(
         context.sessionDataStore.edit { it.clear() }
     }
 
+    /**
+     * The signed-in employee, including what their role permits.
+     *
+     * Encrypted like the tokens: the role and permission list say what this person is allowed to do,
+     * and leaving that in plaintext on disk would be an obvious thing to tamper with.
+     */
+    override suspend fun currentEmployee(): SignedInEmployee? {
+        val prefs = context.sessionDataStore.data.first()
+        val raw = prefs[EMPLOYEE]?.let(crypto::decrypt) ?: return null
+        val parts = raw.split(FIELD_SEPARATOR)
+        if (parts.size < EXPECTED_FIELDS) return null
+        return SignedInEmployee(
+            employeeId = parts[0],
+            employeeCode = parts[1],
+            displayName = parts[2],
+            role = parts[3],
+            permissions = parts[4].split(LIST_SEPARATOR).filter { it.isNotBlank() },
+            allowedStatuses = parts[5].split(LIST_SEPARATOR).filter { it.isNotBlank() },
+        )
+    }
+
+    override suspend fun saveEmployee(employee: SignedInEmployee) {
+        val raw = listOf(
+            employee.employeeId,
+            employee.employeeCode,
+            employee.displayName,
+            employee.role,
+            employee.permissions.joinToString(LIST_SEPARATOR),
+            employee.allowedStatuses.joinToString(LIST_SEPARATOR),
+        ).joinToString(FIELD_SEPARATOR)
+        context.sessionDataStore.edit { it[EMPLOYEE] = crypto.encrypt(raw) }
+    }
+
     private companion object {
         val ACCESS_TOKEN: Preferences.Key<String> = stringPreferencesKey("access_token")
         val REFRESH_TOKEN: Preferences.Key<String> = stringPreferencesKey("refresh_token")
         val DEVICE_ID: Preferences.Key<String> = stringPreferencesKey("device_id")
+        val EMPLOYEE: Preferences.Key<String> = stringPreferencesKey("employee")
+
+        // Field separators chosen to be absent from ids, names and permission strings.
+        const val FIELD_SEPARATOR = "\u001F"
+        const val LIST_SEPARATOR = ","
+        const val EXPECTED_FIELDS = 6
     }
 }

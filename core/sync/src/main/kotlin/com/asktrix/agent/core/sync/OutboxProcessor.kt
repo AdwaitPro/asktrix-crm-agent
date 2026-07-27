@@ -20,7 +20,7 @@ import kotlinx.serialization.json.Json
  * Drains the outbox, one item at a time, in the order the employee acted.
  *
  * Order matters and is deliberate: a remark added before a status change should reach the CRM in
- * that order, and processing serially is what guarantees it. Throughput is irrelevant here — a field
+ * that order, and processing serially is what guarantees it. Throughput is irrelevant here - a field
  * agent generates a handful of actions per hour, not thousands.
  */
 @Singleton
@@ -90,7 +90,7 @@ class OutboxProcessor @Inject constructor(
         }
 
         else -> {
-            AsktrixLog.e(TAG, "Unknown outbox kind '${item.kind}' — dropping to avoid a retry loop")
+            AsktrixLog.e(TAG, "Unknown outbox kind '${item.kind}' - dropping to avoid a retry loop")
             AsktrixResult.Failure(AsktrixError.Unexpected("unknown outbox kind"))
         }
     }

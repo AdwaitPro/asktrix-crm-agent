@@ -14,7 +14,7 @@ import kotlin.coroutines.resume
 /**
  * Registers this device's FCM token with the CRM (§24).
  *
- * `onNewToken` only fires when Firebase mints a *new* token — typically once per install. An
+ * `onNewToken` only fires when Firebase mints a *new* token - typically once per install. An
  * employee who signs out and back in, or a device restored from backup, would otherwise never
  * register, and pushes would silently go nowhere. So registration also runs after every successful
  * sign-in, which is idempotent server-side.
@@ -38,7 +38,7 @@ class PushTokenRegistrar @Inject constructor(
 
     /**
      * Both `FirebaseMessaging.token` and `getToken()` are marked deprecated in this SDK version, with
-     * no non-deprecated replacement exposed. Suppressed deliberately rather than left as noise —
+     * no non-deprecated replacement exposed. Suppressed deliberately rather than left as noise -
      * revisit when the Firebase BOM ships the successor API.
      */
     @Suppress("DEPRECATION")

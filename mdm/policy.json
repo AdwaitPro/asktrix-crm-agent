@@ -4,7 +4,7 @@
     "",
     "IMPORTANT: this is an Android Management API policy document, applied by whichever EMM the",
     "company subscribes to (see docs/adr/0004-device-management.md). The Asktrix app is NOT the",
-    "Device Policy Controller — Google restricts AMAPI to commercial EMM vendors, and Play Protect",
+    "Device Policy Controller - Google restricts AMAPI to commercial EMM vendors, and Play Protect",
     "has blocked non-approved custom DPCs at provisioning since 2026.",
     "",
     "Every field below is a documented AMAPI policy key. Fields the requirements ask for that have",
@@ -20,7 +20,7 @@
       "installType": "FORCE_INSTALLED",
       "defaultPermissionPolicy": "GRANT",
       "_comment_permissions": [
-        "GRANT auto-grants runtime permissions the app declares — including location and camera —",
+        "GRANT auto-grants runtime permissions the app declares - including location and camera -",
         "so a field agent never has to reason about a permission dialog.",
         "NOTE: ACCESS_BACKGROUND_LOCATION is NOT silently grantable by a device owner on modern",
         "Android; the app still runs its own two-step request flow, which is why LocationSampler",
@@ -29,7 +29,7 @@
       "userControlSettings": "USER_CONTROL_DISALLOWED",
       "_comment_userControl": [
         "Blocks force-stop and clear-data for this package (§14-§20), and as a documented side",
-        "effect exempts it from App Standby buckets — which is the closest thing AMAPI offers to",
+        "effect exempts it from App Standby buckets - which is the closest thing AMAPI offers to",
         "protection from aggressive background management."
       ]
     }
@@ -77,7 +77,7 @@
 
   "permittedInputMethods": [],
   "_comment_inputMethods": [
-    "Empty array means system input methods only — a third-party keyboard could exfiltrate typed",
+    "Empty array means system input methods only - a third-party keyboard could exfiltrate typed",
     "text, including internal remarks."
   ],
 
@@ -123,15 +123,15 @@
   "_comment_notEnforceable": [
     "Requirements with NO supported policy key. Documented rather than faked:",
     "",
-    "1. 'Disable Nearby Share / Quick Share' — there is no dedicated AMAPI key. The nearest",
+    "1. 'Disable Nearby Share / Quick Share' - there is no dedicated AMAPI key. The nearest",
     "   enforceable controls are bluetoothSharingDisabled, outgoingBeamDisabled, and",
     "   playStoreMode=WHITELIST preventing sharing apps. Verify residual Quick Share behaviour",
     "   per OEM on real hardware.",
-    "2. 'Disable copy/paste out of the app' — DISALLOW_CROSS_PROFILE_COPY_PASTE applies to work",
+    "2. 'Disable copy/paste out of the app' - DISALLOW_CROSS_PROFILE_COPY_PASTE applies to work",
     "   profiles, not fully managed devices. On a fully managed device this must be enforced in the",
     "   app: the Asktrix contact fields have no copy affordance and no text selection.",
-    "3. 'Block all browsers' — enforced by omission from the whitelist rather than by a key.",
-    "4. 'Disable Settings entirely' — no single key. kioskCustomization.systemNavigation plus",
+    "3. 'Block all browsers' - enforced by omission from the whitelist rather than by a key.",
+    "4. 'Disable Settings entirely' - no single key. kioskCustomization.systemNavigation plus",
     "   lock-task mode is the mechanism if full kiosk is wanted; the individual *Disabled keys",
     "   above cover the settings that actually matter without the kiosk UX cost."
   ]

@@ -3,7 +3,7 @@ package com.asktrix.agent.core.common.result
 /**
  * The single result type crossing every layer boundary.
  *
- * Exceptions are never used for expected failures — a network timeout, a 401, a validation rejection
+ * Exceptions are never used for expected failures - a network timeout, a 401, a validation rejection
  * and an offline device are all ordinary outcomes this app must handle, not exceptional ones. Making
  * them part of the return type means the compiler enforces handling them.
  */

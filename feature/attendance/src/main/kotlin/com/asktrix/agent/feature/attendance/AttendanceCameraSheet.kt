@@ -42,7 +42,7 @@ import kotlinx.coroutines.launch
 /**
  * In-app camera for the optional attendance photo (§11).
  *
- * Front camera, low resolution, and no gallery access — the photo exists to evidence that a person
+ * Front camera, low resolution, and no gallery access - the photo exists to evidence that a person
  * was present, so anything more would collect data the requirement does not ask for.
  *
  * "Skip" is deliberately always available: the photo is optional, and a camera that fails must never

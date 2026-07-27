@@ -60,7 +60,7 @@ class AttendanceCamera(private val context: Context) {
             }, ContextCompat.getMainExecutor(context))
         }
 
-    /** Captures a JPEG. Returns null rather than throwing — a failed photo must not block check-in. */
+    /** Captures a JPEG. Returns null rather than throwing - a failed photo must not block check-in. */
     suspend fun capture(): ByteArray? = suspendCancellableCoroutine { continuation ->
         val capture = imageCapture ?: run {
             continuation.resume(null)

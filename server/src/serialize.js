@@ -1,5 +1,6 @@
 'use strict';
 const { maskPhone, maskEmail } = require('./mask');
+const { permissionsFor, statusesFor } = require('./roles');
 
 /**
  * Row -> API projection.
@@ -116,12 +117,17 @@ function attendanceRecord(row) {
 }
 
 function employee(row) {
+  // Derived from the role rather than read from the row, so a permission change takes effect
+  // everywhere at once instead of needing a data migration.
+  const permissions = permissionsFor(row.role);
   return {
     employeeId: row.employee_id,
     employeeCode: row.employee_code,
     displayName: row.display_name,
     role: row.role,
-    permissions: row.permissions || [],
+    permissions,
+    /** The §13 quick actions this role may use. The app renders exactly these. */
+    allowedStatuses: statusesFor(row.role),
   };
 }
 

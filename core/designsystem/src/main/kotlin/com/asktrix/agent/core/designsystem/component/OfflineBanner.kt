@@ -27,7 +27,7 @@ import com.asktrix.agent.core.designsystem.theme.AsktrixTheme
  * Shown when the device has no validated internet connection (§9).
  *
  * Worded as reassurance rather than as an error, because being offline is the expected condition for
- * a field agent, and their work is genuinely safe — it is queued in the outbox and will sync. An
+ * a field agent, and their work is genuinely safe - it is queued in the outbox and will sync. An
  * alarming message here would train people to distrust a system that is working correctly.
  */
 @Composable

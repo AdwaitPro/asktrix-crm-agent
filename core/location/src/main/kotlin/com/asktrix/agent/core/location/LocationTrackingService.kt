@@ -38,12 +38,12 @@ import kotlinx.serialization.json.buildJsonObject
  * interval of 15 minutes, so it cannot meet a 10-minute requirement. `AlarmManager` exact alarms are
  * restricted from Android 12 and are the wrong tool for routine sampling. A foreground service with
  * `foregroundServiceType="location"` is the supported mechanism for user-visible, ongoing location
- * work — and the persistent notification is a feature here, not a cost: DPDP notice obligations mean
+ * work - and the persistent notification is a feature here, not a cost: DPDP notice obligations mean
  * the employee should be able to see, at any moment, that tracking is on.
  *
  * **Why it is tied to check-in rather than always running.** §10 says working hours only, and that is
  * a compliance boundary, not a preference. Starting at check-in and stopping at check-out means the
- * app is not tracking anyone on their own time — and it also sidesteps the Android 15 six-hour cap
+ * app is not tracking anyone on their own time - and it also sidesteps the Android 15 six-hour cap
  * that applies to `dataSync` services, since a `location` service has no such limit.
  *
  * Samples are enqueued in the outbox, never uploaded inline, so a dead network never loses a sample
@@ -182,7 +182,7 @@ class LocationTrackingService : Service() {
         /** §10: every 10 minutes. */
         private const val SAMPLE_INTERVAL_MILLIS = 10 * 60 * 1000L
 
-        /** Must be called from the foreground — at check-in, or from a visible screen. */
+        /** Must be called from the foreground - at check-in, or from a visible screen. */
         fun start(context: Context) {
             context.startForegroundService(Intent(context, LocationTrackingService::class.java))
         }

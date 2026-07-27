@@ -13,10 +13,10 @@ import dagger.hilt.android.AndroidEntryPoint
  * The single activity host.
  *
  * `FLAG_SECURE` is applied before `setContent` and is never removed for the lifetime of the process.
- * It blocks screenshots, screen recording, and appearance in the recents thumbnail (§14–§20).
+ * It blocks screenshots, screen recording, and appearance in the recents thumbnail (§14-§20).
  *
  * It is applied here, at the only window that exists, rather than per-screen: a per-screen approach
- * fails the moment someone adds a screen and forgets. Note the documented limit — this cannot stop a
+ * fails the moment someone adds a screen and forgets. Note the documented limit - this cannot stop a
  * second phone photographing the display, which is exactly why customer contact data is masked at the
  * server and never sent to the device (docs/adr/0003-server-side-pii-masking.md).
  *

@@ -9,6 +9,7 @@ import com.asktrix.agent.core.data.model.Client
 import com.asktrix.agent.core.data.model.ProcessStatus
 import com.asktrix.agent.core.data.model.TimelineEntry
 import com.asktrix.agent.core.data.repository.CallRepository
+import com.asktrix.agent.core.common.session.EmployeeStore
 import com.asktrix.agent.core.data.repository.ClientRepository
 import com.asktrix.agent.core.sync.ConnectivityObserver
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,6 +31,11 @@ data class ClientDetailUiState(
     val message: String? = null,
     val errorMessage: String? = null,
     /** Set when a data call is ready to join; the screen opens the in-call view. */
+    /** The §13 actions this role may apply. Empty until the session loads. */
+    val availableStatuses: List<ProcessStatus> = emptyList(),
+    /** Whether this role may place calls at all (§2). */
+    val canPlaceCalls: Boolean = false,
+    val roleLabel: String = "",
     val launchCallUrl: String? = null,
     /** The one-time link to send the customer so they can join. */
     val customerCallLink: String? = null,
@@ -50,6 +56,7 @@ class ClientDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val clients: ClientRepository,
     private val calls: CallRepository,
+    private val employees: EmployeeStore,
     connectivity: ConnectivityObserver,
 ) : ViewModel() {
 
@@ -62,6 +69,7 @@ class ClientDetailViewModel @Inject constructor(
     private val message = MutableStateFlow<String?>(null)
     private val error = MutableStateFlow<String?>(null)
     private val launchCall = MutableStateFlow<String?>(null)
+    private val role = MutableStateFlow<com.asktrix.agent.core.common.session.SignedInEmployee?>(null)
     private val customerLink = MutableStateFlow<String?>(null)
 
     val state: StateFlow<ClientDetailUiState> = combine(
@@ -90,6 +98,12 @@ class ClientDetailViewModel @Inject constructor(
             errorMessage = err,
             launchCallUrl = launch,
             customerCallLink = link,
+            availableStatuses = role.value?.allowedStatuses
+                ?.map(ProcessStatus::from)
+                ?.filter { it in QUICK_STATUSES }
+                ?: emptyList(),
+            canPlaceCalls = role.value?.can("calls:place") ?: false,
+            roleLabel = role.value?.roleLabel.orEmpty(),
         )
     }.stateIn(
         scope = viewModelScope,
@@ -99,6 +113,7 @@ class ClientDetailViewModel @Inject constructor(
 
     init {
         refresh()
+        viewModelScope.launch { role.value = employees.currentEmployee() }
     }
 
     fun refresh() {
@@ -133,7 +148,7 @@ class ClientDetailViewModel @Inject constructor(
                 )
             ) {
                 is AsktrixResult.Success -> {
-                    message.value = "${status.label} — saved"
+                    message.value = "${status.label} - saved"
                     refresh()
                 }
                 is AsktrixResult.Failure -> error.value = result.error.toDetailMessage()
@@ -145,7 +160,7 @@ class ClientDetailViewModel @Inject constructor(
      * Starts a click-to-call (§5).
      *
      * The request carries only the client id. The provider dials the agent's own handset first, then
-     * bridges the customer — so no customer number ever reaches this device.
+     * bridges the customer - so no customer number ever reaches this device.
      */
     fun startCall() {
         if (activeCall.value?.state?.isActive == true) return

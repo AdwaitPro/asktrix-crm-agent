@@ -83,7 +83,7 @@ class ApiCallTest {
     }
 
     @Test
-    fun `unauthenticated is permanent — refresh is the Authenticator's job, not the outbox's`() = runTest {
+    fun `unauthenticated is permanent - refresh is the Authenticator's job, not the outbox's`() = runTest {
         val result = apiCall<String>(json) {
             Response.error(401, errorBody("""{"code":"UNAUTHENTICATED","message":"expired"}"""))
         }

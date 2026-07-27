@@ -25,7 +25,7 @@ import okhttp3.Route
  *    the dead access token through [AuthInterceptor] and recurse straight back into here.
  *
  * Refresh tokens are single-use and rotate. If the server refuses, the session is cleared and the
- * local cache is purged (§3) — the user must sign in again.
+ * local cache is purged (§3) - the user must sign in again.
  */
 class TokenAuthenticator(
     private val tokens: SessionTokenStore,

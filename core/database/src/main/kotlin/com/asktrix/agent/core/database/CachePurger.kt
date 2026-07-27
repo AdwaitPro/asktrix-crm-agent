@@ -13,8 +13,8 @@ import javax.inject.Singleton
  * Two layers, because either alone is incomplete:
  *
  *  1. Delete the database file. Removes the data.
- *  2. Destroy the Keystore key. Renders any residue — a journal file, a copy in an unallocated
- *     block, a forensic image taken earlier — permanently undecryptable, because the key it was
+ *  2. Destroy the Keystore key. Renders any residue - a journal file, a copy in an unallocated
+ *     block, a forensic image taken earlier - permanently undecryptable, because the key it was
  *     encrypted under no longer exists in hardware.
  *
  * Step 2 is what makes the purge meaningful on a device an attacker may physically hold.

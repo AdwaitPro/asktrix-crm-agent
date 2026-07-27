@@ -9,7 +9,7 @@ const { query } = require('./db');
  * then the customer, records the call, and reports the outcome by webhook. The device only requests
  * a call and observes state.
  *
- * That indirection is exactly why this simulation is faithful rather than a shortcut — the app sees
+ * That indirection is exactly why this simulation is faithful rather than a shortcut - the app sees
  * the same state machine, the same timings and the same failure modes it will see in production.
  * Swapping in the real provider replaces this file and changes nothing above it.
  *
@@ -101,7 +101,7 @@ async function recordAndTimeline(sessionId, clientId, employee, deviceId, state,
   );
 
   const summary = state === 'COMPLETED'
-    ? `Call completed — ${Math.floor(durationSeconds / 60)}m ${durationSeconds % 60}s${recorded ? ' (recorded)' : ''}`
+    ? `Call completed - ${Math.floor(durationSeconds / 60)}m ${durationSeconds % 60}s${recorded ? ' (recorded)' : ''}`
     : `Call ${state.toLowerCase().replace('_', ' ')}`;
 
   await query(

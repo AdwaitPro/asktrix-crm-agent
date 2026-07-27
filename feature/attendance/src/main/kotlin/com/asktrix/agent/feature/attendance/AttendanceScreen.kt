@@ -53,11 +53,21 @@ import java.time.Instant
 @Composable
 fun AttendanceRoute(viewModel: AttendanceViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = androidx.compose.ui.platform.LocalContext.current
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
     ) { grants ->
         viewModel.onPermissionResult(grants.values.any { it })
+    }
+
+    // The optional photo needs the camera, and nothing was ever asking for it, so the capture sheet
+    // could only fail to bind. Requested when the employee opts in, not at screen entry, so someone
+    // who never wants a photo is never prompted.
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+    ) { granted ->
+        if (granted) viewModel.requestCapture() else viewModel.onCameraDenied()
     }
 
     if (state.awaitingCapture) {
@@ -69,11 +79,23 @@ fun AttendanceRoute(viewModel: AttendanceViewModel = hiltViewModel()) {
 
     AttendanceScreen(
         state = state,
-        onToggle = { if (state.photoEnabled) viewModel.requestCapture() else viewModel.toggle() },
+        onToggle = {
+            if (!state.photoEnabled) {
+                viewModel.toggle()
+            } else if (
+                androidx.core.content.ContextCompat.checkSelfPermission(
+                    context, Manifest.permission.CAMERA,
+                ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+            ) {
+                viewModel.requestCapture()
+            } else {
+                cameraLauncher.launch(Manifest.permission.CAMERA)
+            }
+        },
         onPhotoEnabledChange = viewModel::setPhotoEnabled,
         onRequestPermission = {
             // Foreground location only. ACCESS_BACKGROUND_LOCATION must be requested separately,
-            // after this is granted — Android refuses to show both in one dialog.
+            // after this is granted - Android refuses to show both in one dialog.
             permissionLauncher.launch(
                 arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION,
@@ -251,13 +273,13 @@ private fun TodaySummary(today: AttendanceToday) {
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(Modifier.padding(AsktrixTheme.spacing.lg)) {
-            SummaryRow("Checked in", today.checkInAt?.absoluteLabel() ?: "—")
-            SummaryRow("Checked out", today.checkOutAt?.absoluteLabel() ?: "—")
+            SummaryRow("Checked in", today.checkInAt?.absoluteLabel() ?: "-")
+            SummaryRow("Checked out", today.checkOutAt?.absoluteLabel() ?: "-")
             SummaryRow(
                 "Worked",
                 today.workedSeconds?.let { seconds ->
                     "${seconds / SECONDS_PER_HOUR}h ${(seconds % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE}m"
-                } ?: "—",
+                } ?: "-",
             )
         }
     }
@@ -316,7 +338,7 @@ private fun PermissionPrompt(onRequest: () -> Unit) {
 private const val SECONDS_PER_MINUTE = 60L
 private const val SECONDS_PER_HOUR = 3600L
 
-@Preview(name = "Attendance — checked in", showBackground = true, heightDp = 800)
+@Preview(name = "Attendance - checked in", showBackground = true, heightDp = 800)
 @Composable
 private fun AttendancePreview() {
     AsktrixTheme {

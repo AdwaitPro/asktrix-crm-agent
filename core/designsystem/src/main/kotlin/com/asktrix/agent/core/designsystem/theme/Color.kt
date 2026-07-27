@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 
 /**
  * A deliberately narrow palette. This app is used all day, in bright Indian daylight and in dim
- * offices, by people who need to read a status at a glance — so contrast and semantic clarity matter
+ * offices, by people who need to read a status at a glance - so contrast and semantic clarity matter
  * far more than decoration.
  *
  * Every foreground/background pair below meets WCAG AA (4.5:1) for body text.

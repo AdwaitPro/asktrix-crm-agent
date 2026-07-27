@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.sp
  * the best Devanagari coverage on Indian devices for free. Weight and spacing carry the hierarchy
  * instead.
  *
- * `LineHeightStyle` with `Trim.None` keeps multi-line list items optically even — the default trims
+ * `LineHeightStyle` with `Trim.None` keeps multi-line list items optically even - the default trims
  * the first line's ascent and makes dense lists look misaligned.
  */
 private val Default = FontFamily.Default

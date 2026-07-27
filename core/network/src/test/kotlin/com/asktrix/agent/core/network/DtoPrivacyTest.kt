@@ -47,7 +47,7 @@ class DtoPrivacyTest {
 
         assertTrue(
             "${klass.simpleName} declares properties that look like unmasked contact details: " +
-                "$offenders. See docs/adr/0003-server-side-pii-masking.md — masking is server-side " +
+                "$offenders. See docs/adr/0003-server-side-pii-masking.md - masking is server-side " +
                 "and the DTO must have no field for a full number or address.",
             offenders.isEmpty(),
         )

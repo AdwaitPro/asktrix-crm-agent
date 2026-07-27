@@ -7,7 +7,7 @@ import java.time.Instant
  *
  * Separate from the DTO and the Room entity on purpose: the wire format and the cache schema each
  * change for their own reasons, and the UI should not break when either does. It also means the
- * privacy invariant is expressed three times independently — none of these three layers has a field
+ * privacy invariant is expressed three times independently - none of these three layers has a field
  * for an unmasked phone number or email.
  */
 data class Client(

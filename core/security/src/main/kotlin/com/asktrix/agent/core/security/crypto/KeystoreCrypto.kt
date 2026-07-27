@@ -14,12 +14,12 @@ import javax.inject.Singleton
 /**
  * AES-GCM encryption with a key held in the Android Keystore.
  *
- * The key material never leaves the Keystore and is never serialised — this class can encrypt and
+ * The key material never leaves the Keystore and is never serialised - this class can encrypt and
  * decrypt, but cannot export the key, so a rooted attacker who copies the app's files still cannot
  * read the ciphertext without the hardware-backed key.
  *
  * StrongBox (a discrete secure element) is used when the device has one, with a documented fallback
- * to the TEE-backed Keystore. StrongBox is not universal — requiring it would exclude much of the
+ * to the TEE-backed Keystore. StrongBox is not universal - requiring it would exclude much of the
  * likely fleet, so availability is detected rather than assumed.
  *
  * GCM is authenticated encryption: tampering with stored bytes causes decryption to fail rather than
@@ -44,7 +44,7 @@ class KeystoreCrypto @Inject constructor() {
      *
      * Returns null rather than throwing when the data is corrupt, the key was invalidated (for
      * example the user removed their screen lock), or the value was tampered with. The caller treats
-     * null as "session gone, sign in again and purge the cache" — a recoverable state, not a crash.
+     * null as "session gone, sign in again and purge the cache" - a recoverable state, not a crash.
      */
     fun decrypt(encoded: String): String? = runCatching {
         val bytes = Base64.decode(encoded, Base64.NO_WRAP)

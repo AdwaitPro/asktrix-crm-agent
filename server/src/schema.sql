@@ -43,6 +43,7 @@ CREATE TABLE employees (
     work_days       TEXT[] NOT NULL DEFAULT ARRAY['MON','TUE','WED','THU','FRI','SAT'],
     timezone        TEXT NOT NULL DEFAULT 'Asia/Kolkata',
     active          BOOLEAN NOT NULL DEFAULT TRUE,
+    is_demo         BOOLEAN NOT NULL DEFAULT FALSE,
     created_at      TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
@@ -102,7 +103,10 @@ CREATE TABLE clients (
     -- Optimistic concurrency. The app sends the version it saw; a mismatch yields 409 plus the
     -- current state, so the outbox can resolve without a second round trip (§9, §23).
     version             INTEGER NOT NULL DEFAULT 1,
-    created_at          TIMESTAMPTZ NOT NULL DEFAULT now()
+    created_at          TIMESTAMPTZ NOT NULL DEFAULT now(),
+    -- Seeded demonstration data. Real activity is written with FALSE, so the console can show
+    -- either set without ever deleting anything.
+    is_demo BOOLEAN NOT NULL DEFAULT FALSE
 );
 CREATE INDEX idx_clients_assigned ON clients(assigned_employee);
 CREATE INDEX idx_clients_status   ON clients(process_status);
@@ -136,7 +140,10 @@ CREATE TABLE timeline_entries (
     summary         TEXT NOT NULL,
     actor_name      TEXT,
     call_record_id  TEXT,
-    occurred_at     TIMESTAMPTZ NOT NULL DEFAULT now()
+    occurred_at     TIMESTAMPTZ NOT NULL DEFAULT now(),
+    -- Seeded demonstration data. Real activity is written with FALSE, so the console can show
+    -- either set without ever deleting anything.
+    is_demo BOOLEAN NOT NULL DEFAULT FALSE
 );
 CREATE INDEX idx_timeline_client ON timeline_entries(client_id, occurred_at DESC);
 
@@ -180,7 +187,10 @@ CREATE TABLE call_records (
     duration_seconds INTEGER NOT NULL DEFAULT 0,
     -- Recording lives with the telephony provider / CRM. The device never downloads it (§6).
     recording_available BOOLEAN NOT NULL DEFAULT FALSE,
-    recording_uri    TEXT
+    recording_uri    TEXT,
+    -- Seeded demonstration data. Real activity is written with FALSE, so the console can show
+    -- either set without ever deleting anything.
+    is_demo BOOLEAN NOT NULL DEFAULT FALSE
 );
 CREATE INDEX idx_calls_employee ON call_records(employee_id, started_at DESC);
 CREATE INDEX idx_calls_client   ON call_records(client_id, started_at DESC);
@@ -196,7 +206,10 @@ CREATE TABLE attendance (
     longitude       DOUBLE PRECISION NOT NULL,
     accuracy_metres REAL,
     photo_uploaded  BOOLEAN NOT NULL DEFAULT FALSE,
-    photo_bytes     BYTEA
+    photo_bytes     BYTEA,
+    -- Seeded demonstration data. Real activity is written with FALSE, so the console can show
+    -- either set without ever deleting anything.
+    is_demo BOOLEAN NOT NULL DEFAULT FALSE
 );
 CREATE INDEX idx_attendance_employee ON attendance(employee_id, occurred_at DESC);
 
@@ -210,7 +223,10 @@ CREATE TABLE location_pings (
     longitude       DOUBLE PRECISION NOT NULL,
     accuracy_metres REAL,
     is_mocked       BOOLEAN NOT NULL DEFAULT FALSE,
-    battery_percent INTEGER
+    battery_percent INTEGER,
+    -- Seeded demonstration data. Real activity is written with FALSE, so the console can show
+    -- either set without ever deleting anything.
+    is_demo BOOLEAN NOT NULL DEFAULT FALSE
 );
 CREATE INDEX idx_pings_employee ON location_pings(employee_id, sampled_at DESC);
 

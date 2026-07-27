@@ -1,6 +1,7 @@
 package com.asktrix.agent.di
 
 import com.asktrix.agent.BuildConfig
+import com.asktrix.agent.core.common.session.EmployeeStore
 import com.asktrix.agent.core.common.session.SessionTokenStore
 import com.asktrix.agent.core.datastore.EncryptedSessionStore
 import com.asktrix.agent.core.network.di.NetworkModule
@@ -49,4 +50,8 @@ abstract class AppBindings {
     @Binds
     @Singleton
     abstract fun sessionTokenStore(impl: EncryptedSessionStore): SessionTokenStore
+
+    @Binds
+    @Singleton
+    abstract fun employeeStore(impl: EncryptedSessionStore): EmployeeStore
 }

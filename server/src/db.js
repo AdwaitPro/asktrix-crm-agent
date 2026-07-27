@@ -5,7 +5,7 @@ if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL is not set. Copy server/.env.example to server/.env and fill it in.');
 }
 
-// Neon pooled endpoint. Keep the pool small — Neon's pooler multiplexes, and a large local pool
+// Neon pooled endpoint. Keep the pool small - Neon's pooler multiplexes, and a large local pool
 // just holds idle connections open.
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,

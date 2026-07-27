@@ -9,8 +9,8 @@ import javax.inject.Inject
 
 /**
  * WorkManager is configured here rather than by its default initializer (which is removed in the
- * manifest) so that workers can be constructor-injected by Hilt. Every background job in this app —
- * the outbox, location sampling, recording reconciliation — is a Hilt worker.
+ * manifest) so that workers can be constructor-injected by Hilt. Every background job in this app -
+ * the outbox, location sampling, recording reconciliation - is a Hilt worker.
  */
 @HiltAndroidApp
 class AsktrixApplication : Application(), Configuration.Provider {

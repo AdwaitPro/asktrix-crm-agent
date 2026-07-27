@@ -87,7 +87,7 @@ interface OutboxDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun enqueue(item: OutboxEntity)
 
-    /** Work that is due now, oldest first — FIFO preserves the order the employee acted in. */
+    /** Work that is due now, oldest first - FIFO preserves the order the employee acted in. */
     @Query(
         "SELECT * FROM outbox WHERE state = 'PENDING' AND nextAttemptAtMillis <= :now " +
             "ORDER BY createdAtMillis ASC LIMIT :limit",

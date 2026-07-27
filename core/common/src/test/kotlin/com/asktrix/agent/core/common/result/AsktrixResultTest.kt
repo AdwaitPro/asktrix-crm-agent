@@ -93,11 +93,11 @@ class AsktrixResultTest {
             val retryable = error is AsktrixError.Retryable
             val permanent = error is AsktrixError.Permanent
             assertTrue(
-                "$error is neither Retryable nor Permanent — the sync engine cannot classify it",
+                "$error is neither Retryable nor Permanent - the sync engine cannot classify it",
                 retryable || permanent,
             )
             assertFalse(
-                "$error is both Retryable and Permanent — retry behaviour would be ambiguous",
+                "$error is both Retryable and Permanent - retry behaviour would be ambiguous",
                 retryable && permanent,
             )
         }

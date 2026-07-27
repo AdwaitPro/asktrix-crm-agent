@@ -14,7 +14,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Observed device state, gathered for the server to judge (§14–§20, §25–§27).
+ * Observed device state, gathered for the server to judge (§14-§20, §25-§27).
  *
  * Two things this class is **not**:
  *
@@ -23,7 +23,7 @@ import javax.inject.Singleton
  *     since 2026. Restrictions are enforced by the EMM's policy (`mdm/policy.json`), not here. This
  *     class only reads and reports (ADR-0004).
  *
- *  2. **It is not a security control.** Every check below is bypassable by anyone who cares — a
+ *  2. **It is not a security control.** Every check below is bypassable by anyone who cares - a
  *     rooted device can lie about all of it. The authoritative verdict is the server's verification
  *     of the Keystore attestation statement. These signals are defence in depth and, just as
  *     usefully, field diagnostics.
@@ -80,7 +80,7 @@ class DeviceComplianceReporter @Inject constructor(
     /** Confirms the EMM enrolment actually took effect on this handset. */
     private fun isDeviceOwnerManaged(): Boolean = runCatching {
         val dpm = context.getSystemService<DevicePolicyManager>() ?: return@runCatching false
-        // The Asktrix app is never the device owner (ADR-0004), so this asks whether *any* app is —
+        // The Asktrix app is never the device owner (ADR-0004), so this asks whether *any* app is -
         // i.e. whether the EMM enrolment actually took on this handset.
         dpm.activeAdmins?.isNotEmpty() == true ||
             dpm.isDeviceOwnerApp(context.packageName) ||
@@ -91,7 +91,7 @@ class DeviceComplianceReporter @Inject constructor(
      * The single most valuable field in this report.
      *
      * Android's compatibility definition requires a compliant OEM restriction to be visible here, so
-     * a `true` value is direct evidence that a battery manager is throttling us — which is the usual
+     * a `true` value is direct evidence that a battery manager is throttling us - which is the usual
      * reason location data goes quiet in the field.
      */
     private fun isBackgroundRestricted(): Boolean = runCatching {
@@ -101,7 +101,7 @@ class DeviceComplianceReporter @Inject constructor(
     /**
      * Bucket 5 (`STANDBY_BUCKET_EXEMPTED`) confirms an EMM exemption is in force. Checked instead of
      * `isIgnoringBatteryOptimizations`, which reads false even when an EMM role exemption is applied
-     * — the exemption is implemented through standby buckets rather than the power allowlist.
+     * - the exemption is implemented through standby buckets rather than the power allowlist.
      */
     private fun appStandbyBucket(): Int? = runCatching {
         context.getSystemService<UsageStatsManager>()?.appStandbyBucket

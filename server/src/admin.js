@@ -6,14 +6,30 @@ const { query } = require('./db');
 const { maskPhone, maskEmail } = require('./mask');
 
 /**
- * Admin API (§25–§27).
+ * Demo data filter.
+ *
+ * Seeded history is flagged is_demo. The console can show demonstration data, real activity, or
+ * both, without ever deleting anything - so a demo can be given on realistic history and then
+ * switched to show only what actually happened on the devices.
+ */
+function demoFilter(req, alias = '') {
+  const col = alias ? `${alias}.is_demo` : 'is_demo';
+  switch (req.query.data) {
+    case 'demo': return ` AND ${col} = TRUE`;
+    case 'real': return ` AND ${col} = FALSE`;
+    default: return '';
+  }
+}
+
+/**
+ * Admin API (§25-§27).
  *
  * Serves the manager-facing dashboard: employee status, live location, attendance, call records with
  * recordings, the client pipeline, and device compliance.
  *
  * **On masking:** §4 says *employees* must never see full contact details. A manager working a
  * customer escalation legitimately may. So the admin API masks by default and exposes an explicit,
- * **audited** reveal — every unmask is written to `pii_access_log` with who, what and when. That is
+ * **audited** reveal - every unmask is written to `pii_access_log` with who, what and when. That is
  * both the safer default and what a DPDP audit will ask for.
  */
 
@@ -69,31 +85,32 @@ function register(app, asyncRoute, verifyPassword) {
   }));
 
   // -------------------------------------------------------------- overview --
-  app.get('/admin/overview', requireAdmin, asyncRoute(async (_req, res) => {
+  app.get('/admin/overview', requireAdmin, asyncRoute(async (req, res) => {
+    const F = demoFilter(req);
     const { rows } = await query(`
       SELECT
         (SELECT count(*) FROM employees WHERE active) AS employees,
-        (SELECT count(*) FROM clients) AS clients,
-        (SELECT count(*) FROM clients WHERE process_status = 'COMPLETED') AS completed,
-        (SELECT count(*) FROM clients WHERE follow_up_at IS NOT NULL AND follow_up_at <= now())
+        (SELECT count(*) FROM clients WHERE TRUE ${F}) AS clients,
+        (SELECT count(*) FROM clients WHERE process_status = 'COMPLETED' ${F}) AS completed,
+        (SELECT count(*) FROM clients WHERE follow_up_at IS NOT NULL AND follow_up_at <= now() ${F})
           AS follow_ups_due,
-        (SELECT count(*) FROM call_records WHERE (started_at AT TIME ZONE 'Asia/Kolkata')::date = (now() AT TIME ZONE 'Asia/Kolkata')::date)
+        (SELECT count(*) FROM call_records WHERE (started_at AT TIME ZONE 'Asia/Kolkata')::date = (now() AT TIME ZONE 'Asia/Kolkata')::date ${F})
           AS calls_today,
         (SELECT count(*) FROM call_records
-          WHERE (started_at AT TIME ZONE 'Asia/Kolkata')::date = (now() AT TIME ZONE 'Asia/Kolkata')::date AND state = 'COMPLETED')
+          WHERE (started_at AT TIME ZONE 'Asia/Kolkata')::date = (now() AT TIME ZONE 'Asia/Kolkata')::date AND state = 'COMPLETED' ${F})
           AS calls_connected_today,
         (SELECT coalesce(sum(duration_seconds), 0) FROM call_records
-          WHERE (started_at AT TIME ZONE 'Asia/Kolkata')::date = (now() AT TIME ZONE 'Asia/Kolkata')::date) AS talk_seconds_today,
-        (SELECT count(*) FROM call_records WHERE recording_available) AS recordings,
+          WHERE (started_at AT TIME ZONE 'Asia/Kolkata')::date = (now() AT TIME ZONE 'Asia/Kolkata')::date ${F}) AS talk_seconds_today,
+        (SELECT count(*) FROM call_records WHERE recording_available ${F}) AS recordings,
         (SELECT count(DISTINCT employee_id) FROM attendance
-          WHERE kind = 'CHECK_IN' AND (occurred_at AT TIME ZONE 'Asia/Kolkata')::date = (now() AT TIME ZONE 'Asia/Kolkata')::date)
+          WHERE kind = 'CHECK_IN' AND (occurred_at AT TIME ZONE 'Asia/Kolkata')::date = (now() AT TIME ZONE 'Asia/Kolkata')::date ${F})
           AS checked_in_today,
         (SELECT count(*) FROM location_pings
-          WHERE (sampled_at AT TIME ZONE 'Asia/Kolkata')::date = (now() AT TIME ZONE 'Asia/Kolkata')::date) AS pings_today,
+          WHERE (sampled_at AT TIME ZONE 'Asia/Kolkata')::date = (now() AT TIME ZONE 'Asia/Kolkata')::date ${F}) AS pings_today,
         (SELECT count(*) FROM devices) AS devices,
         (SELECT count(*) FROM devices WHERE NOT compliant) AS devices_noncompliant
     `);
-    res.json(rows[0]);
+    res.json({ ...rows[0], dataMode: req.query.data || 'all' });
   }));
 
   // ------------------------------------------------------------- employees --
@@ -120,13 +137,20 @@ function register(app, asyncRoute, verifyPassword) {
              (SELECT count(*) FROM devices d WHERE d.employee_id = e.employee_id) AS devices
       FROM employees e WHERE e.active ORDER BY e.employee_code
     `);
-    res.json({ items: rows });
+    const { permissionsFor, statusesFor } = require('./roles');
+    res.json({
+      items: rows.map((r) => ({
+        ...r,
+        permissions: permissionsFor(r.role),
+        allowedStatuses: statusesFor(r.role),
+      })),
+    });
   }));
 
   app.get('/admin/employees/:id/locations', requireAdmin, asyncRoute(async (req, res) => {
     const { rows } = await query(
       `SELECT latitude, longitude, accuracy_metres, sampled_at, received_at, battery_percent, is_mocked
-       FROM location_pings WHERE employee_id = $1
+       FROM location_pings WHERE employee_id = $1 ${demoFilter(req)}
        ORDER BY sampled_at DESC LIMIT 200`,
       [req.params.id],
     );
@@ -136,7 +160,8 @@ function register(app, asyncRoute, verifyPassword) {
   app.get('/admin/employees/:id/attendance', requireAdmin, asyncRoute(async (req, res) => {
     const { rows } = await query(
       `SELECT attendance_id, kind, occurred_at, recorded_at, latitude, longitude, photo_uploaded
-       FROM attendance WHERE employee_id = $1 ORDER BY occurred_at DESC LIMIT 60`,
+       FROM attendance WHERE employee_id = $1 ${demoFilter(req)}
+       ORDER BY occurred_at DESC LIMIT 60`,
       [req.params.id],
     );
     res.json({ items: rows });
@@ -147,10 +172,11 @@ function register(app, asyncRoute, verifyPassword) {
     const params = [];
     let where = '1=1';
     if (req.query.employeeId) { params.push(req.query.employeeId); where += ` AND r.employee_id = $${params.length}`; }
+    where += demoFilter(req, 'r');
     const { rows } = await query(
       `SELECT r.call_record_id, r.client_id, c.name AS client_name, e.display_name AS employee_name,
               r.direction, r.state, r.started_at, r.duration_seconds, r.recording_available,
-              r.recording_uri, r.device_id
+              r.recording_uri, r.device_id, r.is_demo
        FROM call_records r
        JOIN clients c ON c.client_id = r.client_id
        JOIN employees e ON e.employee_id = r.employee_id
@@ -165,7 +191,7 @@ function register(app, asyncRoute, verifyPassword) {
    *
    * Audited like the contact reveal: a recording of a customer conversation is personal data, and
    * "who listened to this call" is a question a DPDP audit will ask. Note the asymmetry with the
-   * mobile app — the handset is only ever told that a recording *exists*; it can never fetch one.
+   * mobile app - the handset is only ever told that a recording *exists*; it can never fetch one.
    *
    * In production this proxies the telephony provider's short-lived recording URL rather than
    * serving a local file. Here it serves the generated demo audio.
@@ -209,12 +235,14 @@ function register(app, asyncRoute, verifyPassword) {
   }));
 
   // ---------------------------------------------------------------- clients --
-  app.get('/admin/clients', requireAdmin, asyncRoute(async (_req, res) => {
+  app.get('/admin/clients', requireAdmin, asyncRoute(async (req, res) => {
+    const F = demoFilter(req, 'c');
     const { rows } = await query(`
       SELECT c.client_id, c.name, c.service_id, c.process_status, c.payment_status,
              c.government_status, c.documents_pending, c.follow_up_at, c.last_interaction_at,
-             c.version, c.phone_full, c.email_full, e.display_name AS assigned_to
+             c.version, c.phone_full, c.email_full, c.is_demo, e.display_name AS assigned_to
       FROM clients c LEFT JOIN employees e ON e.employee_id = c.assigned_employee
+      WHERE TRUE ${F}
       ORDER BY c.client_id
     `);
     // Masked by default, exactly like the mobile app. Revealing requires the audited endpoint below.
@@ -232,12 +260,13 @@ function register(app, asyncRoute, verifyPassword) {
         assignedTo: r.assigned_to,
         phoneMasked: maskPhone(r.phone_full),
         emailMasked: maskEmail(r.email_full),
+        isDemo: r.is_demo,
       })),
     });
   }));
 
   /**
-   * Reveals a customer's real contact details to an admin — and records that it happened.
+   * Reveals a customer's real contact details to an admin - and records that it happened.
    *
    * This is the only endpoint in the entire system that returns an unmasked value, it is restricted
    * to TEAM_LEADER, and it is always audited. A DPDP audit asks "who looked at this customer's data

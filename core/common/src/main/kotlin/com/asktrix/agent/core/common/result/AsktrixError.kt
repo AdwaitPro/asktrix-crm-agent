@@ -74,7 +74,7 @@ sealed interface AsktrixError {
     data class StorageFailure(override val debugContext: String? = null) : Permanent
 
     /**
-     * The device failed an integrity check (§14–§20). The caller must purge the local cache and end
+     * The device failed an integrity check (§14-§20). The caller must purge the local cache and end
      * the session; this is never retried.
      */
     data class IntegrityFailure(

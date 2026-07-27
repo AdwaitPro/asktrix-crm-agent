@@ -5,7 +5,7 @@
  * bright white dashboard is fatiguing in that role. The palette matches the Android app so the two
  * halves of the product read as one system.
  *
- * No framework and no build step — the whole console is three static files served by the CRM.
+ * No framework and no build step - the whole console is three static files served by the CRM.
  */
 
 :root {
@@ -415,3 +415,37 @@ tbody tr:hover { background: rgba(30, 41, 59, 0.5); }
 
 .map-pop { font-size: 12.5px; line-height: 1.5; }
 .map-pop strong { font-weight: 650; }
+
+
+/* ─────────────────────────────  Data mode switch  ───────────────────────────── */
+
+.seg {
+  display: inline-flex;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 2px;
+}
+.seg__btn {
+  border: none; background: transparent;
+  color: var(--text-dim);
+  font-size: 12px; font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.14s ease, color 0.14s ease;
+}
+.seg__btn:hover { color: var(--text); }
+.seg__btn.is-active { background: var(--accent); color: #06202E; }
+@media (prefers-color-scheme: light) { .seg__btn.is-active { color: #FFFFFF; } }
+
+.demo-tag {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--text-faint);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 1px 5px;
+  margin-left: 6px;
+  vertical-align: middle;
+}

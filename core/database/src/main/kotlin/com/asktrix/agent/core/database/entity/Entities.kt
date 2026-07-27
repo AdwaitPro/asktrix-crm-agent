@@ -73,7 +73,7 @@ data class CachedCallRecordEntity(
  *
  * Every write the employee makes is enqueued here **before** any network attempt, so nothing is lost
  * when the device is offline and nothing is duplicated on retry. [idempotencyKey] is generated once,
- * at enqueue time, and reused on every attempt — that is what makes a retry safe.
+ * at enqueue time, and reused on every attempt - that is what makes a retry safe.
  */
 @Entity(tableName = "outbox", indices = [Index("state"), Index("nextAttemptAtMillis")])
 data class OutboxEntity(
@@ -81,7 +81,7 @@ data class OutboxEntity(
     /** Generated once and never regenerated; the server dedupes on it. */
     val idempotencyKey: String,
     val kind: String,
-    /** The target entity, e.g. a clientId — used to show pending state in the UI. */
+    /** The target entity, e.g. a clientId - used to show pending state in the UI. */
     val targetId: String?,
     /** JSON request body, serialised at enqueue time. */
     val payload: String,
