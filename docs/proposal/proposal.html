@@ -1,0 +1,828 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Asktrix CRM Mobile Agent App - Proposal and Handover</title>
+<style>
+/*
+ * Client proposal, print-first.
+ *
+ * Designed for A4 and for being read on paper in a meeting, so the hierarchy has to survive
+ * black-and-white printing: weight and spacing carry the structure, colour only accents it.
+ */
+
+@page {
+  size: A4;
+  margin: 18mm 16mm 20mm;
+}
+
+:root {
+  --ink:        #10192B;
+  --ink-soft:   #3C4A61;
+  --ink-faint:  #6B7A91;
+  --rule:       #DCE3EC;
+  --rule-soft:  #EDF1F6;
+  --accent:     #0B5FA5;
+  --accent-pale:#EEF5FC;
+  --good:       #0F7B52;
+  --warn:       #9A6600;
+  --paper-2:    #F7F9FC;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+body {
+  margin: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  font-size: 10.2pt;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  letter-spacing: -0.002em;
+}
+
+h1, h2, h3, h4 { color: var(--ink); margin: 0; letter-spacing: -0.015em; }
+
+p { margin: 0 0 8pt; }
+strong { color: var(--ink); font-weight: 600; }
+
+a { color: var(--accent); text-decoration: none; }
+
+.page-break { break-before: page; }
+section { break-inside: auto; }
+h2, h3, h4 { break-after: avoid; }
+
+/*
+ * Long tables must be allowed to flow across pages. Forbidding a break inside a table that is
+ * taller than a page pushes the whole thing to a fresh sheet and still overflows, which left large
+ * blank areas. Rows stay intact and the header repeats instead.
+ */
+table { break-inside: auto; }
+tr    { break-inside: avoid; }
+thead { display: table-header-group; }
+tfoot { display: table-footer-group; }
+
+.box, .card, .stats, .price-hero, .sign { break-inside: avoid; }
+
+/* ─────────────────────────────  Cover  ───────────────────────────── */
+
+.cover {
+  height: 253mm;
+  display: flex;
+  flex-direction: column;
+  break-after: page;
+}
+
+.cover__mark {
+  width: 46px; height: 46px;
+  border-radius: 11px;
+  background: var(--accent);
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 700;
+  margin-bottom: 26pt;
+}
+
+.cover__eyebrow {
+  font-size: 8.5pt;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12pt;
+}
+
+.cover h1 {
+  font-size: 30pt;
+  line-height: 1.12;
+  font-weight: 700;
+  margin-bottom: 14pt;
+  max-width: 15cm;
+}
+
+.cover__sub {
+  font-size: 12pt;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  max-width: 13.5cm;
+  margin-bottom: auto;
+}
+
+.cover__headline {
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+  background: var(--paper-2);
+  padding: 14pt 16pt;
+  margin-bottom: 20pt;
+}
+.cover__headline .k { font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); }
+.cover__headline .v { font-size: 20pt; font-weight: 700; color: var(--ink); line-height: 1.2; }
+.cover__headline .n { font-size: 9.5pt; color: var(--ink-faint); margin-top: 3pt; }
+
+.cover__meta {
+  border-top: 1px solid var(--rule);
+  padding-top: 12pt;
+  display: flex;
+  gap: 28pt;
+  font-size: 9.5pt;
+}
+.cover__meta .lbl { color: var(--ink-faint); font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.08em; }
+.cover__meta .val { color: var(--ink); font-weight: 600; }
+
+/* ─────────────────────────────  Sections  ───────────────────────────── */
+
+.sec-num {
+  font-size: 8.5pt;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+h2 {
+  font-size: 16pt;
+  font-weight: 700;
+  margin: 4pt 0 10pt;
+  padding-bottom: 6pt;
+  border-bottom: 1px solid var(--rule);
+}
+
+h3 {
+  font-size: 11pt;
+  font-weight: 700;
+  margin: 16pt 0 6pt;
+}
+
+h4 { font-size: 10pt; font-weight: 700; margin: 0 0 4pt; }
+
+section { margin-bottom: 22pt; }
+
+ul { margin: 0 0 8pt; padding-left: 16pt; }
+li { margin-bottom: 4pt; }
+
+.lede { font-size: 11pt; line-height: 1.55; color: var(--ink-soft); margin-bottom: 12pt; }
+
+/* ─────────────────────────────  Tables  ───────────────────────────── */
+
+table { width: 100%; border-collapse: collapse; font-size: 9.4pt; margin: 8pt 0 12pt; }
+
+th {
+  text-align: left;
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding: 6pt 8pt;
+  border-bottom: 1.2px solid var(--rule);
+}
+
+td {
+  padding: 6pt 8pt;
+  border-bottom: 1px solid var(--rule-soft);
+  vertical-align: top;
+}
+
+td.k { color: var(--ink); font-weight: 600; white-space: nowrap; }
+td.num, th.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+tr.total td {
+  border-top: 1.4px solid var(--ink);
+  border-bottom: none;
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 10.5pt;
+  padding-top: 8pt;
+}
+tr.sub td { color: var(--ink); font-weight: 600; border-bottom: 1px solid var(--rule); }
+
+.tag {
+  display: inline-block;
+  font-size: 7.6pt;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 1.5pt 5pt;
+  border-radius: 3pt;
+}
+.tag--done { background: #E4F4EC; color: var(--good); }
+.tag--dep  { background: #FDF3DF; color: var(--warn); }
+
+/* ─────────────────────────────  Boxes  ───────────────────────────── */
+
+.box {
+  border: 1px solid var(--rule);
+  border-radius: 5pt;
+  padding: 11pt 13pt;
+  margin: 10pt 0;
+  background: var(--paper-2);
+}
+.box--accent { border-left: 3px solid var(--accent); background: var(--accent-pale); }
+.box--plain  { background: #fff; }
+.box p:last-child { margin-bottom: 0; }
+
+.grid-2 { display: flex; gap: 10pt; margin: 10pt 0; }
+.grid-2 > * { flex: 1; margin: 0; }
+
+.card {
+  border: 1px solid var(--rule);
+  border-radius: 5pt;
+  padding: 10pt 12pt;
+  background: #fff;
+}
+.card h4 { color: var(--ink); }
+.card p { font-size: 9.3pt; margin: 0; }
+
+.stats { display: flex; gap: 8pt; margin: 12pt 0; }
+.stat {
+  flex: 1;
+  border: 1px solid var(--rule);
+  border-radius: 5pt;
+  padding: 9pt 10pt;
+  background: #fff;
+}
+.stat .v { font-size: 17pt; font-weight: 700; color: var(--ink); line-height: 1.1; }
+.stat .l { font-size: 8pt; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.07em; margin-top: 2pt; }
+
+code {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 8.8pt;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 2.5pt;
+  padding: 0.5pt 3pt;
+  color: var(--ink);
+}
+
+.price-hero {
+  border: 1.4px solid var(--ink);
+  border-radius: 6pt;
+  padding: 16pt 18pt;
+  margin: 12pt 0 14pt;
+  display: flex;
+  align-items: baseline;
+  gap: 20pt;
+}
+.price-hero .amt { font-size: 26pt; font-weight: 700; color: var(--ink); line-height: 1; }
+.price-hero .cap { font-size: 9pt; color: var(--ink-faint); }
+.price-hero .side { margin-left: auto; text-align: right; }
+.price-hero .side .amt2 { font-size: 15pt; font-weight: 700; color: var(--ink); }
+
+.sign {
+  display: flex;
+  gap: 24pt;
+  margin-top: 26pt;
+}
+.sign > div { flex: 1; }
+.sign .line { border-bottom: 1px solid var(--ink); height: 34pt; }
+.sign .who { font-size: 8.5pt; color: var(--ink-faint); margin-top: 5pt; }
+
+.foot {
+  margin-top: 24pt;
+  padding-top: 8pt;
+  border-top: 1px solid var(--rule);
+  font-size: 8.5pt;
+  color: var(--ink-faint);
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════  COVER  ═══════════════════════════ -->
+<div class="cover">
+  <div class="cover__mark">A</div>
+  <div class="cover__eyebrow">Proposal and handover document</div>
+  <h1>Asktrix CRM Mobile Agent App</h1>
+  <p class="cover__sub">
+    A secure Android application for field and office staff, with a web console for managers.
+    Built to the requirement document v1.0, sections 1 to 30. Working, deployed, and available
+    to install today.
+  </p>
+
+  <div class="cover__headline">
+    <div class="k">Total investment</div>
+    <div class="v">Rs 3,00,000 <span style="font-size:11pt;font-weight:500;color:var(--ink-faint)">plus GST</span></div>
+    <div class="n">One time. Annual maintenance Rs 5,000 per month, billed separately.</div>
+  </div>
+
+  <div class="cover__meta">
+    <div>
+      <div class="lbl">Prepared for</div>
+      <div class="val">Asktrix CRM</div>
+    </div>
+    <div>
+      <div class="lbl">Prepared by</div>
+      <div class="val">Adwait Keshari</div>
+    </div>
+    <div>
+      <div class="lbl">Status</div>
+      <div class="val">Delivered and live</div>
+    </div>
+    <div>
+      <div class="lbl">Valid until</div>
+      <div class="val">30 days from issue</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════  1. SUMMARY  ═══════════════════════════ -->
+<section>
+  <div class="sec-num">Section 01</div>
+  <h2>What you are getting</h2>
+
+  <p class="lede">
+    This is not a proposal to begin work. The application described here is finished, deployed and
+    running. You can install it on a phone and use it before you approve anything.
+  </p>
+
+  <div class="stats">
+    <div class="stat"><div class="v">21 of 25</div><div class="l">Requirement areas verified</div></div>
+    <div class="stat"><div class="v">19</div><div class="l">Software modules</div></div>
+    <div class="stat"><div class="v">55</div><div class="l">Automated tests passing</div></div>
+    <div class="stat"><div class="v">14,800</div><div class="l">Lines of code written</div></div>
+  </div>
+
+  <p>The delivery has three parts:</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h4>1. The Android application</h4>
+      <p>
+        For your employees. Their assigned clients, masked customer contact details, calling,
+        status updates, attendance with location and photo, and full offline operation.
+      </p>
+    </div>
+    <div class="card">
+      <h4>2. The admin web console</h4>
+      <p>
+        For your managers. Live attendance, staff locations on a map, every call placed, the
+        client pipeline, enrolled devices, and an audit trail of every contact detail viewed.
+      </p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:10pt">
+    <h4>3. The engineering record</h4>
+    <p>
+      Thirteen technical documents including the API contract, four architecture decision records,
+      a compliance matrix for the DPDP Act 2023, a requirement traceability matrix mapping every
+      section of your requirement document to the code that implements it, and operational runbooks.
+      Your future development team inherits a documented system, not a mystery.
+    </p>
+  </div>
+
+  <div class="box box--accent">
+    <h4>Why this matters commercially</h4>
+    <p>
+      Most mobile app proposals ask you to fund an idea and see the result in four months. The
+      normal risk is that the finished product does not match what was described. That risk does not
+      exist here, because the product already exists. You are approving something you have used.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════  2. SEE IT  ═══════════════════════════ -->
+<section>
+  <div class="sec-num">Section 02</div>
+  <h2>Verify it yourself before you decide</h2>
+
+  <p>Nothing below requires our involvement. Open these on your own devices.</p>
+
+  <table>
+    <thead>
+      <tr><th style="width:30%">What</th><th>Where</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="k">Plain-English guide</td>
+        <td>asktrix-crm.vercel.app/demo<br>
+          <span style="color:var(--ink-faint)">Explains the whole system for someone who has never seen it.</span></td>
+      </tr>
+      <tr>
+        <td class="k">Admin console</td>
+        <td>asktrix-crm.vercel.app/admin<br>
+          <span style="color:var(--ink-faint)">Sign in with code <code>EMP003</code>, password <code>asktrix123</code>.</span></td>
+      </tr>
+      <tr>
+        <td class="k">Android app</td>
+        <td>github.com/AdwaitPro/asktrix-crm-agent/releases/latest<br>
+          <span style="color:var(--ink-faint)">Signed APK, 12.3 MB. Sign in as <code>EMP001</code> to <code>EMP006</code>, same password.</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="box">
+    <h4>The five minute evaluation</h4>
+    <p>
+      Open the console and set the data filter to <strong>Real</strong>. Every figure drops to zero,
+      because the sample data is excluded. Now install the app on a phone, check in for the day, and
+      refresh the console. Attendance goes from zero to one, with the position and photo attached.
+      Everything you see after that point is something you did yourself.
+    </p>
+  </div>
+</section>
+
+<div class="page-break"></div>
+
+<!-- ═══════════════════════════  3. SCOPE  ═══════════════════════════ -->
+<section>
+  <div class="sec-num">Section 03</div>
+  <h2>Scope delivered, against your requirement document</h2>
+
+  <p>
+    Each row corresponds to a numbered section of the Asktrix CRM Mobile Agent App Developer
+    Requirement Document v1.0. The full traceability matrix, naming the exact source files and tests
+    for each, is included in the handover.
+  </p>
+
+  <table>
+    <thead>
+      <tr><th style="width:8%">Ref</th><th style="width:44%">Requirement</th><th>Delivered as</th><th style="width:13%">Status</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="k">1</td><td>Secure employee operations app</td><td>Hardened Android application, 19 modules</td><td><span class="tag tag--done">Done</span></td></tr>
+      <tr><td class="k">2</td><td>Six user roles</td><td>Customer Support, Sales, Documentation, Accounts, Relationship Managers, Team Leaders, each with its own permissions, enforced on the server</td><td><span class="tag tag--done">Done</span></td></tr>
+      <tr><td class="k">3</td><td>No permanent customer database on the device</td><td>Encrypted cache with automatic expiry, erased on sign out</td><td><span class="tag tag--done">Done</span></td></tr>
+      <tr><td class="k">4</td><td>Masked phone and email</td><td>Masking performed by the server. The full number never reaches the handset</td><td><span class="tag tag--done">Done</span></td></tr>
+      <tr><td class="k">5</td><td>Click to call only, no dial pad</td><td>Calls addressed by client reference. The app declares no calling permission at all</td><td><span class="tag tag--done">Done</span></td></tr>
+      <tr><td class="k">6</td><td>Call recording</td><td>Delivered through an internet calling architecture. See section 7</td><td><span class="tag tag--done">Done</span></td></tr>
+      <tr><td class="k">7</td><td>Call history synchronisation</td><td>Every call logged against the client with duration and outcome</td><td><span class="tag tag--done">Done</span></td></tr>
+      <tr><td class="k">8</td><td>Client detail and timeline</td><td>Full activity history per client</td><td><span class="tag tag--done">Done</span></td></tr>
+      <tr><td class="k">9</td><td>Offline operation</td><td>Queued actions with duplicate protection, sent when the network returns</td><td><span class="tag tag--done">Done</span></td></tr>
+      <tr><td class="k">10</td><td>Location sampling</td><td>During working hours only, with battery and mock-location detection</td><td><span class="tag tag--done">Done</span></td></tr>
+      <tr><td class="k">11</td><td>Attendance with GPS and photo</td><td>Check in and out, position recorded, optional selfie</td><td><span class="tag tag--done">Done</span></td></tr>
+      <tr><td class="k">12</td><td>Dashboard</td><td>Assigned clients, pending work, follow-ups due</td><td><span class="tag tag--done">Done</span></td></tr>
+      <tr><td class="k">13</td><td>Quick status actions</td><td>Restricted to those the signed-in role is permitted to set</td><td><span class="tag tag--done">Done</span></td></tr>
+      <tr><td class="k">14 to 20</td><td>Device integrity and anti-tamper</td><td>Hardware-backed key attestation, root and emulator detection, screenshot blocking, no sensitive logging</td><td><span class="tag tag--done">Done</span></td></tr>
+      <tr><td class="k">21</td><td>Factory reset protection</td><td>Policy authored and ready. Requires an enrolled company device to activate</td><td><span class="tag tag--dep">Your input</span></td></tr>
+      <tr><td class="k">22 to 24</td><td>Data protection and synchronisation</td><td>Encrypted storage, certificate handling, token rotation, conflict resolution</td><td><span class="tag tag--done">Done</span></td></tr>
+      <tr><td class="k">25 to 27</td><td>Management visibility and restrictions</td><td>Admin console, device policy set, restriction enforcement</td><td><span class="tag tag--done">Done</span></td></tr>
+      <tr><td class="k">28 to 30</td><td>Deployment and operations</td><td>Signed release builds, deployment pipeline, runbooks</td><td><span class="tag tag--done">Done</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══════════════════════════  4. TECH  ═══════════════════════════ -->
+<section>
+  <div class="sec-num">Section 04</div>
+  <h2>Technology stack</h2>
+
+  <p>
+    Every component is current, actively maintained, and free of licence fees. There are no
+    proprietary frameworks and no vendor lock-in.
+  </p>
+
+  <h3>Android application</h3>
+  <table>
+    <thead><tr><th style="width:26%">Area</th><th style="width:34%">Technology</th><th>Why it was chosen</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Language</td><td>Kotlin 2.4</td><td>Google's official language for Android. Any Android developer can maintain it</td></tr>
+      <tr><td class="k">User interface</td><td>Jetpack Compose, Material 3</td><td>Google's current UI toolkit. Supports dark mode and accessibility natively</td></tr>
+      <tr><td class="k">Build system</td><td>Gradle 9.6, Android Gradle Plugin 9.3</td><td>Standard Android tooling</td></tr>
+      <tr><td class="k">Android support</td><td>Android 10 through Android 16</td><td>Covers effectively every handset in use in India today</td></tr>
+      <tr><td class="k">Architecture</td><td>19 modules, dependencies pointing inward</td><td>Features can be changed without risk to security or data code</td></tr>
+      <tr><td class="k">Dependency injection</td><td>Hilt 2.60</td><td>Google's standard. Keeps components independently testable</td></tr>
+      <tr><td class="k">Local database</td><td>Room 2.8 with SQLCipher 4.17</td><td>The on-device cache is encrypted at rest</td></tr>
+      <tr><td class="k">Preferences</td><td>DataStore 1.2, values encrypted individually</td><td>Session tokens are unreadable even with the file in hand</td></tr>
+      <tr><td class="k">Networking</td><td>Retrofit 3.0, OkHttp 5.4</td><td>Industry standard, with plain HTTP refused outright</td></tr>
+      <tr><td class="k">Data format</td><td>Kotlin Serialization 1.11</td><td>Type-checked at compile time, so malformed data cannot slip through</td></tr>
+      <tr><td class="k">Background work</td><td>WorkManager, Coroutines 1.11</td><td>Survives the app being closed or the phone restarting</td></tr>
+      <tr><td class="k">Camera</td><td>CameraX 1.6</td><td>Attendance photograph capture across all manufacturers</td></tr>
+      <tr><td class="k">Location</td><td>Google Play Services Location</td><td>Accurate positioning with low battery impact</td></tr>
+      <tr><td class="k">Cryptography</td><td>Android Keystore, AES-GCM, StrongBox where available</td><td>Keys are held in dedicated hardware and cannot be extracted</td></tr>
+      <tr><td class="k">Release protection</td><td>R8 code shrinking and obfuscation</td><td>Reduces the app to 12.3 MB and makes it difficult to reverse engineer</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Server and admin console</h3>
+  <table>
+    <thead><tr><th style="width:26%">Area</th><th style="width:34%">Technology</th><th>Why it was chosen</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Runtime</td><td>Node.js with Express</td><td>Widely known, easy for any team to take over</td></tr>
+      <tr><td class="k">Database</td><td>PostgreSQL</td><td>The most trusted open-source database. No licence cost</td></tr>
+      <tr><td class="k">API contract</td><td>OpenAPI 3.1, 19 endpoints</td><td>A formal specification your CRM team can build against</td></tr>
+      <tr><td class="k">Authentication</td><td>Signed tokens with rotating refresh, bound to the device</td><td>A stolen token is useless on another handset</td></tr>
+      <tr><td class="k">Calling</td><td>WebRTC over standard web protocols</td><td>Voice between two endpoints over the internet. No call charges</td></tr>
+      <tr><td class="k">Maps</td><td>MapLibre with open map tiles</td><td>No mapping licence fee and no usage limits</td></tr>
+      <tr><td class="k">Console</td><td>Standard HTML, CSS and JavaScript</td><td>No build step and no framework to become obsolete</td></tr>
+      <tr><td class="k">Hosting</td><td>Serverless deployment, single command</td><td>Scales automatically and runs at no cost at your volumes</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="page-break"></div>
+
+<!-- ═══════════════════════════  5. SECURITY  ═══════════════════════════ -->
+<section>
+  <div class="sec-num">Section 05</div>
+  <h2>How customer data is protected</h2>
+
+  <p class="lede">
+    The central requirement of your document is that employees must be able to do their work without
+    ever holding a customer's contact details. That is the design principle the whole system is built
+    around, not a feature added on top.
+  </p>
+
+  <table>
+    <thead><tr><th style="width:34%">Risk</th><th>How it is prevented</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="k">An employee copies customer numbers and takes them to a competitor</td>
+        <td>The full number is never sent to the phone. There is no screen that can display it and nothing stored on the device to extract. The employee presses call and the system connects them</td>
+      </tr>
+      <tr>
+        <td class="k">An employee photographs the screen</td>
+        <td>Screenshots and screen recording are blocked by the operating system throughout the app. A capture returns a blank image</td>
+      </tr>
+      <tr>
+        <td class="k">A phone is lost or stolen</td>
+        <td>Cached client data is encrypted with a key held in the phone's security hardware. The cache expires automatically and is destroyed on sign out</td>
+      </tr>
+      <tr>
+        <td class="k">A modified or rooted phone is used to bypass the rules</td>
+        <td>The app verifies device integrity using hardware-backed attestation and refuses to operate on a compromised handset</td>
+      </tr>
+      <tr>
+        <td class="k">Permissions are bypassed by editing the app</td>
+        <td>Every role restriction is enforced again on the server. The app is never trusted to police itself</td>
+      </tr>
+      <tr>
+        <td class="k">A manager quietly looks up a customer's real number</td>
+        <td>Possible only through a dedicated screen that requires a written reason and records the manager's name, the customer, and the time in a permanent audit log</td>
+      </tr>
+      <tr>
+        <td class="k">Sensitive data leaks into device logs</td>
+        <td>Direct logging is blocked at build time by an automated rule, and log statements are stripped entirely from release builds</td>
+      </tr>
+      <tr>
+        <td class="k">A future code change accidentally exposes a number</td>
+        <td>An automatic check inspects every response before it leaves the server and blocks any that contains an unmasked number or email</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="box box--accent">
+    <h4>Digital Personal Data Protection Act 2023</h4>
+    <p>
+      A compliance document is included in the handover covering lawful basis, data minimisation,
+      retention periods, employee notice requirements and consent for call recording. Masking,
+      automatic expiry and the audit trail were designed against these obligations rather than
+      retrofitted to them.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════  6. CALLING  ═══════════════════════════ -->
+<section>
+  <div class="sec-num">Section 06</div>
+  <h2>Calling, and why it works the way it does</h2>
+
+  <p>
+    Section 6 of your requirement document asks for calls to be recorded on the device. That is not
+    possible on any modern Android phone. Google removed the ability for applications to record
+    telephone calls in 2022 and enforces it at the operating system level. No vendor can deliver it
+    as written, and any who claims otherwise is either mistaken or describing something that will
+    stop working.
+  </p>
+
+  <p><strong>The business requirement is still met, by a different route.</strong> Calls are placed over
+  the internet between the employee's app and the customer, rather than over the telephone network.
+  This produces three advantages:</p>
+
+  <ul>
+    <li><strong>Recording is lawful and technically possible</strong>, because the audio path belongs to your system rather than to a telecom operator.</li>
+    <li><strong>The employee never learns the customer's number</strong>, which is the actual point of section 5.</li>
+    <li><strong>There are no call charges at all.</strong> A telephony provider capable of the original approach costs approximately Rs 1,599 per user per month. For thirty staff that is Rs 5,75,000 per year, avoided permanently.</li>
+  </ul>
+
+  <p>
+    The customer receives a link and joins from their own phone browser. They install nothing. The
+    call length, outcome and recording are written against the client record automatically.
+  </p>
+
+  <div class="box">
+    <h4>If you later want calls to reach ordinary phone numbers</h4>
+    <p>
+      That requires a licensed telecom partner and is a commercial decision rather than a technical
+      one. The system is built so that this can be added without redesigning anything. Quoted
+      separately if and when you want it.
+    </p>
+  </div>
+</section>
+
+<div class="page-break"></div>
+
+<!-- ═══════════════════════════  7. COMMERCIALS  ═══════════════════════════ -->
+<section>
+  <div class="sec-num">Section 07</div>
+  <h2>Commercial terms</h2>
+
+  <p>
+    The components below are individually priced so the scope is transparent. They are offered
+    together at a reduced figure.
+  </p>
+
+  <table>
+    <thead><tr><th>Component</th><th class="num" style="width:22%">Individual value</th></tr></thead>
+    <tbody>
+      <tr><td>Android application, requirement sections 1 to 30</td><td class="num">Rs 2,10,000</td></tr>
+      <tr><td>Admin web console with live tracking, calls, pipeline and audit log</td><td class="num">Rs 75,000</td></tr>
+      <tr><td>API contract, server implementation and integration layer</td><td class="num">Rs 45,000</td></tr>
+      <tr><td>Deployment, documentation, traceability matrix and handover</td><td class="num">Rs 30,000</td></tr>
+      <tr class="sub"><td>Total value of components</td><td class="num">Rs 3,60,000</td></tr>
+      <tr><td>Bundled engagement discount</td><td class="num">(Rs 60,000)</td></tr>
+      <tr class="total"><td>Fixed price, all components</td><td class="num">Rs 3,00,000</td></tr>
+    </tbody>
+  </table>
+
+  <div class="price-hero">
+    <div>
+      <div class="amt">Rs 3,00,000</div>
+      <div class="cap">One time, plus GST at 18 percent (Rs 54,000). Payable Rs 3,54,000.</div>
+    </div>
+    <div class="side">
+      <div class="amt2">Rs 5,000 / month</div>
+      <div class="cap">Annual maintenance, from go-live</div>
+    </div>
+  </div>
+
+  <h3>Payment schedule</h3>
+  <table>
+    <thead><tr><th style="width:14%">Stage</th><th>Milestone</th><th class="num" style="width:20%">Amount</th></tr></thead>
+    <tbody>
+      <tr><td class="k">1</td><td>On acceptance of this proposal</td><td class="num">Rs 90,000</td></tr>
+      <tr><td class="k">2</td><td>On completion of user acceptance testing by your team</td><td class="num">Rs 90,000</td></tr>
+      <tr><td class="k">3</td><td>On go-live and handover of source code and documentation</td><td class="num">Rs 90,000</td></tr>
+      <tr><td class="k">4</td><td>Thirty days after go-live, on stabilisation</td><td class="num">Rs 30,000</td></tr>
+      <tr class="total"><td></td><td>Total, exclusive of GST</td><td class="num">Rs 3,00,000</td></tr>
+    </tbody>
+  </table>
+
+  <h3>What the maintenance charge covers</h3>
+  <p>Rs 5,000 per month, minimum term twelve months, invoiced monthly in advance.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h4>Included</h4>
+      <p>
+        Defect correction in delivered functionality. Compatibility updates for new Android releases.
+        Security patching of dependencies. Response within two working days. Up to six hours of
+        engineering effort per month.
+      </p>
+    </div>
+    <div class="card">
+      <h4>Not included</h4>
+      <p>
+        New features or changes to agreed behaviour. Work arising from changes on your side, such as
+        a revised CRM API. Third party costs. Unused hours do not carry forward. Additional work is
+        quoted in advance at Rs 1,200 per hour.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════  8. BOUNDARIES  ═══════════════════════════ -->
+<section>
+  <div class="sec-num">Section 08</div>
+  <h2>What is not included, stated plainly</h2>
+
+  <p>
+    Listed so that neither side discovers a disagreement later. None of the following affects the
+    fixed price or the final payment.
+  </p>
+
+  <table>
+    <thead><tr><th style="width:34%">Item</th><th>Position</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="k">On-device call recording as literally worded in section 6</td>
+        <td>Prevented by Android itself and cannot be delivered by any vendor. The business requirement is met by the internet calling architecture described in section 6 of this document</td>
+      </tr>
+      <tr>
+        <td class="k">Factory reset protection, section 21</td>
+        <td>The policy is written and ready. Activating it requires a company-owned handset that has been factory reset and enrolled, which is your decision and your hardware</td>
+      </tr>
+      <tr>
+        <td class="k">Device management enrolment</td>
+        <td>The policy set is delivered. Enrolling handsets into a management platform is an operational task on your side. We will assist and the runbook is provided</td>
+      </tr>
+      <tr>
+        <td class="k">Calls to ordinary telephone numbers</td>
+        <td>Requires a licensed telecom partner and a commercial agreement. Quoted separately if wanted</td>
+      </tr>
+      <tr>
+        <td class="k">Apple iOS version</td>
+        <td>Not in scope. Your requirement document specifies Android</td>
+      </tr>
+      <tr>
+        <td class="k">Running costs</td>
+        <td>Hosting, database, Google Play developer account, device management licences and any telecom charges are billed to you directly by those providers. At your stated volumes the current hosting and database run at no cost</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>What we need from you</h3>
+  <table>
+    <thead><tr><th style="width:34%">Dependency</th><th>Effect if delayed</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="k">Working CRM API access with credentials</td>
+        <td>Integration cannot begin. The delivered system runs on its own server in the meantime, so nothing is blocked, but the changeover date moves</td>
+      </tr>
+      <tr>
+        <td class="k">A named person for acceptance testing</td>
+        <td>Milestone 2 cannot be signed off</td>
+      </tr>
+      <tr>
+        <td class="k">Google Play developer account, if you want Play Store distribution</td>
+        <td>Distribution falls back to direct installation, which is already working</td>
+      </tr>
+      <tr>
+        <td class="k">Employee records and client data for initial loading</td>
+        <td>The system operates on sample data until supplied</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:9.4pt">
+    Integration timelines are measured from the date working API credentials are received. Where
+    delivery is held up by a pending dependency on your side for more than two weeks, the schedule
+    extends by the same period.
+  </p>
+</section>
+
+<div class="page-break"></div>
+
+<!-- ═══════════════════════════  9. HANDOVER  ═══════════════════════════ -->
+<section>
+  <div class="sec-num">Section 09</div>
+  <h2>What is handed over on final payment</h2>
+
+  <table>
+    <thead><tr><th style="width:34%">Asset</th><th>Detail</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Full source code</td><td>Application, server and console, transferred to a repository you own, with the complete development history</td></tr>
+      <tr><td class="k">Intellectual property</td><td>Assigned to Asktrix CRM in full on receipt of final payment</td></tr>
+      <tr><td class="k">Signed release build</td><td>Installable application file together with the signing key, so you can publish updates independently</td></tr>
+      <tr><td class="k">API specification</td><td>Formal OpenAPI document covering 19 endpoints, for your CRM team to implement against</td></tr>
+      <tr><td class="k">Traceability matrix</td><td>Every requirement section mapped to the code and tests that satisfy it</td></tr>
+      <tr><td class="k">Architecture decision records</td><td>Four documents recording why each significant technical choice was made, with sources</td></tr>
+      <tr><td class="k">Compliance documentation</td><td>DPDP Act 2023 matrix, retention schedule and call recording consent position</td></tr>
+      <tr><td class="k">Operational runbooks</td><td>Deployment, device enrolment, zero-cost operation and integration guides</td></tr>
+      <tr><td class="k">Automated test suite</td><td>55 tests that any future developer can run to confirm nothing has been broken</td></tr>
+    </tbody>
+  </table>
+
+  <div class="box box--accent">
+    <h4>You are not dependent on us afterwards</h4>
+    <p>
+      Everything is built on standard, widely used technology and documented in full. Any competent
+      Android developer can take over. That is deliberate. A supplier who makes themselves impossible
+      to replace is a risk to you, not an asset.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════  10. NEXT  ═══════════════════════════ -->
+<section>
+  <div class="sec-num">Section 10</div>
+  <h2>Next steps</h2>
+
+  <table>
+    <thead><tr><th style="width:12%">Step</th><th style="width:52%">Action</th><th>Timing</th></tr></thead>
+    <tbody>
+      <tr><td class="k">1</td><td>Evaluate the live system using section 02 of this document</td><td>Immediate</td></tr>
+      <tr><td class="k">2</td><td>Accept this proposal and settle milestone 1</td><td>At your decision</td></tr>
+      <tr><td class="k">3</td><td>Provide CRM API credentials and nominate an acceptance tester</td><td>Within 1 week of acceptance</td></tr>
+      <tr><td class="k">4</td><td>Integration with your live CRM, replacing the interim server</td><td>2 to 3 weeks from credentials</td></tr>
+      <tr><td class="k">5</td><td>Acceptance testing by your nominated person</td><td>1 week</td></tr>
+      <tr><td class="k">6</td><td>Go-live, source code handover, staff rollout</td><td>1 week</td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    <strong>Total time from acceptance to live operation: approximately five to six weeks</strong>,
+    almost all of it waiting on the CRM API and your testing rather than on development, because the
+    application itself is finished.
+  </p>
+
+  <div class="sign">
+    <div>
+      <div class="line"></div>
+      <div class="who">For Asktrix CRM. Name, designation, date</div>
+    </div>
+    <div>
+      <div class="line"></div>
+      <div class="who">Adwait Keshari. Date</div>
+    </div>
+  </div>
+
+  <div class="foot">
+    Asktrix CRM Mobile Agent App, proposal and handover document. Prices in Indian Rupees, exclusive
+    of GST. Valid for 30 days from issue. This document supersedes any previous verbal or written
+    estimate.
+  </div>
+</section>
+
+</body>
+</html>
