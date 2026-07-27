@@ -26,6 +26,13 @@
   </div>
 
   <audio id="remote" autoplay playsinline></audio>
+
+  <!-- Live connection state. A silent call is otherwise indistinguishable from a working one. -->
+  <div class="diag" id="diag" hidden></div>
+  <button class="btn btn--ghost" id="diag-toggle"
+          style="margin-top:14px;background:transparent;border:1px solid var(--border);color:var(--dim);min-width:0;padding:8px 16px;font-size:12px">
+    Connection details
+  </button>
 </div>
 
 <script src="rtc.js"></script>
@@ -42,6 +49,16 @@
   const share = document.getElementById('share');
 
   let tick = null;
+  const diag = document.getElementById('diag');
+  const lines = [];
+  function addDiagnostic(line) {
+    lines.push(line);
+    diag.innerHTML = lines.slice(-8).map((l) => `<div>${l}</div>`).join('');
+    diag.scrollTop = diag.scrollHeight;
+  }
+  document.getElementById('diag-toggle').addEventListener('click', () => {
+    diag.hidden = !diag.hidden;
+  });
 
   const COPY = {
     'requesting-microphone': 'Allow microphone access',
@@ -80,7 +97,15 @@
     room,
     role: 'agent',
     onState: setState,
-    onRemoteStream: (stream) => { remote.srcObject = stream; },
+    onDiagnostic: addDiagnostic,
+    onRemoteStream: (stream) => {
+      remote.srcObject = stream;
+      // Autoplay can still be refused even with a prior gesture; retry explicitly and say so
+      // rather than presenting a connected call that is silent for no visible reason.
+      remote.play()
+        .then(() => addDiagnostic('audio output started'))
+        .catch((e) => addDiagnostic('audio blocked: ' + e.name + ', tap the screen'));
+    },
   });
 
   call.start().catch(() => setState('rejected', 'Microphone access is needed to place calls'));
@@ -93,6 +118,13 @@
   });
 
   window.addEventListener('pagehide', () => { call.stop(); });
+
+  // A blocked autoplay is recoverable with any user gesture.
+  document.body.addEventListener('click', () => {
+    if (remote.srcObject && remote.paused) {
+      remote.play().then(() => addDiagnostic('audio output resumed')).catch(() => {});
+    }
+  });
 </script>
 </body>
 </html>

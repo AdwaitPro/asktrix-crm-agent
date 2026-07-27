@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.AudioManager
 import android.os.Bundle
 import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
@@ -36,6 +37,8 @@ import com.asktrix.agent.core.common.log.AsktrixLog
 class CallActivity : ComponentActivity() {
 
     private lateinit var webView: WebView
+    private var audioManager: AudioManager? = null
+    private var previousAudioMode: Int = AudioManager.MODE_NORMAL
 
     private val micPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
@@ -54,6 +57,23 @@ class CallActivity : ComponentActivity() {
         )
         // Keep the screen on for the duration of the call.
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+        // Route audio for a voice call.
+        //
+        // Without this the WebView captures and plays through the media path: the remote voice comes
+        // out of the earpiece at media volume, or nowhere audible at all, and echo cancellation is
+        // not applied. MODE_IN_COMMUNICATION tells the platform this is a voice call, and the volume
+        // keys then control call volume rather than ringtone volume, which is what a user expects
+        // mid-call.
+        audioManager = getSystemService(AudioManager::class.java)?.also { manager ->
+            previousAudioMode = manager.mode
+            manager.mode = AudioManager.MODE_IN_COMMUNICATION
+            // Speakerphone by default: this is a work call the agent is likely taking hands-free,
+            // and an inaudible call is a far worse first impression than a loud one.
+            @Suppress("DEPRECATION")
+            manager.isSpeakerphoneOn = true
+        }
+        volumeControlStream = AudioManager.STREAM_VOICE_CALL
 
         webView = WebView(this)
         setContentView(webView)
@@ -108,6 +128,12 @@ class CallActivity : ComponentActivity() {
     }
 
     override fun onDestroy() {
+        // Hand the audio path back, or every other app on the device stays in call mode.
+        audioManager?.let { manager ->
+            @Suppress("DEPRECATION")
+            manager.isSpeakerphoneOn = false
+            manager.mode = previousAudioMode
+        }
         webView.loadUrl("about:blank")
         webView.destroy()
         super.onDestroy()

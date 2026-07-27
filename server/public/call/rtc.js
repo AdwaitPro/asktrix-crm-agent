@@ -13,14 +13,35 @@
  */
 const ICE_SERVERS = [
   { urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] },
+  /*
+   * A relay, not just STUN.
+   *
+   * STUN only tells each side its public address; it cannot help when both peers sit behind
+   * symmetric NAT, which Indian mobile carrier networks very often use. In that case ICE reports
+   * "connected" on the signalling path while no media ever flows - a call that looks connected and
+   * is silent. TURN relays the audio as a fallback.
+   *
+   * openrelay is a free public TURN service. For production, run coturn (also free) so the media
+   * path is under our control.
+   */
+  {
+    urls: [
+      'turn:openrelay.metered.ca:80',
+      'turn:openrelay.metered.ca:443',
+      'turn:openrelay.metered.ca:443?transport=tcp',
+    ],
+    username: 'openrelayproject',
+    credential: 'openrelayproject',
+  },
 ];
 
 class AsktrixCall {
-  constructor({ room, role, onState, onRemoteStream }) {
+  constructor({ room, role, onState, onRemoteStream, onDiagnostic }) {
     this.room = room;
     this.role = role;
     this.onState = onState || (() => {});
     this.onRemoteStream = onRemoteStream || (() => {});
+    this.onDiagnostic = onDiagnostic || (() => {});
     this.pc = null;
     this.token = null;
     this.polling = false;
@@ -61,12 +82,18 @@ class AsktrixCall {
 
     this.pc.onconnectionstatechange = () => {
       const state = this.pc.connectionState;
+      this.onDiagnostic(`peer: ${state}`);
       if (state === 'connected' && !this.startedAt) {
         this.startedAt = Date.now();
         this.send({ type: 'connected' });
         this.onState('connected');
+        this.reportSelectedRoute();
       }
       if (['failed', 'disconnected'].includes(state)) this.onState('lost');
+    };
+
+    this.pc.oniceconnectionstatechange = () => {
+      this.onDiagnostic(`ice: ${this.pc.iceConnectionState}`);
     };
 
     // Announce arrival, then poll for the peer's messages. Call setup is a handful of small
@@ -156,6 +183,47 @@ class AsktrixCall {
     }
   }
 
+  /**
+   * Reports the route the media actually took, and whether bytes are moving.
+   *
+   * "Connected with no audio" and "connected and working" look identical from the connection state
+   * alone. Reading the selected candidate pair distinguishes a direct path from a relayed one, and
+   * the received byte count proves media is genuinely flowing rather than merely negotiated.
+   */
+  async reportSelectedRoute() {
+    try {
+      const stats = await this.pc.getStats();
+      let pair = null;
+      const candidates = new Map();
+      stats.forEach((report) => {
+        if (report.type === 'local-candidate' || report.type === 'remote-candidate') {
+          candidates.set(report.id, report);
+        }
+        if (report.type === 'candidate-pair' && report.state === 'succeeded' && report.nominated) {
+          pair = report;
+        }
+      });
+      if (pair) {
+        const local = candidates.get(pair.localCandidateId);
+        const remote = candidates.get(pair.remoteCandidateId);
+        const relayed = local?.candidateType === 'relay' || remote?.candidateType === 'relay';
+        this.onDiagnostic(`route: ${relayed ? 'relay' : 'direct'} (${local?.candidateType} to ${remote?.candidateType})`);
+      }
+    } catch { /* diagnostics only */ }
+
+    // Confirm audio is actually arriving a few seconds in.
+    setTimeout(async () => {
+      try {
+        const stats = await this.pc.getStats();
+        let bytes = 0;
+        stats.forEach((r) => {
+          if (r.type === 'inbound-rtp' && r.kind === 'audio') bytes = r.bytesReceived || 0;
+        });
+        this.onDiagnostic(bytes > 0 ? `audio flowing (${Math.round(bytes / 1024)} KB)` : 'no audio received');
+      } catch { /* diagnostics only */ }
+    }, 5000);
+  }
+
   async makeOffer() {
     if (this.offered) return;
     this.offered = true;
@@ -178,6 +246,9 @@ class AsktrixCall {
     if (this.recorder || typeof MediaRecorder === 'undefined') return;
     try {
       const context = new AudioContext();
+      // Browsers start an AudioContext suspended until a user gesture. The call button is that
+      // gesture, but resuming explicitly avoids a silent recorder if the policy changes.
+      if (context.state === 'suspended') context.resume();
       const destination = context.createMediaStreamDestination();
       context.createMediaStreamSource(this.localStream).connect(destination);
       context.createMediaStreamSource(remoteStream).connect(destination);

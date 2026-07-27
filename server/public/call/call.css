@@ -73,3 +73,18 @@ html, body {
   font-size: 13px; line-height: 1.65; color: var(--dim); text-align: left;
 }
 .notice strong { color: var(--text); }
+
+.diag {
+  margin-top: 18px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px; line-height: 1.7;
+  color: var(--dim);
+  background: rgba(0,0,0,0.28);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  max-width: 420px; width: 100%;
+  text-align: left;
+  max-height: 128px; overflow-y: auto;
+}
+.diag b { color: var(--good); font-weight: 600; }
