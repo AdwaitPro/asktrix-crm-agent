@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Asktrix - How it works</title>
+  <meta name="description" content="A plain-English guide to running the Asktrix agent app and admin console, written so anyone can operate the whole system without help." />
+  <link rel="stylesheet" href="/demo/guide.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230B1220'/><text y='68' x='50' text-anchor='middle' font-size='58' font-family='system-ui' font-weight='700' fill='%2338BDF8'>A</text></svg>" />
+</head>
+<body>
+
+<a class="skip" href="#start">Skip to the guide</a>
+
+<div class="layout">
+
+  <!-- ───────────────────────────  Sidebar  ─────────────────────────── -->
+  <aside class="side">
+    <a class="brand" href="/demo">
+      <span class="brand__mark">A</span>
+      <span>
+        <span class="brand__name">Asktrix</span>
+        <span class="brand__sub">How it works</span>
+      </span>
+    </a>
+
+    <nav class="toc" aria-label="Sections">
+      <a href="#start">Start here</a>
+      <a href="#quick">Get running in 5 minutes</a>
+      <a href="#logins">Who you can sign in as</a>
+      <a href="#console">The admin console</a>
+      <a href="#app">The phone app</a>
+      <a href="#calling">How a call works</a>
+      <a href="#attendance">Check in and check out</a>
+      <a href="#privacy">Why numbers are hidden</a>
+      <a href="#offline">What happens with no signal</a>
+      <a href="#script">Run the demo</a>
+      <a href="#trouble">If something looks wrong</a>
+      <a href="#faq">Questions people ask</a>
+    </nav>
+
+    <a class="side__cta" href="/admin/">Open the console</a>
+  </aside>
+
+  <!-- ───────────────────────────  Content  ─────────────────────────── -->
+  <main class="doc">
+
+    <header class="hero" id="start">
+      <p class="eyebrow">Plain English guide</p>
+      <h1>Everything this system does, and how to drive it</h1>
+      <p class="lede">
+        Asktrix has two halves. Employees carry an <strong>Android app</strong> to work through the
+        clients assigned to them. Managers watch it all from an <strong>admin console</strong> in a
+        web browser. This page explains both, start to finish, assuming you have never seen either.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="#quick">Get running in 5 minutes</a>
+        <a class="btn" href="https://github.com/AdwaitPro/asktrix-crm-agent/releases/latest">Download the app</a>
+      </div>
+    </header>
+
+    <div class="split">
+      <section class="panel">
+        <h3 class="panel__title">The phone app</h3>
+        <p class="panel__body">
+          For the person doing the work. Shows the clients assigned to them, lets them call a client,
+          record what happened, mark progress, and check in for the day.
+        </p>
+        <p class="panel__meta">Android 10 or newer</p>
+      </section>
+      <section class="panel">
+        <h3 class="panel__title">The admin console</h3>
+        <p class="panel__body">
+          For the person in charge. Shows who is on duty, where they are, every call made, every
+          client's progress, and every time someone looked at a customer's real contact details.
+        </p>
+        <p class="panel__meta">Any web browser</p>
+      </section>
+    </div>
+
+    <!-- ─────────────────────────  Quick start  ───────────────────────── -->
+    <section id="quick">
+      <h2>Get running in 5 minutes</h2>
+      <p>
+        You do not have to install anything to see most of the system. The console runs in a browser.
+        Install the app only when you want to see the employee side on a real phone.
+      </p>
+
+      <ol class="steps">
+        <li>
+          <h3>Open the console</h3>
+          <p>
+            Go to <a href="/admin/">asktrix-crm.vercel.app/admin/</a>. Sign in with employee code
+            <code>EMP003</code> and password <code>asktrix123</code>.
+          </p>
+          <p class="note">
+            Only a Team Leader can open the console. EMP003 is Rohit Desai, the team leader in the
+            sample data. The other five accounts are for the phone app.
+          </p>
+        </li>
+        <li>
+          <h3>Look around</h3>
+          <p>
+            You land on Overview. The buttons down the left switch between Employees, Location,
+            Calls, Clients, Devices and the Audit log. There is sample data in every one of them, so
+            nothing is empty.
+          </p>
+        </li>
+        <li>
+          <h3>Install the app, if you want the full demo</h3>
+          <p>
+            Download the APK from
+            <a href="https://github.com/AdwaitPro/asktrix-crm-agent/releases/latest">the releases page</a>
+            on the Android phone itself. Android will ask you to allow installing from this source.
+            Allow it, then open the file. See <a href="#install">the detailed install steps</a> if it
+            gets stuck.
+          </p>
+        </li>
+        <li>
+          <h3>Sign in on the phone</h3>
+          <p>
+            Use any code from <code>EMP001</code> to <code>EMP006</code>, password
+            <code>asktrix123</code>. What you can do changes depending on which one you pick, which
+            is the whole point of the next section.
+          </p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ─────────────────────────  Logins  ───────────────────────── -->
+    <section id="logins">
+      <h2>Who you can sign in as</h2>
+      <p>
+        Six people, six jobs. The system does not give everyone the same buttons, because they do not
+        all do the same work. An accounts clerk records that money arrived. They have no business
+        moving a government filing forward, so they cannot, and the button is not there.
+      </p>
+      <p class="note">
+        Every account uses the same password: <code>asktrix123</code>
+      </p>
+
+      <div class="table-wrap">
+        <table class="roles">
+          <thead>
+            <tr>
+              <th>Sign in as</th>
+              <th>Person</th>
+              <th>Their job</th>
+              <th>What they can do</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>EMP002</code></td>
+              <td>Meera Iyer</td>
+              <td>Customer Support</td>
+              <td>
+                Calls clients. Can mark <em>documents received</em>, <em>not responding</em> and
+                <em>callback scheduled</em>.
+              </td>
+            </tr>
+            <tr>
+              <td><code>EMP004</code></td>
+              <td>Priya Menon</td>
+              <td>Sales</td>
+              <td>
+                Calls clients. Can mark <em>not responding</em>, <em>callback scheduled</em> and
+                <em>completed</em>.
+              </td>
+            </tr>
+            <tr>
+              <td><code>EMP005</code></td>
+              <td>Karthik Rao</td>
+              <td>Documentation</td>
+              <td>
+                Handles paperwork and government filings. <strong>Cannot call</strong> and
+                <strong>cannot touch payments</strong>.
+              </td>
+            </tr>
+            <tr>
+              <td><code>EMP006</code></td>
+              <td>Sneha Pillai</td>
+              <td>Accounts</td>
+              <td>
+                One job: mark <em>payment received</em>. <strong>Cannot call</strong> and
+                <strong>cannot move a filing</strong>.
+              </td>
+            </tr>
+            <tr>
+              <td><code>EMP001</code></td>
+              <td>Aarav Sharma</td>
+              <td>Relationship Manager</td>
+              <td>Owns the client end to end. Can call and can set almost every status.</td>
+            </tr>
+            <tr class="is-highlight">
+              <td><code>EMP003</code></td>
+              <td>Rohit Desai</td>
+              <td>Team Leader</td>
+              <td>
+                Everything above, <strong>plus the admin console</strong>. This is the login to use
+                in a browser.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout--good">
+        <h4>The part worth showing off</h4>
+        <p>
+          Hiding a button is not security, because an app can be modified. The rules are enforced on
+          the server as well. If you sign in as Accounts and try to move a government filing anyway,
+          the server refuses it. The app is not trusted to police itself.
+        </p>
+      </div>
+
+      <p>
+        On the phone, open <strong>Settings</strong> to see the signed-in person, their job title and
+        the exact list of what their role allows. That is why a missing button is never a mystery.
+      </p>
+    </section>
+
+    <!-- ─────────────────────────  Console  ───────────────────────── -->
+    <section id="console">
+      <h2>The admin console, screen by screen</h2>
+      <p>
+        Sign in at <a href="/admin/">/admin/</a> as <code>EMP003</code>. Seven screens, listed down
+        the left.
+      </p>
+
+      <div class="cards">
+        <article class="card">
+          <h3>Overview</h3>
+          <p>
+            The day at a glance: who checked in, how many calls went out, how long people spent
+            talking, follow-ups falling due, and how many recordings are held.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Employees</h3>
+          <p>
+            One row per person. Whether they are on duty right now, when they checked in, calls made
+            today, talk time, and their last known position with battery level.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Location</h3>
+          <p>
+            A map of where an employee has been during working hours. Pick a person from the list to
+            draw their trail. Positions are only collected while they are on duty.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Calls</h3>
+          <p>
+            Every call: who called, which client, whether it connected, how long it lasted, and
+            whether a recording was kept.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Clients</h3>
+          <p>
+            The full pipeline with each client's stage, payment state and documents outstanding.
+            Phone numbers and emails appear masked here too, exactly as they do on the phone.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Devices</h3>
+          <p>
+            Every enrolled handset, its Android version, app version, and whether it passed its
+            security checks.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Audit log</h3>
+          <p>
+            Every single time an administrator revealed a customer's real phone number or email, who
+            did it, and the reason they gave.
+          </p>
+        </article>
+      </div>
+
+      <h3 id="toggle">The All / Demo / Real switch</h3>
+      <p>
+        At the top of every screen there are three buttons: <strong>All</strong>,
+        <strong>Demo</strong> and <strong>Real</strong>. This is how you separate the sample data
+        from genuine activity.
+      </p>
+      <ul class="plain">
+        <li><strong>Demo</strong> shows only the made-up clients, calls and employees that ship with the system, so you always have something to present.</li>
+        <li><strong>Real</strong> shows only what actually happened: your own logins, your own calls, your own phone. It starts completely empty and fills as you use it.</li>
+        <li><strong>All</strong> shows both together.</li>
+      </ul>
+      <p class="note">
+        Switch to <strong>Real</strong>, and every figure drops to zero. Make one call from the phone,
+        press Refresh, and watch it appear. That is a convincing thing to show someone, because it
+        proves the numbers are not painted on.
+      </p>
+    </section>
+
+    <!-- ─────────────────────────  App  ───────────────────────── -->
+    <section id="app">
+      <h2>The phone app, screen by screen</h2>
+
+      <h3 id="install">Installing it</h3>
+      <ol class="steps steps--tight">
+        <li>
+          <h3>Download on the phone</h3>
+          <p>
+            Open
+            <a href="https://github.com/AdwaitPro/asktrix-crm-agent/releases/latest">the releases page</a>
+            in the phone's browser and tap the <code>.apk</code> file. Downloading it on a laptop and
+            transferring it works too, it is just slower.
+          </p>
+        </li>
+        <li>
+          <h3>Allow the install</h3>
+          <p>
+            Android will warn that this did not come from the Play Store. Tap
+            <em>Settings</em> in that prompt, turn on <em>Allow from this source</em>, then go back
+            and tap Install. This is normal for an app given directly to staff.
+          </p>
+        </li>
+        <li>
+          <h3>Say yes to the permissions</h3>
+          <p>
+            The app asks for location, camera and microphone the first time each one is needed, and
+            explains why at the moment it asks. Location is for attendance, the camera is for the
+            check-in photo, the microphone is for calls. Nothing is requested up front for no reason.
+          </p>
+        </li>
+      </ol>
+
+      <div class="callout">
+        <h4>You do not need to wipe your phone</h4>
+        <p>
+          The strictest version of this system expects a company-owned phone that has been factory
+          reset and enrolled. That is not required to run or demonstrate it. Install it on a normal
+          personal phone and everything in this guide works.
+        </p>
+      </div>
+
+      <h3>What you see once you are in</h3>
+      <div class="cards">
+        <article class="card">
+          <h3>Dashboard</h3>
+          <p>
+            Clients assigned to you, work waiting, and follow-ups due today. This is the starting
+            point each morning.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Client detail</h3>
+          <p>
+            Everything about one client: their masked contact details, the history of what has
+            happened, and the status buttons your role is allowed to press.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Calls</h3>
+          <p>
+            The calls you have made, whether each one connected, and how long it lasted.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Attendance</h3>
+          <p>
+            Check in at the start of the day and out at the end, with your position and an optional
+            photo.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Settings</h3>
+          <p>
+            Who you are signed in as, your job title, and the full list of what your role permits.
+            Also the device's security status.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────  Calling  ───────────────────────── -->
+    <section id="calling">
+      <h2>How a call works</h2>
+      <p>
+        This is the part most worth understanding, because it is not a normal phone call and it is
+        deliberately not one.
+      </p>
+
+      <ol class="steps">
+        <li>
+          <h3>The employee presses Call</h3>
+          <p>
+            They never see or type a phone number. They press Call on a client. The system knows who
+            that is.
+          </p>
+        </li>
+        <li>
+          <h3>A private call room opens</h3>
+          <p>
+            The server creates a one-off room and hands back two links: one for the employee, one for
+            the customer. The call screen opens on the phone automatically.
+          </p>
+        </li>
+        <li>
+          <h3>The customer joins by link</h3>
+          <p>
+            They tap the link and they are in. There is nothing to install on their side. The call
+            travels over the internet, not the telephone network.
+          </p>
+        </li>
+        <li>
+          <h3>The call is recorded and logged</h3>
+          <p>
+            When either side hangs up, the length, the outcome and the recording are written against
+            that client. It shows up in the console within seconds.
+          </p>
+        </li>
+      </ol>
+
+      <div class="callout callout--good">
+        <h4>Why not just dial the number</h4>
+        <p>
+          Three reasons. The employee never learns the customer's real number, so they cannot take it
+          with them when they leave. There are no per-minute charges, because nothing touches the
+          phone network. And Android blocks apps from recording ordinary phone calls, so a real call
+          could not be recorded at all. Going over the internet solves all three at once.
+        </p>
+      </div>
+
+      <h3>Trying it yourself</h3>
+      <p>
+        You need two devices, or a phone and a laptop. Sign in on the phone as <code>EMP001</code>,
+        open any client, press Call. Send yourself the customer link and open it on the other device.
+        Allow the microphone on both. Speak.
+      </p>
+      <p class="note">
+        Both sides must allow the microphone, or you will see "connected" with no sound. If that
+        happens, close the call and start again, this time watching for the microphone prompt.
+      </p>
+    </section>
+
+    <!-- ─────────────────────────  Attendance  ───────────────────────── -->
+    <section id="attendance">
+      <h2>Check in and check out</h2>
+      <p>
+        Open <strong>Attendance</strong> and press Check in. The app records where you are and offers
+        to take a photo. Press Check out at the end of the day. Both appear in the console
+        immediately, and the check-in count on Overview goes up.
+      </p>
+      <ul class="plain">
+        <li><strong>The camera prompt</strong> appears before the photo screen opens. Allow it, and the front camera opens.</li>
+        <li><strong>The photo is optional.</strong> Check-in works without it if a manager does not require one.</li>
+        <li><strong>Indoors,</strong> a fresh satellite fix can take a while. The app falls back to the last position it knew rather than refusing to check you in.</li>
+        <li><strong>Position is only collected while on duty.</strong> Check out and it stops. It is not a tracker that runs all night.</li>
+      </ul>
+    </section>
+
+    <!-- ─────────────────────────  Privacy  ───────────────────────── -->
+    <section id="privacy">
+      <h2>Why phone numbers appear as 98XXXXXX12</h2>
+      <p>
+        Customer contact details are hidden everywhere. A number reads
+        <code>98XXXXXX12</code> and an email reads <code>siv****@gmail.com</code>. This is not a
+        display trick. The full number is never sent to the phone at all, so there is nothing on the
+        device to uncover, screenshot or copy out.
+      </p>
+      <p>
+        The employee does not need the number. They press Call and the system connects them. That is
+        the point: they can do the job without ever holding the customer's details.
+      </p>
+      <p>
+        An administrator can reveal a real number when there is a genuine reason, from the Clients
+        screen in the console. They have to type a reason, and it is written into the
+        <strong>Audit log</strong> with their name and the time. Nobody looks quietly.
+      </p>
+    </section>
+
+    <!-- ─────────────────────────  Offline  ───────────────────────── -->
+    <section id="offline">
+      <h2>What happens when there is no signal</h2>
+      <p>
+        Field staff lose signal constantly, in basements, lifts and villages. The app is built for
+        that rather than surprised by it.
+      </p>
+      <ul class="plain">
+        <li><strong>Nothing is lost.</strong> A status change, a note or a check-in made with no signal is saved on the device and sent the moment the connection returns.</li>
+        <li><strong>Nothing is duplicated.</strong> Each action carries a unique ticket, so if it gets sent twice after a flaky retry, the server only counts it once.</li>
+        <li><strong>Client data does not linger.</strong> The copy held on the phone is encrypted and expires on its own, and it is wiped completely on sign-out.</li>
+      </ul>
+      <p class="note">
+        Worth demonstrating: turn on aeroplane mode, change a client's status, watch it save. Turn
+        aeroplane mode off, wait a moment, and refresh the console. It is there.
+      </p>
+    </section>
+
+    <!-- ─────────────────────────  Demo script  ───────────────────────── -->
+    <section id="script">
+      <h2>Run the demo</h2>
+      <p>
+        An order that shows the whole system in about ten minutes, built so each step sets up the
+        next. Have the console open on a laptop and the app open on a phone.
+      </p>
+
+      <ol class="steps steps--numbered">
+        <li>
+          <h3>Open on the console</h3>
+          <p>
+            Sign in as <code>EMP003</code>. Stay on Overview. Say what the numbers are: people on
+            duty, calls today, time on the phone, follow-ups due.
+          </p>
+        </li>
+        <li>
+          <h3>Prove the data is real</h3>
+          <p>
+            Press <strong>Real</strong>. Everything drops to zero. Explain that what they were
+            looking at was sample data, and that from here on everything they see is something you
+            actually did in front of them. Leave it on Real.
+          </p>
+        </li>
+        <li>
+          <h3>Check in on the phone</h3>
+          <p>
+            Sign in as <code>EMP001</code>, go to Attendance, check in, take the photo. Refresh the
+            console. On duty goes from zero to one, with the photo and position attached.
+          </p>
+        </li>
+        <li>
+          <h3>Show a client</h3>
+          <p>
+            Open any client on the phone. Point at the masked phone number and explain that the real
+            one is not on the device at all.
+          </p>
+        </li>
+        <li>
+          <h3>Make a call</h3>
+          <p>
+            Press Call, open the customer link on the laptop, allow the microphone on both, talk for
+            a few seconds, hang up. Refresh the console. The call is in the Calls screen with its
+            length.
+          </p>
+        </li>
+        <li>
+          <h3>Show the roles</h3>
+          <p>
+            Sign out on the phone and back in as <code>EMP006</code>, the accounts clerk. Open a
+            client. The call button is gone and the only status offered is <em>payment received</em>.
+            Then sign in as <code>EMP005</code>, documentation: no call button either, but the
+            government filing status is there instead. Same app, same screen, different job.
+          </p>
+        </li>
+        <li>
+          <h3>Show it works offline</h3>
+          <p>
+            Aeroplane mode on. Change a status. It saves. Aeroplane mode off. Refresh the console and
+            it has arrived.
+          </p>
+        </li>
+        <li>
+          <h3>Finish on the audit log</h3>
+          <p>
+            In the console, reveal a customer's real number with a reason. Open the Audit log and
+            show the entry that just appeared, with your name on it.
+          </p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ─────────────────────────  Trouble  ───────────────────────── -->
+    <section id="trouble">
+      <h2>If something looks wrong</h2>
+
+      <dl class="faq">
+        <dt>The console says the sign-in is wrong</dt>
+        <dd>
+          Use the employee code, not an email address. <code>EMP003</code>, password
+          <code>asktrix123</code>. Only a Team Leader can open the console, so the other five codes
+          will be refused here even though they work on the phone.
+        </dd>
+
+        <dt>A call says "a call is already in progress"</dt>
+        <dd>
+          A previous call was closed in a way that left it hanging. Open the call screen and hang up
+          properly, or wait two minutes and it clears itself. It will not stay stuck.
+        </dd>
+
+        <dt>The call connects but there is no sound</dt>
+        <dd>
+          One side did not allow the microphone. Close the call, start again, and watch for the
+          prompt on both devices. If a browser blocked it silently, check the padlock icon in the
+          address bar and allow the microphone there.
+        </dd>
+
+        <dt>Check-in will not pick up my location</dt>
+        <dd>
+          Step near a window or outside. Indoors a first satellite fix can take a minute. The app
+          will fall back to your last known position rather than block you.
+        </dd>
+
+        <dt>The app never asked for the camera</dt>
+        <dd>
+          It asks the first time you open the check-in photo screen. If you refused earlier, Android
+          will not ask again. Go to Android Settings, Apps, Asktrix Agent, Permissions, and turn the
+          camera on by hand.
+        </dd>
+
+        <dt>The console is empty</dt>
+        <dd>
+          Check whether the switch at the top is set to <strong>Real</strong>. Real is empty until
+          you do something yourself. Press <strong>Demo</strong> or <strong>All</strong> to see the
+          sample data again.
+        </dd>
+
+        <dt>The map does not appear</dt>
+        <dd>
+          Pick an employee from the list on the Location screen first. The map draws that person's
+          trail, so it stays blank until you choose someone.
+        </dd>
+
+        <dt>Android refuses to install the app</dt>
+        <dd>
+          Allow installs from your browser, in Android Settings under Apps, Special access, Install
+          unknown apps. Also make sure you are on Android 10 or newer.
+        </dd>
+      </dl>
+    </section>
+
+    <!-- ─────────────────────────  FAQ  ───────────────────────── -->
+    <section id="faq">
+      <h2>Questions people ask</h2>
+
+      <dl class="faq">
+        <dt>Does it cost anything to run</dt>
+        <dd>
+          No. Calls go over the internet rather than the phone network, so there are no per-minute
+          charges, and the server and database run on free plans.
+        </dd>
+
+        <dt>Can an employee find out a customer's real number</dt>
+        <dd>
+          No. The full number is never sent to the phone. There is no screen it can be revealed on
+          and nothing stored on the device to dig out.
+        </dd>
+
+        <dt>Is this connected to the real CRM yet</dt>
+        <dd>
+          Not yet. It runs against its own server, which follows the exact contract the real CRM
+          will need to provide. When those endpoints exist, the app points at them and the rest is
+          unchanged.
+        </dd>
+
+        <dt>Where are the call recordings kept</dt>
+        <dd>
+          On the server, not on the phone. The employee's device is told that a recording exists but
+          is never given a link to the audio.
+        </dd>
+
+        <dt>Does it track people after hours</dt>
+        <dd>
+          No. Position is only sampled between check-in and check-out. Check out and it stops.
+        </dd>
+
+        <dt>Can I add my own real clients</dt>
+        <dd>
+          Yes. Anything you create is marked real rather than demo, so the
+          <strong>Real</strong> view shows your data on its own, cleanly separated from the samples.
+        </dd>
+      </dl>
+    </section>
+
+    <footer class="foot">
+      <div class="foot__links">
+        <a href="/admin/">Admin console</a>
+        <a href="https://github.com/AdwaitPro/asktrix-crm-agent/releases/latest">Download the app</a>
+        <a href="https://github.com/AdwaitPro/asktrix-crm-agent">Source code</a>
+      </div>
+      <p>Asktrix CRM Mobile Agent App</p>
+    </footer>
+
+  </main>
+</div>
+
+<script src="/demo/guide.js"></script>
+</body>
+</html>

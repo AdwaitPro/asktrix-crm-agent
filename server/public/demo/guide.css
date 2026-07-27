@@ -1,0 +1,536 @@
+/*
+ * Asktrix guide page.
+ *
+ * Shares the console's palette and spacing scale so the two read as one product, but this is a
+ * document rather than a dashboard: wider measure, larger type, more air. A person reads this once,
+ * standing up, five minutes before a demo, so legibility beats density everywhere they conflict.
+ *
+ * Self-contained on purpose. It does not import the console stylesheet, because a change made for a
+ * data table should never be able to break the page someone reads when they are already lost.
+ */
+
+:root {
+  --bg:            #0B1220;
+  --surface:       #0F172A;
+  --surface-2:     #1E293B;
+  --border:        #24334A;
+  --border-soft:   #1A2740;
+  --text:          #F1F5F9;
+  --text-dim:      #94A3B8;
+  --text-faint:    #64748B;
+
+  --accent:        #38BDF8;
+  --accent-strong: #0284C7;
+  --positive:      #10B981;
+  --warning:       #F59E0B;
+
+  --radius:        14px;
+  --radius-sm:     10px;
+
+  --s1: 4px;  --s2: 8px;  --s3: 12px; --s4: 16px;
+  --s5: 24px; --s6: 32px; --s7: 48px; --s8: 72px;
+
+  --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+
+  --side-w: 264px;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation: none !important; transition: none !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.65;
+  letter-spacing: -0.011em;
+  -webkit-font-smoothing: antialiased;
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: var(--s3);
+  padding: var(--s2) var(--s4);
+  background: var(--accent);
+  color: #04121F;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  z-index: 50;
+}
+.skip:focus { left: var(--s3); }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1px 6px;
+  color: #BAE6FD;
+  white-space: nowrap;
+}
+
+/* ─────────────────────────────  Layout  ───────────────────────────── */
+
+.layout {
+  display: grid;
+  grid-template-columns: var(--side-w) minmax(0, 1fr);
+  gap: var(--s8);
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 var(--s6);
+}
+
+/* ─────────────────────────────  Sidebar  ───────────────────────────── */
+
+.side {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  padding: var(--s6) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s5);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  color: inherit;
+}
+.brand:hover { text-decoration: none; }
+
+.brand__mark {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: linear-gradient(145deg, var(--accent), var(--accent-strong));
+  color: #04121F;
+  font-weight: 700;
+  font-size: 18px;
+}
+.brand__name { display: block; font-weight: 650; letter-spacing: -0.02em; }
+.brand__sub  { display: block; font-size: 12.5px; color: var(--text-faint); }
+
+.toc {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow-y: auto;
+  /* The rail sits left of the labels; the active item lights its own segment. */
+  border-left: 1px solid var(--border-soft);
+}
+
+.toc a {
+  padding: 7px var(--s4);
+  margin-left: -1px;
+  border-left: 2px solid transparent;
+  font-size: 14px;
+  color: var(--text-faint);
+  transition: color 140ms ease, border-color 140ms ease;
+}
+.toc a:hover { color: var(--text-dim); text-decoration: none; }
+.toc a.is-active {
+  color: var(--text);
+  border-left-color: var(--accent);
+  font-weight: 550;
+}
+
+.side__cta {
+  margin-top: auto;
+  text-align: center;
+  padding: 11px var(--s4);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 550;
+  transition: background 140ms ease, border-color 140ms ease;
+}
+.side__cta:hover { background: #26364F; border-color: #33455F; text-decoration: none; }
+
+/* ─────────────────────────────  Document  ───────────────────────────── */
+
+.doc {
+  min-width: 0;
+  padding: var(--s8) 0 var(--s8);
+  max-width: 760px;
+}
+
+.hero { padding-bottom: var(--s7); }
+
+.eyebrow {
+  margin: 0 0 var(--s3);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+h1 {
+  margin: 0 0 var(--s4);
+  font-size: clamp(34px, 5vw, 46px);
+  line-height: 1.1;
+  font-weight: 680;
+  letter-spacing: -0.035em;
+  /* A very slight wash rather than a loud gradient: it should read as ink, not as decoration. */
+  background: linear-gradient(180deg, #FFFFFF 25%, #B9CBE4 130%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.lede {
+  margin: 0;
+  font-size: 18.5px;
+  line-height: 1.6;
+  color: var(--text-dim);
+}
+.lede strong { color: var(--text); font-weight: 600; }
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s3);
+  margin-top: var(--s5);
+}
+
+.btn {
+  display: inline-block;
+  padding: 11px var(--s5);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 550;
+  transition: background 140ms ease, border-color 140ms ease, transform 140ms ease;
+}
+.btn:hover { background: #26364F; border-color: #33455F; text-decoration: none; }
+.btn:active { transform: translateY(1px); }
+
+.btn--primary {
+  background: linear-gradient(145deg, var(--accent), var(--accent-strong));
+  border-color: transparent;
+  color: #04121F;
+  font-weight: 650;
+}
+.btn--primary:hover { filter: brightness(1.07); }
+
+section { padding: var(--s7) 0; border-top: 1px solid var(--border-soft); }
+.hero { border-top: 0; }
+
+h2 {
+  margin: 0 0 var(--s4);
+  font-size: 27px;
+  line-height: 1.25;
+  font-weight: 640;
+  letter-spacing: -0.028em;
+}
+
+h3 {
+  margin: var(--s6) 0 var(--s3);
+  font-size: 18px;
+  font-weight: 620;
+  letter-spacing: -0.02em;
+}
+
+p { margin: 0 0 var(--s4); color: var(--text-dim); }
+p strong, li strong, dd strong { color: var(--text); font-weight: 600; }
+em { color: var(--text); font-style: normal; font-weight: 550; }
+
+.note {
+  border-left: 2px solid var(--border);
+  padding-left: var(--s4);
+  font-size: 15px;
+  color: var(--text-faint);
+}
+
+.plain { margin: 0 0 var(--s4); padding-left: var(--s5); }
+.plain li { margin-bottom: var(--s3); color: var(--text-dim); }
+
+/* ─────────────────────────────  Panels  ───────────────────────────── */
+
+.split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--s4);
+  padding-bottom: var(--s5);
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--s5);
+}
+.panel__title { margin: 0 0 var(--s2); font-size: 16px; }
+.panel__body  { margin: 0 0 var(--s3); font-size: 15px; }
+.panel__meta  { margin: 0; font-size: 13px; color: var(--text-faint); }
+
+/* ─────────────────────────────  Steps  ───────────────────────────── */
+
+.steps {
+  list-style: none;
+  counter-reset: step;
+  margin: var(--s5) 0 0;
+  padding: 0;
+}
+
+.steps li {
+  counter-increment: step;
+  position: relative;
+  padding: 0 0 var(--s6) var(--s7);
+}
+
+/* The numbered marker doubles as the connector, so the sequence reads as one thread. */
+.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-size: 13.5px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.steps li::after {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 34px;
+  bottom: 6px;
+  width: 1px;
+  background: var(--border-soft);
+}
+.steps li:last-child { padding-bottom: 0; }
+.steps li:last-child::after { display: none; }
+
+.steps h3 { margin: 4px 0 var(--s2); font-size: 16.5px; }
+.steps p  { margin: 0 0 var(--s3); font-size: 15px; }
+.steps p:last-child { margin-bottom: 0; }
+
+.steps--tight li { padding-bottom: var(--s5); }
+
+/* ─────────────────────────────  Cards  ───────────────────────────── */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
+  gap: var(--s3);
+  margin: var(--s5) 0;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--s4) var(--s5) var(--s5);
+  transition: border-color 160ms ease, background 160ms ease;
+}
+.card:hover { border-color: #33455F; background: #111E33; }
+.card h3 { margin: 0 0 var(--s2); font-size: 15.5px; }
+.card p  { margin: 0; font-size: 14.5px; line-height: 1.6; }
+
+/* ─────────────────────────────  Callouts  ───────────────────────────── */
+
+.callout {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: var(--s5);
+  margin: var(--s5) 0;
+}
+.callout--good { border-left-color: var(--positive); }
+.callout h4 {
+  margin: 0 0 var(--s2);
+  font-size: 15.5px;
+  font-weight: 620;
+  letter-spacing: -0.015em;
+}
+.callout p { margin: 0; font-size: 15px; }
+
+/* ─────────────────────────────  Table  ───────────────────────────── */
+
+.table-wrap {
+  /* Wide content scrolls inside its own box; the page itself never scrolls sideways. */
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: var(--s5) 0;
+  background: var(--surface);
+}
+
+.roles {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  font-size: 14.5px;
+}
+
+.roles th {
+  text-align: left;
+  padding: var(--s3) var(--s4);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.roles td {
+  padding: var(--s4);
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--text-dim);
+  vertical-align: top;
+}
+.roles tbody tr:last-child td { border-bottom: 0; }
+.roles tbody tr:hover td { background: rgba(56, 189, 248, 0.035); }
+.roles td:nth-child(2) { color: var(--text); font-weight: 550; white-space: nowrap; }
+.roles td:nth-child(3) { white-space: nowrap; }
+
+.roles .is-highlight td { background: rgba(56, 189, 248, 0.06); }
+.roles .is-highlight:hover td { background: rgba(56, 189, 248, 0.09); }
+
+/* ─────────────────────────────  Definition lists  ───────────────────────────── */
+
+.faq { margin: var(--s5) 0 0; }
+
+.faq dt {
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--text);
+  letter-spacing: -0.015em;
+  padding-top: var(--s4);
+  border-top: 1px solid var(--border-soft);
+}
+.faq dt:first-of-type { border-top: 0; padding-top: 0; }
+
+.faq dd {
+  margin: var(--s2) 0 var(--s5);
+  color: var(--text-dim);
+  font-size: 15px;
+}
+
+/* ─────────────────────────────  Footer  ───────────────────────────── */
+
+.foot {
+  margin-top: var(--s7);
+  padding-top: var(--s5);
+  border-top: 1px solid var(--border-soft);
+}
+.foot__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s5);
+  margin-bottom: var(--s3);
+  font-size: 14.5px;
+}
+.foot p { margin: 0; font-size: 13px; color: var(--text-faint); }
+
+/* ─────────────────────────────  Narrow screens  ───────────────────────────── */
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding: 0 var(--s4);
+  }
+
+  .side {
+    position: static;
+    height: auto;
+    padding: var(--s5) 0 0;
+    gap: var(--s4);
+  }
+
+  /*
+   * The rail becomes a scrolling strip: still a map of the page, no longer a column. It stays stuck
+   * to the top, because on a phone the sidebar has scrolled away by the second section and a table
+   * of contents you cannot reach is not one.
+   */
+  .toc {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    flex-direction: row;
+    gap: var(--s1);
+    overflow-x: auto;
+    border-left: 0;
+    border-bottom: 1px solid var(--border-soft);
+    padding-bottom: var(--s1);
+    background: var(--bg);
+    scrollbar-width: none;
+  }
+  .toc::-webkit-scrollbar { display: none; }
+  .toc a {
+    white-space: nowrap;
+    border-left: 0;
+    border-bottom: 2px solid transparent;
+    margin-left: 0;
+    padding: var(--s2) var(--s3);
+  }
+  .toc a.is-active { border-left: 0; border-bottom-color: var(--accent); }
+
+  /*
+   * Hidden here rather than reflowed: it otherwise sits between the strip and the headline and
+   * pushes the whole point of the page below the fold. The hero and footer both link to the console.
+   */
+  .side__cta { display: none; }
+
+  .doc { padding: var(--s6) 0 var(--s7); }
+  section { padding: var(--s6) 0; }
+}
+
+@media (max-width: 560px) {
+  body { font-size: 15.5px; }
+  .lede { font-size: 17px; }
+  h2 { font-size: 23px; }
+  .steps li { padding-left: var(--s6); }
+  .hero__actions .btn { flex: 1 1 100%; text-align: center; }
+}
+
+@media print {
+  .side, .hero__actions { display: none; }
+  body { background: #fff; color: #000; }
+  .layout { display: block; padding: 0; }
+  .doc { max-width: none; }
+  h1 { color: #000; -webkit-text-fill-color: #000; }
+  p, li, dd, .card p { color: #222; }
+}

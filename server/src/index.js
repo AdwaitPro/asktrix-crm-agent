@@ -47,6 +47,9 @@ const staticOptions = {
 app.use('/admin', express.static(path.join(__dirname, '..', 'public'), staticOptions));
 // Call pages are opened directly by customers, so they live at the root rather than under /admin.
 app.use('/call', express.static(path.join(__dirname, '..', 'public', 'call'), staticOptions));
+// The guide. Served without the trailing-slash redirect so a link to /demo lands directly.
+app.get('/demo', (_req, res) => res.sendFile(path.join(__dirname, '..', 'public', 'demo', 'index.html')));
+app.use('/demo', express.static(path.join(__dirname, '..', 'public', 'demo'), staticOptions));
 app.use('/vendor', express.static(path.join(__dirname, '..', 'public', 'vendor'), staticOptions));
 
 // ---------------------------------------------------------------------------------------------

@@ -1,0 +1,456 @@
+- generic [active] [ref=f4e1]:
+  - link "Skip to the guide" [ref=f4e2] [cursor=pointer]:
+    - /url: "#start"
+  - generic [ref=f4e3]:
+    - complementary [ref=f4e4]:
+      - link "A Asktrix How it works" [ref=f4e5] [cursor=pointer]:
+        - /url: /demo
+        - generic [ref=f4e6]: A
+        - generic [ref=f4e7]:
+          - generic [ref=f4e8]: Asktrix
+          - generic [ref=f4e9]: How it works
+      - navigation "Sections" [ref=f4e10]:
+        - link "Start here" [ref=f4e11] [cursor=pointer]:
+          - /url: "#start"
+        - link "Get running in 5 minutes" [ref=f4e12] [cursor=pointer]:
+          - /url: "#quick"
+        - link "Who you can sign in as" [ref=f4e13] [cursor=pointer]:
+          - /url: "#logins"
+        - link "The admin console" [ref=f4e14] [cursor=pointer]:
+          - /url: "#console"
+        - link "The phone app" [ref=f4e15] [cursor=pointer]:
+          - /url: "#app"
+        - link "How a call works" [ref=f4e16] [cursor=pointer]:
+          - /url: "#calling"
+        - link "Check in and check out" [ref=f4e17] [cursor=pointer]:
+          - /url: "#attendance"
+        - link "Why numbers are hidden" [ref=f4e18] [cursor=pointer]:
+          - /url: "#privacy"
+        - link "What happens with no signal" [ref=f4e19] [cursor=pointer]:
+          - /url: "#offline"
+        - link "Run the demo" [ref=f4e20] [cursor=pointer]:
+          - /url: "#script"
+        - link "If something looks wrong" [ref=f4e21] [cursor=pointer]:
+          - /url: "#trouble"
+        - link "Questions people ask" [ref=f4e22] [cursor=pointer]:
+          - /url: "#faq"
+    - main [ref=f4e23]:
+      - generic [ref=f4e24]:
+        - paragraph [ref=f4e25]: Plain English guide
+        - heading "Everything this system does, and how to drive it" [level=1] [ref=f4e26]
+        - paragraph [ref=f4e27]:
+          - text: Asktrix has two halves. Employees carry an
+          - strong [ref=f4e28]: Android app
+          - text: to work through the clients assigned to them. Managers watch it all from an
+          - strong [ref=f4e29]: admin console
+          - text: in a web browser. This page explains both, start to finish, assuming you have never seen either.
+        - generic [ref=f4e30]:
+          - link "Get running in 5 minutes" [ref=f4e31] [cursor=pointer]:
+            - /url: "#quick"
+          - link "Download the app" [ref=f4e32] [cursor=pointer]:
+            - /url: https://github.com/AdwaitPro/asktrix-crm-agent/releases/latest
+      - generic [ref=f4e33]:
+        - generic [ref=f4e34]:
+          - heading "The phone app" [level=3] [ref=f4e35]
+          - paragraph [ref=f4e36]: For the person doing the work. Shows the clients assigned to them, lets them call a client, record what happened, mark progress, and check in for the day.
+          - paragraph [ref=f4e37]: Android 10 or newer
+        - generic [ref=f4e38]:
+          - heading "The admin console" [level=3] [ref=f4e39]
+          - paragraph [ref=f4e40]: For the person in charge. Shows who is on duty, where they are, every call made, every client's progress, and every time someone looked at a customer's real contact details.
+          - paragraph [ref=f4e41]: Any web browser
+      - generic [ref=f4e42]:
+        - heading "Get running in 5 minutes" [level=2] [ref=f4e43]
+        - paragraph [ref=f4e44]: You do not have to install anything to see most of the system. The console runs in a browser. Install the app only when you want to see the employee side on a real phone.
+        - list [ref=f4e45]:
+          - listitem [ref=f4e46]:
+            - heading "Open the console" [level=3] [ref=f4e47]
+            - paragraph [ref=f4e48]:
+              - text: Go to
+              - link "asktrix-crm.vercel.app/admin/" [ref=f4e49] [cursor=pointer]:
+                - /url: /admin/
+              - text: . Sign in with employee code
+              - code [ref=f4e50]: EMP003
+              - text: and password
+              - code [ref=f4e51]: asktrix123
+              - text: .
+            - paragraph [ref=f4e52]: Only a Team Leader can open the console. EMP003 is Rohit Desai, the team leader in the sample data. The other five accounts are for the phone app.
+          - listitem [ref=f4e53]:
+            - heading "Look around" [level=3] [ref=f4e54]
+            - paragraph [ref=f4e55]: You land on Overview. The buttons down the left switch between Employees, Location, Calls, Clients, Devices and the Audit log. There is sample data in every one of them, so nothing is empty.
+          - listitem [ref=f4e56]:
+            - heading "Install the app, if you want the full demo" [level=3] [ref=f4e57]
+            - paragraph [ref=f4e58]:
+              - text: Download the APK from
+              - link "the releases page" [ref=f4e59] [cursor=pointer]:
+                - /url: https://github.com/AdwaitPro/asktrix-crm-agent/releases/latest
+              - text: on the Android phone itself. Android will ask you to allow installing from this source. Allow it, then open the file. See
+              - link "the detailed install steps" [ref=f4e60] [cursor=pointer]:
+                - /url: "#install"
+              - text: if it gets stuck.
+          - listitem [ref=f4e61]:
+            - heading "Sign in on the phone" [level=3] [ref=f4e62]
+            - paragraph [ref=f4e63]:
+              - text: Use any code from
+              - code [ref=f4e64]: EMP001
+              - text: to
+              - code [ref=f4e65]: EMP006
+              - text: ", password"
+              - code [ref=f4e66]: asktrix123
+              - text: . What you can do changes depending on which one you pick, which is the whole point of the next section.
+      - generic [ref=f4e67]:
+        - heading "Who you can sign in as" [level=2] [ref=f4e68]
+        - paragraph [ref=f4e69]: Six people, six jobs. The system does not give everyone the same buttons, because they do not all do the same work. An accounts clerk records that money arrived. They have no business moving a government filing forward, so they cannot, and the button is not there.
+        - paragraph [ref=f4e70]:
+          - text: "Every account uses the same password:"
+          - code [ref=f4e71]: asktrix123
+        - table [ref=f4e73]:
+          - rowgroup [ref=f4e74]:
+            - row [ref=f4e75]:
+              - columnheader "Sign in as" [ref=f4e76]
+              - columnheader "Person" [ref=f4e77]
+              - columnheader "Their job" [ref=f4e78]
+              - columnheader "What they can do" [ref=f4e79]
+          - rowgroup [ref=f4e80]:
+            - row [ref=f4e81]:
+              - cell [ref=f4e82]:
+                - code [ref=f4e83]: EMP002
+              - cell "Meera Iyer" [ref=f4e84]
+              - cell "Customer Support" [ref=f4e85]
+              - cell [ref=f4e86]:
+                - text: Calls clients. Can mark
+                - emphasis [ref=f4e87]: documents received
+                - text: ","
+                - emphasis [ref=f4e88]: not responding
+                - text: and
+                - emphasis [ref=f4e89]: callback scheduled
+                - text: .
+            - row [ref=f4e90]:
+              - cell [ref=f4e91]:
+                - code [ref=f4e92]: EMP004
+              - cell "Priya Menon" [ref=f4e93]
+              - cell "Sales" [ref=f4e94]
+              - cell [ref=f4e95]:
+                - text: Calls clients. Can mark
+                - emphasis [ref=f4e96]: not responding
+                - text: ","
+                - emphasis [ref=f4e97]: callback scheduled
+                - text: and
+                - emphasis [ref=f4e98]: completed
+                - text: .
+            - row [ref=f4e99]:
+              - cell [ref=f4e100]:
+                - code [ref=f4e101]: EMP005
+              - cell "Karthik Rao" [ref=f4e102]
+              - cell "Documentation" [ref=f4e103]
+              - cell [ref=f4e104]:
+                - text: Handles paperwork and government filings.
+                - strong [ref=f4e105]: Cannot call
+                - text: and
+                - strong [ref=f4e106]: cannot touch payments
+                - text: .
+            - row [ref=f4e107]:
+              - cell [ref=f4e108]:
+                - code [ref=f4e109]: EMP006
+              - cell "Sneha Pillai" [ref=f4e110]
+              - cell "Accounts" [ref=f4e111]
+              - cell [ref=f4e112]:
+                - text: "One job: mark"
+                - emphasis [ref=f4e113]: payment received
+                - text: .
+                - strong [ref=f4e114]: Cannot call
+                - text: and
+                - strong [ref=f4e115]: cannot move a filing
+                - text: .
+            - row [ref=f4e116]:
+              - cell [ref=f4e117]:
+                - code [ref=f4e118]: EMP001
+              - cell "Aarav Sharma" [ref=f4e119]
+              - cell "Relationship Manager" [ref=f4e120]
+              - cell "Owns the client end to end. Can call and can set almost every status." [ref=f4e121]
+            - row [ref=f4e122]:
+              - cell [ref=f4e123]:
+                - code [ref=f4e124]: EMP003
+              - cell "Rohit Desai" [ref=f4e125]
+              - cell "Team Leader" [ref=f4e126]
+              - cell [ref=f4e127]:
+                - text: Everything above,
+                - strong [ref=f4e128]: plus the admin console
+                - text: . This is the login to use in a browser.
+        - generic [ref=f4e129]:
+          - heading "The part worth showing off" [level=4] [ref=f4e130]
+          - paragraph [ref=f4e131]: Hiding a button is not security, because an app can be modified. The rules are enforced on the server as well. If you sign in as Accounts and try to move a government filing anyway, the server refuses it. The app is not trusted to police itself.
+        - paragraph [ref=f4e132]:
+          - text: On the phone, open
+          - strong [ref=f4e133]: Settings
+          - text: to see the signed-in person, their job title and the exact list of what their role allows. That is why a missing button is never a mystery.
+      - generic [ref=f4e134]:
+        - heading "The admin console, screen by screen" [level=2] [ref=f4e135]
+        - paragraph [ref=f4e136]:
+          - text: Sign in at
+          - link /admin/ [ref=f4e137] [cursor=pointer]:
+            - /url: /admin/
+          - text: as
+          - code [ref=f4e138]: EMP003
+          - text: . Seven screens, listed down the left.
+        - generic [ref=f4e139]:
+          - article [ref=f4e140]:
+            - heading "Overview" [level=3] [ref=f4e141]
+            - paragraph [ref=f4e142]: "The day at a glance: who checked in, how many calls went out, how long people spent talking, follow-ups falling due, and how many recordings are held."
+          - article [ref=f4e143]:
+            - heading "Employees" [level=3] [ref=f4e144]
+            - paragraph [ref=f4e145]: One row per person. Whether they are on duty right now, when they checked in, calls made today, talk time, and their last known position with battery level.
+          - article [ref=f4e146]:
+            - heading "Location" [level=3] [ref=f4e147]
+            - paragraph [ref=f4e148]: A map of where an employee has been during working hours. Pick a person from the list to draw their trail. Positions are only collected while they are on duty.
+          - article [ref=f4e149]:
+            - heading "Calls" [level=3] [ref=f4e150]
+            - paragraph [ref=f4e151]: "Every call: who called, which client, whether it connected, how long it lasted, and whether a recording was kept."
+          - article [ref=f4e152]:
+            - heading "Clients" [level=3] [ref=f4e153]
+            - paragraph [ref=f4e154]: The full pipeline with each client's stage, payment state and documents outstanding. Phone numbers and emails appear masked here too, exactly as they do on the phone.
+          - article [ref=f4e155]:
+            - heading "Devices" [level=3] [ref=f4e156]
+            - paragraph [ref=f4e157]: Every enrolled handset, its Android version, app version, and whether it passed its security checks.
+          - article [ref=f4e158]:
+            - heading "Audit log" [level=3] [ref=f4e159]
+            - paragraph [ref=f4e160]: Every single time an administrator revealed a customer's real phone number or email, who did it, and the reason they gave.
+        - heading "The All / Demo / Real switch" [level=3] [ref=f4e161]
+        - paragraph [ref=f4e162]:
+          - text: "At the top of every screen there are three buttons:"
+          - strong [ref=f4e163]: All
+          - text: ","
+          - strong [ref=f4e164]: Demo
+          - text: and
+          - strong [ref=f4e165]: Real
+          - text: . This is how you separate the sample data from genuine activity.
+        - list [ref=f4e166]:
+          - listitem [ref=f4e167]:
+            - strong [ref=f4e168]: Demo
+            - text: shows only the made-up clients, calls and employees that ship with the system, so you always have something to present.
+          - listitem [ref=f4e169]:
+            - strong [ref=f4e170]: Real
+            - text: "shows only what actually happened: your own logins, your own calls, your own phone. It starts completely empty and fills as you use it."
+          - listitem [ref=f4e171]:
+            - strong [ref=f4e172]: All
+            - text: shows both together.
+        - paragraph [ref=f4e173]:
+          - text: Switch to
+          - strong [ref=f4e174]: Real
+          - text: ", and every figure drops to zero. Make one call from the phone, press Refresh, and watch it appear. That is a convincing thing to show someone, because it proves the numbers are not painted on."
+      - generic [ref=f4e175]:
+        - heading "The phone app, screen by screen" [level=2] [ref=f4e176]
+        - heading "Installing it" [level=3] [ref=f4e177]
+        - list [ref=f4e178]:
+          - listitem [ref=f4e179]:
+            - heading "Download on the phone" [level=3] [ref=f4e180]
+            - paragraph [ref=f4e181]:
+              - text: Open
+              - link "the releases page" [ref=f4e182] [cursor=pointer]:
+                - /url: https://github.com/AdwaitPro/asktrix-crm-agent/releases/latest
+              - text: in the phone's browser and tap the
+              - code [ref=f4e183]: .apk
+              - text: file. Downloading it on a laptop and transferring it works too, it is just slower.
+          - listitem [ref=f4e184]:
+            - heading "Allow the install" [level=3] [ref=f4e185]
+            - paragraph [ref=f4e186]:
+              - text: Android will warn that this did not come from the Play Store. Tap
+              - emphasis [ref=f4e187]: Settings
+              - text: in that prompt, turn on
+              - emphasis [ref=f4e188]: Allow from this source
+              - text: ", then go back and tap Install. This is normal for an app given directly to staff."
+          - listitem [ref=f4e189]:
+            - heading "Say yes to the permissions" [level=3] [ref=f4e190]
+            - paragraph [ref=f4e191]: The app asks for location, camera and microphone the first time each one is needed, and explains why at the moment it asks. Location is for attendance, the camera is for the check-in photo, the microphone is for calls. Nothing is requested up front for no reason.
+        - generic [ref=f4e192]:
+          - heading "You do not need to wipe your phone" [level=4] [ref=f4e193]
+          - paragraph [ref=f4e194]: The strictest version of this system expects a company-owned phone that has been factory reset and enrolled. That is not required to run or demonstrate it. Install it on a normal personal phone and everything in this guide works.
+        - heading "What you see once you are in" [level=3] [ref=f4e195]
+        - generic [ref=f4e196]:
+          - article [ref=f4e197]:
+            - heading "Dashboard" [level=3] [ref=f4e198]
+            - paragraph [ref=f4e199]: Clients assigned to you, work waiting, and follow-ups due today. This is the starting point each morning.
+          - article [ref=f4e200]:
+            - heading "Client detail" [level=3] [ref=f4e201]
+            - paragraph [ref=f4e202]: "Everything about one client: their masked contact details, the history of what has happened, and the status buttons your role is allowed to press."
+          - article [ref=f4e203]:
+            - heading "Calls" [level=3] [ref=f4e204]
+            - paragraph [ref=f4e205]: The calls you have made, whether each one connected, and how long it lasted.
+          - article [ref=f4e206]:
+            - heading "Attendance" [level=3] [ref=f4e207]
+            - paragraph [ref=f4e208]: Check in at the start of the day and out at the end, with your position and an optional photo.
+          - article [ref=f4e209]:
+            - heading "Settings" [level=3] [ref=f4e210]
+            - paragraph [ref=f4e211]: Who you are signed in as, your job title, and the full list of what your role permits. Also the device's security status.
+      - generic [ref=f4e212]:
+        - heading "How a call works" [level=2] [ref=f4e213]
+        - paragraph [ref=f4e214]: This is the part most worth understanding, because it is not a normal phone call and it is deliberately not one.
+        - list [ref=f4e215]:
+          - listitem [ref=f4e216]:
+            - heading "The employee presses Call" [level=3] [ref=f4e217]
+            - paragraph [ref=f4e218]: They never see or type a phone number. They press Call on a client. The system knows who that is.
+          - listitem [ref=f4e219]:
+            - heading "A private call room opens" [level=3] [ref=f4e220]
+            - paragraph [ref=f4e221]: "The server creates a one-off room and hands back two links: one for the employee, one for the customer. The call screen opens on the phone automatically."
+          - listitem [ref=f4e222]:
+            - heading "The customer joins by link" [level=3] [ref=f4e223]
+            - paragraph [ref=f4e224]: They tap the link and they are in. There is nothing to install on their side. The call travels over the internet, not the telephone network.
+          - listitem [ref=f4e225]:
+            - heading "The call is recorded and logged" [level=3] [ref=f4e226]
+            - paragraph [ref=f4e227]: When either side hangs up, the length, the outcome and the recording are written against that client. It shows up in the console within seconds.
+        - generic [ref=f4e228]:
+          - heading "Why not just dial the number" [level=4] [ref=f4e229]
+          - paragraph [ref=f4e230]: Three reasons. The employee never learns the customer's real number, so they cannot take it with them when they leave. There are no per-minute charges, because nothing touches the phone network. And Android blocks apps from recording ordinary phone calls, so a real call could not be recorded at all. Going over the internet solves all three at once.
+        - heading "Trying it yourself" [level=3] [ref=f4e231]
+        - paragraph [ref=f4e232]:
+          - text: You need two devices, or a phone and a laptop. Sign in on the phone as
+          - code [ref=f4e233]: EMP001
+          - text: ", open any client, press Call. Send yourself the customer link and open it on the other device. Allow the microphone on both. Speak."
+        - paragraph [ref=f4e234]: Both sides must allow the microphone, or you will see "connected" with no sound. If that happens, close the call and start again, this time watching for the microphone prompt.
+      - generic [ref=f4e235]:
+        - heading "Check in and check out" [level=2] [ref=f4e236]
+        - paragraph [ref=f4e237]:
+          - text: Open
+          - strong [ref=f4e238]: Attendance
+          - text: and press Check in. The app records where you are and offers to take a photo. Press Check out at the end of the day. Both appear in the console immediately, and the check-in count on Overview goes up.
+        - list [ref=f4e239]:
+          - listitem [ref=f4e240]:
+            - strong [ref=f4e241]: The camera prompt
+            - text: appears before the photo screen opens. Allow it, and the front camera opens.
+          - listitem [ref=f4e242]:
+            - strong [ref=f4e243]: The photo is optional.
+            - text: Check-in works without it if a manager does not require one.
+          - listitem [ref=f4e244]:
+            - strong [ref=f4e245]: Indoors,
+            - text: a fresh satellite fix can take a while. The app falls back to the last position it knew rather than refusing to check you in.
+          - listitem [ref=f4e246]:
+            - strong [ref=f4e247]: Position is only collected while on duty.
+            - text: Check out and it stops. It is not a tracker that runs all night.
+      - generic [ref=f4e248]:
+        - heading "Why phone numbers appear as 98XXXXXX12" [level=2] [ref=f4e249]
+        - paragraph [ref=f4e250]:
+          - text: Customer contact details are hidden everywhere. A number reads
+          - code [ref=f4e251]: 98XXXXXX12
+          - text: and an email reads
+          - code [ref=f4e252]: siv****@gmail.com
+          - text: . This is not a display trick. The full number is never sent to the phone at all, so there is nothing on the device to uncover, screenshot or copy out.
+        - paragraph [ref=f4e253]: "The employee does not need the number. They press Call and the system connects them. That is the point: they can do the job without ever holding the customer's details."
+        - paragraph [ref=f4e254]:
+          - text: An administrator can reveal a real number when there is a genuine reason, from the Clients screen in the console. They have to type a reason, and it is written into the
+          - strong [ref=f4e255]: Audit log
+          - text: with their name and the time. Nobody looks quietly.
+      - generic [ref=f4e256]:
+        - heading "What happens when there is no signal" [level=2] [ref=f4e257]
+        - paragraph [ref=f4e258]: Field staff lose signal constantly, in basements, lifts and villages. The app is built for that rather than surprised by it.
+        - list [ref=f4e259]:
+          - listitem [ref=f4e260]:
+            - strong [ref=f4e261]: Nothing is lost.
+            - text: A status change, a note or a check-in made with no signal is saved on the device and sent the moment the connection returns.
+          - listitem [ref=f4e262]:
+            - strong [ref=f4e263]: Nothing is duplicated.
+            - text: Each action carries a unique ticket, so if it gets sent twice after a flaky retry, the server only counts it once.
+          - listitem [ref=f4e264]:
+            - strong [ref=f4e265]: Client data does not linger.
+            - text: The copy held on the phone is encrypted and expires on its own, and it is wiped completely on sign-out.
+        - paragraph [ref=f4e266]: "Worth demonstrating: turn on aeroplane mode, change a client's status, watch it save. Turn aeroplane mode off, wait a moment, and refresh the console. It is there."
+      - generic [ref=f4e267]:
+        - heading "Run the demo" [level=2] [ref=f4e268]
+        - paragraph [ref=f4e269]: An order that shows the whole system in about ten minutes, built so each step sets up the next. Have the console open on a laptop and the app open on a phone.
+        - list [ref=f4e270]:
+          - listitem [ref=f4e271]:
+            - heading "Open on the console" [level=3] [ref=f4e272]
+            - paragraph [ref=f4e273]:
+              - text: Sign in as
+              - code [ref=f4e274]: EMP003
+              - text: ". Stay on Overview. Say what the numbers are: people on duty, calls today, time on the phone, follow-ups due."
+          - listitem [ref=f4e275]:
+            - heading "Prove the data is real" [level=3] [ref=f4e276]
+            - paragraph [ref=f4e277]:
+              - text: Press
+              - strong [ref=f4e278]: Real
+              - text: . Everything drops to zero. Explain that what they were looking at was sample data, and that from here on everything they see is something you actually did in front of them. Leave it on Real.
+          - listitem [ref=f4e279]:
+            - heading "Check in on the phone" [level=3] [ref=f4e280]
+            - paragraph [ref=f4e281]:
+              - text: Sign in as
+              - code [ref=f4e282]: EMP001
+              - text: ", go to Attendance, check in, take the photo. Refresh the console. On duty goes from zero to one, with the photo and position attached."
+          - listitem [ref=f4e283]:
+            - heading "Show a client" [level=3] [ref=f4e284]
+            - paragraph [ref=f4e285]: Open any client on the phone. Point at the masked phone number and explain that the real one is not on the device at all.
+          - listitem [ref=f4e286]:
+            - heading "Make a call" [level=3] [ref=f4e287]
+            - paragraph [ref=f4e288]: Press Call, open the customer link on the laptop, allow the microphone on both, talk for a few seconds, hang up. Refresh the console. The call is in the Calls screen with its length.
+          - listitem [ref=f4e289]:
+            - heading "Show the roles" [level=3] [ref=f4e290]
+            - paragraph [ref=f4e291]:
+              - text: Sign out on the phone and back in as
+              - code [ref=f4e292]: EMP006
+              - text: ", the accounts clerk. Open a client. The call button is gone and the only status offered is"
+              - emphasis [ref=f4e293]: payment received
+              - text: . Then sign in as
+              - code [ref=f4e294]: EMP005
+              - text: ", documentation: no call button either, but the government filing status is there instead. Same app, same screen, different job."
+          - listitem [ref=f4e295]:
+            - heading "Show it works offline" [level=3] [ref=f4e296]
+            - paragraph [ref=f4e297]: Aeroplane mode on. Change a status. It saves. Aeroplane mode off. Refresh the console and it has arrived.
+          - listitem [ref=f4e298]:
+            - heading "Finish on the audit log" [level=3] [ref=f4e299]
+            - paragraph [ref=f4e300]: In the console, reveal a customer's real number with a reason. Open the Audit log and show the entry that just appeared, with your name on it.
+      - generic [ref=f4e301]:
+        - heading "If something looks wrong" [level=2] [ref=f4e302]
+        - generic [ref=f4e303]:
+          - term [ref=f4e304]: The console says the sign-in is wrong
+          - definition [ref=f4e305]:
+            - text: Use the employee code, not an email address.
+            - code [ref=f4e306]: EMP003
+            - text: ", password"
+            - code [ref=f4e307]: asktrix123
+            - text: . Only a Team Leader can open the console, so the other five codes will be refused here even though they work on the phone.
+          - term [ref=f4e308]: A call says "a call is already in progress"
+          - definition [ref=f4e309]: A previous call was closed in a way that left it hanging. Open the call screen and hang up properly, or wait two minutes and it clears itself. It will not stay stuck.
+          - term [ref=f4e310]: The call connects but there is no sound
+          - definition [ref=f4e311]: One side did not allow the microphone. Close the call, start again, and watch for the prompt on both devices. If a browser blocked it silently, check the padlock icon in the address bar and allow the microphone there.
+          - term [ref=f4e312]: Check-in will not pick up my location
+          - definition [ref=f4e313]: Step near a window or outside. Indoors a first satellite fix can take a minute. The app will fall back to your last known position rather than block you.
+          - term [ref=f4e314]: The app never asked for the camera
+          - definition [ref=f4e315]: It asks the first time you open the check-in photo screen. If you refused earlier, Android will not ask again. Go to Android Settings, Apps, Asktrix Agent, Permissions, and turn the camera on by hand.
+          - term [ref=f4e316]: The console is empty
+          - definition [ref=f4e317]:
+            - text: Check whether the switch at the top is set to
+            - strong [ref=f4e318]: Real
+            - text: . Real is empty until you do something yourself. Press
+            - strong [ref=f4e319]: Demo
+            - text: or
+            - strong [ref=f4e320]: All
+            - text: to see the sample data again.
+          - term [ref=f4e321]: The map does not appear
+          - definition [ref=f4e322]: Pick an employee from the list on the Location screen first. The map draws that person's trail, so it stays blank until you choose someone.
+          - term [ref=f4e323]: Android refuses to install the app
+          - definition [ref=f4e324]: Allow installs from your browser, in Android Settings under Apps, Special access, Install unknown apps. Also make sure you are on Android 10 or newer.
+      - generic [ref=f4e325]:
+        - heading "Questions people ask" [level=2] [ref=f4e326]
+        - generic [ref=f4e327]:
+          - term [ref=f4e328]: Does it cost anything to run
+          - definition [ref=f4e329]: No. Calls go over the internet rather than the phone network, so there are no per-minute charges, and the server and database run on free plans.
+          - term [ref=f4e330]: Can an employee find out a customer's real number
+          - definition [ref=f4e331]: No. The full number is never sent to the phone. There is no screen it can be revealed on and nothing stored on the device to dig out.
+          - term [ref=f4e332]: Is this connected to the real CRM yet
+          - definition [ref=f4e333]: Not yet. It runs against its own server, which follows the exact contract the real CRM will need to provide. When those endpoints exist, the app points at them and the rest is unchanged.
+          - term [ref=f4e334]: Where are the call recordings kept
+          - definition [ref=f4e335]: On the server, not on the phone. The employee's device is told that a recording exists but is never given a link to the audio.
+          - term [ref=f4e336]: Does it track people after hours
+          - definition [ref=f4e337]: No. Position is only sampled between check-in and check-out. Check out and it stops.
+          - term [ref=f4e338]: Can I add my own real clients
+          - definition [ref=f4e339]:
+            - text: Yes. Anything you create is marked real rather than demo, so the
+            - strong [ref=f4e340]: Real
+            - text: view shows your data on its own, cleanly separated from the samples.
+      - generic [ref=f4e341]:
+        - generic [ref=f4e342]:
+          - link "Admin console" [ref=f4e343] [cursor=pointer]:
+            - /url: /admin/
+          - link "Download the app" [ref=f4e344] [cursor=pointer]:
+            - /url: https://github.com/AdwaitPro/asktrix-crm-agent/releases/latest
+          - link "Source code" [ref=f4e345] [cursor=pointer]:
+            - /url: https://github.com/AdwaitPro/asktrix-crm-agent
+        - paragraph [ref=f4e346]: Asktrix CRM Mobile Agent App
