@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <!--
+          §10 GPS sampling. foregroundServiceType="location" is mandatory from Android 14
+          (targetSdk 34) and must be paired with the FOREGROUND_SERVICE_LOCATION permission, which
+          the app manifest declares. Declared here, in the module that owns the service, so adding
+          the module cannot silently omit it.
+        -->
+        <service
+            android:name=".LocationTrackingService"
+            android:exported="false"
+            android:foregroundServiceType="location"
+            android:stopWithTask="false" />
+    </application>
+</manifest>

@@ -22,4 +22,5 @@ dependencies {
     api(projects.core.network)
     // api: features observe ConnectivityObserver and outbox state directly.
     api(projects.core.sync)
+    api(projects.core.location)
 }
